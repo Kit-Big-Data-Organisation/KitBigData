@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "projet-kbd"
+version = "0.1.0"
+description = "Projet Kit Big Data - MS IS_BGD Télécom Paris - 2024/2025"
+authors = [
+    "Ghalia Chaoui <ghalia.chaoui@gmail.com>",
+    "Nour Nounah <nounah.nour511@gmail.com>",
+    "Hariri Safe <safae045@gmail.com>"
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.10.8"
+pandas = "*"
+numpy = "*"
+matplotlib = "*"
+seaborn = "*"
+jupyter = "*"
+streamlit = "*"
+
+[tool.poetry.dev-dependencies]
+black = "*" # For pep8 and style errors 
+flake8 = "*" # For pep8 
+mypy = "*"  # For type checking
+sphinx = "*"  # For generating documentation
+ipykernel = "*"
+
+[tool.flake8]
+max-line-length = 88  # Même longueur de ligne que Black
+ignore = [
+    "E203",  # Espacement autour des slices (conflit avec Black)
+    "W503",  # Line break before binary operator (conflit avec Black)
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
