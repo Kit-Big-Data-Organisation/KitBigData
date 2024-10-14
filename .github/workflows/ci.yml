@@ -25,4 +25,4 @@ jobs:
           flake8 .
 
       - name: Run tests
-        run: pytest --cov=app
+        run: pytest
