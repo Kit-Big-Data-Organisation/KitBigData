@@ -30,7 +30,7 @@ def generate_random_data():
     'Colonne B','Colonne C'.
     Les valeurs sont générées aléatoirement à partir d'une distribution
     normale.
-   
+
     Returns:
         pd.DataFrame: Un DataFrame avec les données générées aléatoirement.
     """
@@ -41,7 +41,7 @@ def generate_random_data():
 
 
 # Afficher un graphique interactif avec Streamlit
-def display_chart(data):
+def display_chart(d):
     """
     Affiche un graphique interactif avec Streamlit.
 
@@ -50,7 +50,7 @@ def display_chart(data):
     Args:
         data (pd.DataFrame): Les données à afficher dans le graphique.
     """
-    st.line_chart(data)
+    st.line_chart(d)
 
 
 # Ajouter une interaction utilisateur simple
