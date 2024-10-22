@@ -1,20 +1,15 @@
-"""
-This module contains the main entry point for the project.
-It prints a message indicating that the project is running successfully.
-"""
-# main.py
+from data_loader import Dataloader
+from data_analyzer import DataAnalyzer
+from streamlit_app import StreamlitApp
+from data_plotter import DataPlotter
+import streamlit as st
 
 
-def main():
-    """
-    Main function that prints a success message.
+# Titre de la page
+st.title("Projet Kit Big Data")
 
-    This function serves as the entry point of the program and
-    outputs a message indicating that the project is running successfully.
-    """
-
-    print("Project is running successfully!")
-
-
+# Exécution des différentes parties de l'application
 if __name__ == "__main__":
-    main()
+
+    app = StreamlitApp("RAW_recipes.csv" , "RAW_interactions.csv")
+    app.run()

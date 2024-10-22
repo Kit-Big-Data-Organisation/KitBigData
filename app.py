@@ -11,6 +11,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+
+
+
+
 # Titre de la page
 st.title("Projet Kit Big Data")
 
@@ -74,6 +78,5 @@ if __name__ == "__main__":
     # Générer et afficher les données
     data = generate_random_data()
     display_chart(data)
-
     # Interaction avec l'utilisateur
     get_user_input()
