@@ -5,7 +5,7 @@ The primary test in this module verifies that the main function prints the
 expected success message when executed.
 """
 
-from projet_kbd import main
+from . import main
 
 
 def test_main_function(capsys):
