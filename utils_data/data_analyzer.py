@@ -27,13 +27,13 @@ class DataAnalyzer:
     Attributs :
     ----------
     data : pd.DataFrame
-        Un DataFrame contenant les données à analyser, avec des colonnes comme 'user_id' 
+        Un DataFrame contenant les données à analyser, avec des colonnes comme 'user_id'
         ou 'id' et 'year'.
 
     Méthodes :
     --------
     group_interactions_year() :
-        Regroupe les données par année et compte soit le nombre d'interactions 
+        Regroupe les données par année et compte soit le nombre d'interactions
         (basé sur 'user_id') soit le nombre de recettes (basé sur 'id').
     """
 
@@ -53,8 +53,8 @@ class DataAnalyzer:
         Regroupe les données par année et compte les interactions ou recettes.
 
         Cette méthode vérifie si la colonne 'user_id' est présente dans le DataFrame
-        pour compter les interactions par année. Si la colonne 'id' est présente, 
-        elle comptera les recettes par année. Les années et les valeurs correspondantes 
+        pour compter les interactions par année. Si la colonne 'id' est présente,
+        elle comptera les recettes par année. Les années et les valeurs correspondantes
         sont ensuite retournées.
 
         Retourne :
@@ -67,17 +67,20 @@ class DataAnalyzer:
 
         Remarque :
         --------
-        - Si les deux colonnes 'user_id' et 'id' existent, seule la dernière 
+        - Si les deux colonnes 'user_id' et 'id' existent, seule la dernière
           (recettes) sera utilisée.
         """
         indices, values = None, None  # Initialisation des variables
 
-        if 'user_id' in self.data.columns:
-            grouped_interactions = self.data.groupby('year')['user_id'].count()
-            indices, values = grouped_interactions.index, grouped_interactions.values
+        if "user_id" in self.data.columns:
+            grouped_interactions = self.data.groupby("year")["user_id"].count()
+            indices, values = (
+                grouped_interactions.index,
+                grouped_interactions.values,
+            )
 
-        if 'id' in self.data.columns:
-            grouped_recipes = self.data.groupby('year')['id'].count()
+        if "id" in self.data.columns:
+            grouped_recipes = self.data.groupby("year")["id"].count()
             indices, values = grouped_recipes.index, grouped_recipes.values
 
         return indices, values

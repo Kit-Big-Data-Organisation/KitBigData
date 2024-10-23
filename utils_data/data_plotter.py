@@ -21,7 +21,8 @@ Classes :
 """
 
 import pandas as pd  # Manipulation des données sous forme de DataFrame
-import matplotlib.pyplot as plt  # Visualisation statique (importé si nécessaire)
+
+# import matplotlib.pyplot as plt  # Visualisation statique (importé si nécessaire)
 import plotly.express as px  # Visualisation interactive
 
 
@@ -72,11 +73,13 @@ class DataPlotter:
         """
         x_values, y_values = self.data_analyzer.group_interactions_year()
 
-        df = pd.DataFrame({
-            'Year': x_values,
-            'Interactions': y_values
-        })
-        fig = px.line(df, x='Year', y='Interactions', title='Number of Interactions per Year')
+        df = pd.DataFrame({"Year": x_values, "Interactions": y_values})
+        fig = px.line(
+            df,
+            x="Year",
+            y="Interactions",
+            title="Number of Interactions per Year",
+        )
         return fig
 
     def plot_nb_recipes_per_year(self):
@@ -95,9 +98,6 @@ class DataPlotter:
         """
         x_values, y_values = self.data_analyzer.group_interactions_year()
 
-        df = pd.DataFrame({
-            'Year': x_values,
-            'Recipes': y_values
-        })
-        fig = px.line(df, x='Year', y='Recipes', title='Number of Recipes per Year')
+        df = pd.DataFrame({"Year": x_values, "Recipes": y_values})
+        fig = px.line(df, x="Year", y="Recipes", title="Number of Recipes per Year")
         return fig

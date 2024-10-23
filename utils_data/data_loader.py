@@ -20,6 +20,7 @@ Modules utilisés :
 """
 
 import pandas as pd  # Manipulation des données sous forme de DataFrame
+
 # import matplotlib.pyplot as plt  # Visualisation (importé si nécessaire)
 
 
@@ -57,7 +58,10 @@ class Dataloader:
             Le nom du fichier à charger (ex: 'data.csv').
         """
         self.filename = filename
-        self.path = "/Users/ghalia/Desktop/Telecom IA/Kit Big Data/Projet/projet_KBD/KitBigData/Data/" + filename
+        self.path = (
+            "/Users/ghalia/Desktop/Telecom IA/Kit Big Data/Projet/projet_KBD/KitBigData/Data/"
+            + filename
+        )
 
     def read(self):
         """
@@ -85,11 +89,11 @@ class Dataloader:
         """
         data = self.read()
 
-        if 'date' in data.columns:
-            data['year'] = data['date'].apply(lambda x: x[:4])
+        if "date" in data.columns:
+            data["year"] = data["date"].apply(lambda x: x[:4])
 
-        if 'submitted' in data.columns:
-            data['year'] = data['submitted'].apply(lambda x: int(x[:4]))
+        if "submitted" in data.columns:
+            data["year"] = data["submitted"].apply(lambda x: int(x[:4]))
 
         return data
 

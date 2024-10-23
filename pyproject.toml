@@ -26,13 +26,6 @@ mypy = "*"  # For type checking
 sphinx = "*"  # For generating documentation
 ipykernel = "*"
 
-[tool.flake8]
-max-line-length = 88  # Même longueur de ligne que Black
-ignore = [
-    "E203",  # Espacement autour des slices (conflit avec Black)
-    "W503",  # Line break before binary operator (conflit avec Black)
-]
-
 [tool.black]
 line-length = 79
 

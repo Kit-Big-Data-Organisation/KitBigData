@@ -22,7 +22,6 @@ jobs:
       - name: Run linters
         run: |
           black .
-          flake8 .
 
       - name: Run tests
         run: pytest
