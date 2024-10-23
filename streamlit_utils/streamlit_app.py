@@ -16,7 +16,7 @@ Modules utilisés :
 
 Classes :
 ---------
-- StreamlitApp : Classe principale pour gérer le chargement des données, 
+- StreamlitApp : Classe principale pour gérer le chargement des données,
   l'analyse, et la création de visualisations dans une application Streamlit.
 """
 

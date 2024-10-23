@@ -20,7 +20,8 @@ Modules utilisés :
 """
 
 import pandas as pd  # Manipulation des données sous forme de DataFrame
-import matplotlib.pyplot as plt  # Visualisation (importé si nécessaire)
+# import matplotlib.pyplot as plt  # Visualisation (importé si nécessaire)
+
 
 class Dataloader:
     """
@@ -71,12 +72,12 @@ class Dataloader:
 
     def preprocess_data(self):
         """
-        Pré-traite les données en ajoutant une colonne 'year' si une colonne 'date' ou 
+        Pré-traite les données en ajoutant une colonne 'year' si une colonne 'date' ou
         'submitted' existe.
-        
+
         Si la colonne 'date' est présente, l'année est extraite des quatre premiers caractères.
         Si la colonne 'submitted' est présente, l'année est extraite de manière similaire.
-        
+
         Retourne :
         --------
         pd.DataFrame

@@ -3,8 +3,8 @@ Module DataPlotter
 
 Ce module fournit des outils pour visualiser les données analysées en utilisant
 `pandas`, `matplotlib.pyplot`, et `plotly.express`. Il prend en entrée un objet
-`DataAnalyzer` qui fournit les données agrégées pour chaque année. Les méthodes de 
-ce module génèrent des graphiques interactifs pour visualiser les interactions 
+`DataAnalyzer` qui fournit les données agrégées pour chaque année. Les méthodes de
+ce module génèrent des graphiques interactifs pour visualiser les interactions
 et les recettes par année.
 
 Modules utilisés :
@@ -47,7 +47,7 @@ class DataPlotter:
     def __init__(self, data_analyzer):
         """
         Initialise le DataPlotter avec un objet DataAnalyzer.
-        
+
         Paramètres :
         ----------
         data_analyzer : DataAnalyzer
@@ -59,11 +59,11 @@ class DataPlotter:
     def plot_nb_interactions_per_year(self):
         """
         Génère un graphique interactif montrant le nombre d'interactions par année.
-        
+
         Utilise les méthodes de DataAnalyzer pour obtenir les valeurs
         des interactions par année et utilise Plotly Express pour
         générer un graphique linéaire interactif.
-        
+
         Retourne :
         --------
         plotly.graph_objects.Figure

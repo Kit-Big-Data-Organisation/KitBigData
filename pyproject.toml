@@ -20,8 +20,8 @@ streamlit = "*"
 plotly = "^5.24.1"
 
 [tool.poetry.dev-dependencies]
-black = "*" # For pep8 and style errors 
-flake8 = "*" # For pep8 
+black = "*" # For pep8 and style errors
+flake8 = "*" # For pep8
 mypy = "*"  # For type checking
 sphinx = "*"  # For generating documentation
 ipykernel = "*"
@@ -32,6 +32,9 @@ ignore = [
     "E203",  # Espacement autour des slices (conflit avec Black)
     "W503",  # Line break before binary operator (conflit avec Black)
 ]
+
+[tool.black]
+line-length = 79
 
 [build-system]
 requires = ["poetry-core"]
