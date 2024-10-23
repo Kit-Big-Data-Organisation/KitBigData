@@ -2,13 +2,13 @@
 Module DataAnalyzer
 
 Ce module fournit des outils pour analyser des données de type DataFrame,
-notamment pour regrouper des interactions ou des recettes par année. 
-Il permet de compter le nombre d'interactions ou de recettes par année 
+notamment pour regrouper des interactions ou des recettes par année.
+Il permet de compter le nombre d'interactions ou de recettes par année
 et retourne les années ainsi que les valeurs correspondantes.
 
 Modules utilisés :
 ------------------
-- pandas : Utilisé pour manipuler les données sous forme de DataFrame et 
+- pandas : Utilisé pour manipuler les données sous forme de DataFrame et
   effectuer des opérations de regroupement et d'agrégation.
 
 Classes :
@@ -17,7 +17,7 @@ Classes :
   les interactions ou recettes par année.
 """
 
-import pandas as pd  # Manipulation des données sous forme de DataFrame
+# import pandas as pd  # Manipulation des données sous forme de DataFrame
 
 
 class DataAnalyzer:
