@@ -1,29 +1,28 @@
-"""
-This module contains unit tests for the main module of the projet_kbd project.
+from unittest.mock import patch
+from streamlit_utils.streamlit_app import StreamlitApp
 
-The primary test in this module verifies that the main function prints the
-expected success message when executed.
-"""
-
-from . import main
-
-
-def test_main_function(capsys):
+def test_streamlit_app_initialization():
     """
-    Test the main function of the main module.
+    Teste l'initialisation de la classe StreamlitApp.
 
-    This test captures the output of the `main.main()` function and verifies
-    that it prints the correct message: "Project is running successfully!".
-
-    Parameters:
-    capsys (fixture): Pytest fixture to capture standard output and error
-    streams.
+    Ce test vérifie que l'objet StreamlitApp est correctement initialisé avec
+    les fichiers CSV fournis. Les attributs `recipes_file` et `interactions_file`
+    doivent contenir les bons noms de fichiers après l'initialisation.
     """
-    # Exécute la fonction main()
-    main.main()
+    app = StreamlitApp("RAW_recipes.csv", "RAW_interactions.csv")
+    assert app.recipes_file == "RAW_recipes.csv"
+    assert app.interactions_file == "RAW_interactions.csv"
 
-    # Capture l'output imprimé par la fonction
-    captured = capsys.readouterr()
+def test_streamlit_app_run():
+    """
+    Teste l'exécution de la méthode `run()` de StreamlitApp.
 
-    # Vérifie que l'output correspond au message attendu
-    assert captured.out == "Project is running successfully!\n"
+    Ce test moque les fonctions `streamlit.title` et `streamlit.write` pour éviter
+    d'interagir avec l'interface Streamlit réelle. Il vérifie que la méthode `run()`
+    de l'application peut s'exécuter sans lever d'exception.
+    """
+    app = StreamlitApp("RAW_recipes.csv", "RAW_interactions.csv")
+
+    # Mock Streamlit functions to avoid side effects
+    with patch('streamlit.title'), patch('streamlit.write'):
+        app.run()
