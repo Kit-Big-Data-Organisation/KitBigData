@@ -1,6 +1,5 @@
 from unittest.mock import patch
 
-
 def test_main_execution():
     """
     Teste que le fichier main.py s'exécute sans erreurs.
