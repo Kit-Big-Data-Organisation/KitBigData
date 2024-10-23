@@ -22,15 +22,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Install Black
-        run: pip install black
-
-      - name: Install pytest
-        run: pip install pytest
-
       - name: Run linters
         run: |
-          black .
+          poetry run black .
 
       - name: Run tests
-        run: pytest
+        run: poetry run pytest
