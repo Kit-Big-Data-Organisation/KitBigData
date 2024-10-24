@@ -10,3 +10,6 @@ if __name__ == "__main__":
 
     app = StreamlitApp("RAW_recipes.csv" , "RAW_interactions.csv")
     app.run()
+    print('----start running for pull----')
+    print('----start running for pull----')
+
