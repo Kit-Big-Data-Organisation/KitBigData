@@ -3,6 +3,7 @@ from data_plotter import DataPlotter
 import streamlit as st
 from data_loader import Dataloader
 
+
 class StreamlitApp:
     def __init__(self, recipe_file, interaction_file):
         self.recipe_file = recipe_file
