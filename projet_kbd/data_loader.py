@@ -4,11 +4,11 @@ class Dataloader:
 
     def __init__(self , filename):
         self.filename = filename
-        self.path = "/Users/user/Desktop/KBD Project/KitBigData/Data/"+filename
+        self.path = "/Users/ghalia/Desktop/Telecom IA/Kit Big Data/Projet/projet_KBD/KitBigData/Data/"+filename
 
-    def read(self) : 
+    def read(self) :
         return pd.read_csv(self.path)
-    
+
     def preprocess_data(self):
 
         data = self.read()
@@ -24,6 +24,6 @@ class Dataloader:
     def loader(self):
         return self.preprocess_data()
 
-    
+
 
 
