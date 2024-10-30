@@ -8,5 +8,5 @@ st.title("Projet Kit Big Data")
 # Exécution des différentes parties de l'application
 if __name__ == "__main__":
 
-    app = StreamlitApp("RAW_recipes.csv" , "RAW_interactions.csv")
+    app = StreamlitApp("/Users/ghalia/Desktop/Telecom IA/Kit Big Data/Projet/projet_KBD/KitBigData/Data", "RAW_recipes.csv","RAW_interactions.csv")
     app.run()
