@@ -17,6 +17,7 @@ matplotlib = "*"
 seaborn = "*"
 jupyter = "*"
 streamlit = "*"
+pytest = "^8.3.3"
 
 [tool.poetry.dev-dependencies]
 black = "*" # For pep8 and style errors 
