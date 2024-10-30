@@ -1,3 +1,4 @@
 # .gitignore
 Data/
 notebook/
+.DS_Store
