@@ -35,6 +35,7 @@ class Dataloader:
         return data
         
     def merge_recipe_interaction(self , interaction_loader):
+
         data_recipes = self.load()
         interaction = interaction_loader.load()
         if data_recipes is not None and interaction is not None:
@@ -42,8 +43,14 @@ class Dataloader:
             self.add_year(merged_recipe_inter)
             return merged_recipe_inter
     
-    def processed_recipe_interaction(self , interaction_loader):
-        data = self.merge_recipe_interaction(interaction_loader)
-        return data.add_year()
-    
+    def adding_nutrition(self , data):
 
+        NutriList=['cal', 'totalFat', 'sugar', 'sodium', 'protein', 'satFat', 'carbs']
+        nutrition_df = pd.DataFrame(data['nutrition'].apply(eval).tolist(), columns = NutriList)
+        merged_recipe_inter = pd.concat([data , nutrition_df] , axis=1)
+        return merged_recipe_inter
+
+    def processed_recipe_interaction(self , interaction_loader):
+        return (self.merge_recipe_interaction(interaction_loader)
+              .pipe(self.add_year)
+              .pipe(self.adding_nutrition))
