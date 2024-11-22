@@ -25,7 +25,7 @@ class DataAnalyzer:
     def group_interactions_year(self):
 
         grouped_interactions = self.data.groupby('year')['review'].count()
-        indices , values = grouped_interactions.index , grouped_interactions.values
+        indices , values = grouped_interactions.index, grouped_interactions.values
 
         return indices ,values
 
@@ -127,6 +127,19 @@ class DataAnalyzer:
         logger.info("Calcul du taux de recettes rapides terminé avec succès")
 
         return quick_recipes_rate_per_year
+
+    def get_top_recipes_by_interactions(self, start_year: int = 2010, end_year: int = 2015, top_n: int = 10):
+        top_recipes_per_year = {}
+
+        for year in range(start_year, end_year + 1):
+            yearly_data = self.data[self.data['year'] == year]
+            if 'interactions' in yearly_data.columns:
+                top_recipes = yearly_data.nlargest(top_n, 'interactions')[['id', 'interactions']]
+                top_recipes_per_year[year] = top_recipes.set_index('id')['interactions'].to_dict()
+            else:
+                logger.warning(f"La colonne 'interactions' n'est pas présente dans les données pour l'année {year}")
+
+        return top_recipes_per_year
 
 
 
