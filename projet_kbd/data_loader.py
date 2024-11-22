@@ -1,3 +1,4 @@
+import utils
 import pandas as pd
 
 class Dataloader:
@@ -49,8 +50,14 @@ class Dataloader:
         nutrition_df = pd.DataFrame(data['nutrition'].apply(eval).tolist(), columns = NutriList)
         merged_recipe_inter = pd.concat([data , nutrition_df] , axis=1)
         return merged_recipe_inter
+    
+    def adding_cuisines(self , data):
+        data['cuisine'] = data['tags'].apply(utils.determine_cuisine)
+        return data
 
+    
     def processed_recipe_interaction(self , interaction_loader):
         return (self.merge_recipe_interaction(interaction_loader)
               .pipe(self.add_year)
+              .pipe(self.adding_cuisines)
               .pipe(self.adding_nutrition))

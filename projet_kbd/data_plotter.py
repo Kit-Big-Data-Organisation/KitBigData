@@ -94,4 +94,45 @@ class DataPlotter:
                         legend_title='Oil Type')
         return fig
 
-        
+    def plot_cuisines_analysis(self , engine):
+
+        df_cuisine = self.data_analyzer.analyze_cuisines(engine)
+
+        labels , sizes = df_cuisine['Cuisine'].tolist() , df_cuisine['Proportion'].tolist()
+
+        fig = px.pie(values=sizes, names=labels)
+
+        return fig
+    
+    def plot_cuisines_evolution(self , engine):
+
+        df_cuisine_evolution = self.data_analyzer.cuisine_evolution(engine)
+        num_rows = 2
+        num_cols = 4
+        fig = make_subplots(rows=num_rows, cols=num_cols, subplot_titles=[f'{cuisine} Cuisine' for cuisine in df_cuisine_evolution.columns if cuisine != 'Year'])
+
+        idx = 1
+
+        for cuisine in df_cuisine_evolution.columns:
+             
+            if cuisine != 'Year':
+           
+                row = (idx - 1) // num_cols + 1
+                col = (idx - 1) % num_cols + 1
+
+                trace = go.Scatter(x=df_cuisine_evolution.index, y=df_cuisine_evolution[cuisine], mode='lines', name=cuisine)
+                fig.add_trace(trace, row=row, col=col)
+
+                idx += 1
+
+        fig.update_layout(height=900, width=1200)
+        fig.update_xaxes(title_text="Year")
+        fig.update_yaxes(title_text="Proportion")
+
+        return fig
+    
+    def plot_top_ingredients(self , engine):
+
+        df_top_ingredients = self.data_analyzer.top_commun_ingredients(engine)
+        print(df_top_ingredients)
+        return df_top_ingredients

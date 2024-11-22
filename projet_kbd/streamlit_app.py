@@ -23,7 +23,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     interactions_loader = Dataloader(path_file, interaction_file)
     data = data_loader.processed_recipe_interaction(interactions_loader)
     analyzer = DataAnalyzer(data)
-    #analyzer.clean_from_outliers()
+    analyzer.clean_from_outliers()
     analyzer.data.to_sql(name='recipe_interaction', con=_engine, if_exists='replace')
     return analyzer
 
@@ -49,34 +49,87 @@ def create_oils_stacked_histograms(analyzer, _engine):
     plotter = DataPlotter(analyzer)
     return plotter.plot_oil_analysis(_engine)
 
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_cuisine_charts(analyzer,_engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_cuisines_analysis(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_cuisine_evolution_charts(analyzer,_engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_cuisines_evolution(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_top_ingredients_table(analyzer,_engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_top_ingredients(_engine)
+
 def run(path_file , recipe_file , interaction_file , engine):
         
+        st.set_page_config(layout="wide")
+
         analyzer = load_and_analyze_data(path_file,recipe_file, interaction_file, engine)
         with st.sidebar:
             selected = option_menu("Dashboard", ["Presentation", 'Nutrition Analysis', 'Cuisine Analysis', 'Free Visualisation']
                 , menu_icon="cast")
 
         if selected == 'Presentation':
+
             st.write("## Presentation")
+
+            col = st.columns([0.5 , 0.5])
             recipe_fig, interaction_fig = create_plots(analyzer)
-            st.plotly_chart(recipe_fig)
-            st.plotly_chart(interaction_fig)
+
+            with col[0]:
+                st.plotly_chart(recipe_fig ,use_container_width=True)
+
+            with col[1]:
+                st.plotly_chart(interaction_fig, use_container_width=True)
 
         elif selected == 'Nutrition Analysis':
+
             st.write("## Nutrition Analysis")
+
+            col = st.columns([0.5 , 0.5])
             oils_analysis = create_oils_stacked_histograms(analyzer , engine)
             cluster_charts_fig = create_nutrition_histograms(analyzer)
-            st.plotly_chart(oils_analysis)
-            st.plotly_chart(cluster_charts_fig, use_container_width=True)
+            with col[0]:
+                st.plotly_chart(oils_analysis)
+            with col[1]:
+                st.plotly_chart(cluster_charts_fig, use_container_width=True)
+
+        elif selected == 'Cuisine Analysis':
+
+            col = st.columns([0.3, 0.7])
+
+            with col[0]:
+                st.markdown('#### Cuisine Analysis')
+                cuisine_analysis = create_cuisine_charts(analyzer , engine)
+                st.plotly_chart(cuisine_analysis,use_container_width=True)
+
+                st.markdown('#### Top ingredients')
+                top_ingredients_cuisine = create_top_ingredients_table(analyzer , engine)
+                st.dataframe(top_ingredients_cuisine,use_container_width=True)
+            
+            with col[1]:
+                st.markdown('#### Cuisine Evolution')
+                cuisine_evolution = create_cuisine_evolution_charts(analyzer , engine)
+                st.plotly_chart(cuisine_evolution,use_container_width=True)
+
+        
+        
 
         elif selected == 'Free Visualisation':
             st.write("## Tags Analysis")
-            set_number = st.slider('Select set of top 10 tags (0 for 1-10, 1 for 11-20, etc.)', 0, 9, 0)
-            tags_chart = create_charts(analyzer, set_number)
-            with st.container():
-                for i in range(0, 8, 2):
-                    cols = st.columns(2)
-                    for j in range(2):
-                        if i + j < len(tags_chart):
-                            with cols[j]:
-                                st.plotly_chart(tags_chart[i+j], use_container_width=True)
+            col = st.columns([0.8,0.2])
+            
+            with col[0]:
+                set_number = st.slider('Select set of top 10 tags (0 for 1-10, 1 for 11-20, etc.)', 0, 9, 0)
+                tags_chart = create_charts(analyzer, set_number)
+                with st.container():
+                    for i in range(0, 8, 2):
+                        cols = st.columns(2)
+                        for j in range(2):
+                            if i + j < len(tags_chart):
+                                with cols[j]:
+                                    st.plotly_chart(tags_chart[i+j], use_container_width=True)
