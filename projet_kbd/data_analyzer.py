@@ -2,6 +2,7 @@ import pandas as pd
 from collections import Counter
 import ast
 from logger_config import logger
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 class DataAnalyzer:
 
@@ -141,5 +142,17 @@ class DataAnalyzer:
 
         return top_recipes_per_year
 
+    # Comments analysis
 
+    def clean_comment(comment):
+        return comment.lower()
 
+    def analyze_sentiment(comment):
+        analyzer = SentimentIntensityAnalyzer()
+        scores = analyzer.polarity_scores(comment)
+        return scores['neg']  # Retourne le score de négativité
+
+    def analyze_comments(dataframe, comment_column):
+        dataframe['cleaned_comment'] = dataframe[comment_column].apply(clean_comment)
+        dataframe['negativity_score'] = dataframe['cleaned_comment'].apply(analyze_sentiment)
+        return dataframe

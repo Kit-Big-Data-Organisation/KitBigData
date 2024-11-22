@@ -3652,6 +3652,20 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "vadersentiment"
+version = "3.3.2"
+description = "VADER Sentiment Analysis. VADER (Valence Aware Dictionary and sEntiment Reasoner) is a lexicon and rule-based sentiment analysis tool that is specifically attuned to sentiments expressed in social media, and works well on texts from other domains."
+optional = false
+python-versions = "*"
+files = [
+    {file = "vaderSentiment-3.3.2-py2.py3-none-any.whl", hash = "sha256:3bf1d243b98b1afad575b9f22bc2cb1e212b94ff89ca74f8a23a588d024ea311"},
+    {file = "vaderSentiment-3.3.2.tar.gz", hash = "sha256:5d7c06e027fc8b99238edb0d53d970cf97066ef97654009890b83703849632f9"},
+]
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "validators"
 version = "0.34.0"
 description = "Python Data Validation for Humans™"
@@ -3798,4 +3812,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.11"
-content-hash = "5be3386ad6f8165268e071490ccf6419b9f3abb64d910d732ef2d6818b841702"
+content-hash = "39c11fd3c1e763265598220d9b63c992fe9d40fbb0034154f1f051be11ff6046"
