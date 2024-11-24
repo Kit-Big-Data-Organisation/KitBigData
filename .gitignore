@@ -1,3 +1,5 @@
 # .gitignore
 Data/
 notebook/
+database/streamlit.db
+projet_kbd/main.py
