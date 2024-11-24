@@ -2,3 +2,4 @@
 Data/
 notebook/
 .DS_Store
+database/streamlit.db
