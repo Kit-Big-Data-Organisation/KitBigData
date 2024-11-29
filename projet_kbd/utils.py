@@ -24,13 +24,3 @@ def determine_cuisine(tags):
             if cuisine in tags:
                 return cuisine
         return 'other'
-
-def contains_any_tag(tag_string, target_tags):
-            try:
-                # Safely evaluate the string to a list
-                tags_list = ast.literal_eval(tag_string)
-                # Check if any target tag is in the list of tags
-                return any(tag in target_tags for tag in tags_list)
-            except:
-                # In case of any error during evaluation, return False
-                return False

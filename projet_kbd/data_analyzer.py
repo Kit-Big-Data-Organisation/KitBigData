@@ -8,7 +8,6 @@ import streamlit as st
 from sqlalchemy.types import Integer, Float, String
 from logger_config import logger
 import ast
-from utils import contains_any_tag
 
 class DataAnalyzer:
     
