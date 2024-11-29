@@ -64,13 +64,23 @@ def create_top_ingredients_table(analyzer,_engine):
     plotter = DataPlotter(analyzer)
     return plotter.plot_top_ingredients(_engine)
 
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_proportion_quick_recipe_charts(analyzer,_engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_quick_recipes_evolution(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_rate_interactions_quick_recipe_charts(analyzer,_engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_rate_interactions_quick_recipe(_engine)
+
 def run(path_file , recipe_file , interaction_file , engine):
         
         st.set_page_config(layout="wide")
 
         analyzer = load_and_analyze_data(path_file,recipe_file, interaction_file, engine)
         with st.sidebar:
-            selected = option_menu("Dashboard", ["Presentation", 'Nutrition Analysis', 'Cuisine Analysis', 'Free Visualisation']
+            selected = option_menu("Dashboard", ["Presentation", 'Nutrition Analysis', 'Cuisine Analysis', 'Quick recipe analysis', 'Free Visualisation']
                 , menu_icon="cast")
 
         if selected == 'Presentation':
@@ -115,9 +125,17 @@ def run(path_file , recipe_file , interaction_file , engine):
                 st.markdown('#### Cuisine Evolution')
                 cuisine_evolution = create_cuisine_evolution_charts(analyzer , engine)
                 st.plotly_chart(cuisine_evolution,use_container_width=True)
+        elif selected == 'Quick recipe analysis':
 
-        
-        
+            st.write("## Quick recipe analysis")
+
+            col = st.columns([0.5 , 0.5])
+            quick_recipe_fig = create_proportion_quick_recipe_charts(analyzer, engine)
+            interactions_quick_recipe_fig = create_rate_interactions_quick_recipe_charts(analyzer, engine)
+            with col[0]:
+                st.plotly_chart(quick_recipe_fig, use_container_width=True)
+            with col[1]:
+                st.plotly_chart(interactions_quick_recipe_fig, use_container_width=True)
 
         elif selected == 'Free Visualisation':
             st.write("## Tags Analysis")

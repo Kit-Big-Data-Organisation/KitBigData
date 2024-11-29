@@ -3,7 +3,7 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
+from logger_config import logger
 
 class DataPlotter:
 
@@ -136,3 +136,52 @@ class DataPlotter:
         df_top_ingredients = self.data_analyzer.top_commun_ingredients(engine)
         print(df_top_ingredients)
         return df_top_ingredients
+    
+    def plot_quick_recipes_evolution(self, engine):
+        """
+        Trace l'évolution de la proportion des recettes rapides au fil des années.
+        Utilise les données calculées par la méthode preprocess_and_calculate_proportions de DataAnalyzer.
+        """
+        logger.info("Attempting to plot the evolution of quick recipes proportions.")
+        try:
+            proportions_df = self.data_analyzer.proportion_quick_recipe(engine)
+            if proportions_df is not None and not proportions_df.empty:
+                logger.info("Data retrieved successfully, plotting.")
+                fig = px.line(proportions_df, x='Year', y='Proportion', 
+                              title='Evolution of the Proportion of Quick Recipes Over the Years',
+                              labels={'Proportion': 'Proportion (%)', 'Year': 'Year'},
+                              markers=True)
+                fig.update_layout(xaxis_title='Year',
+                                  yaxis_title='Proportion of Quick Recipes (%)',
+                                  showlegend=False)
+                return fig
+            else:
+                logger.warning("No data available to plot.")
+                return None
+        except Exception as e:
+            logger.error(f"Failed to plot quick recipes evolution: {e}")
+            return None
+
+    def plot_rate_interactions_quick_recipe(self,engine):
+        """
+        Trace l'évolution de la proportion du nombre d'interaction pour les recettes rapides.
+        """
+        logger.info("Attempting to plot the evolution of the rate of the interactions for quick recipes.")
+        try:
+            rate_inter_quick_recipe = self.data_analyzer.get_quick_recipe_interaction_rate(engine)
+            if rate_inter_quick_recipe is not None and not rate_inter_quick_recipe.empty:
+                logger.info("Data retrieved successfully, plotting.")
+                fig = px.line(rate_inter_quick_recipe, x='year', y='Proportion', 
+                              title='Proportion of Interactions for Quick-Tagged Recipes by Year',
+                              labels={'Proportion': 'Proportion (%)', 'year': 'year'},
+                              markers=True)
+                fig.update_layout(xaxis_title='Year',
+                                  yaxis_title='Rate of interactions for quick recipe (%)',
+                                  showlegend=False)
+                return fig
+            else:
+                logger.warning("No data available to plot.")
+                return None
+        except Exception as e:
+            logger.error(f"Failed to plot rate interaction quick recipes evolution: {e}")
+            return None
