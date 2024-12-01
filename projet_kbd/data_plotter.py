@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+from wordcloud import WordCloud
 from plotly.subplots import make_subplots
 from logger_config import logger
 
@@ -224,3 +225,39 @@ class DataPlotter:
         except Exception as e:
             logger.error(f"Failed to plot categories for quick recipes: {e}")
             return None
+
+
+    # Analyse des commentaires
+
+    @staticmethod
+    def plot_wordcloud(word_frequencies, title="Word Cloud"):
+        """
+        Affiche un Word Cloud à partir des fréquences des mots.
+        :param word_frequencies: Dictionnaire des mots et leurs fréquences.
+        :param title: Titre du Word Cloud.
+        """
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_frequencies)
+        # Générer la figure Matplotlib
+        fig, ax = plt.subplots()
+        ax.imshow(wordcloud, interpolation='bilinear')
+        ax.axis("off")
+        return fig
+    
+    @staticmethod
+    def plot_time_wordcloud(word_frequencies_time):
+        """
+        Génère un Word Cloud pour les mots associés à "time".
+        """
+        wordcloud = WordCloud(
+            width=800,
+            height=400,
+            background_color='white'
+        ).generate_from_frequencies(word_frequencies_time)
+        
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.imshow(wordcloud, interpolation='bilinear')
+        ax.axis('off')
+        plt.tight_layout()
+        return fig
+
+    

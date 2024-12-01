@@ -6,6 +6,7 @@ import functools
 import pandas as pd
 import sqlalchemy
 from streamlit_option_menu import option_menu
+from comment_analyzer import CommentAnalyzer
 
 
 
@@ -78,6 +79,20 @@ def create_rate_interactions_quick_recipe_charts(analyzer,_engine):
 def create_categories_quick_recipe_chart(analyzer,_engine):
     plotter = DataPlotter(analyzer)
     return plotter.plot_categories_quick_recipe(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_wordcloud_plot(analyzer):
+    comment_analyzer = CommentAnalyzer(analyzer.data[['review']].dropna())
+    cleaned_comments = comment_analyzer.clean_comments()
+    word_frequencies = comment_analyzer.generate_word_frequencies()
+    return DataPlotter.plot_wordcloud(word_frequencies)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_time_wordcloud_plot(analyzer):
+    comment_analyzer = CommentAnalyzer(analyzer.data[['review']].dropna())
+    cleaned_comments = comment_analyzer.clean_comments()
+    word_frequencies_time = comment_analyzer.generate_word_frequencies_associated_to_time()
+    return DataPlotter.plot_time_wordcloud(word_frequencies_time)
 
 
 def run(path_file , recipe_file , interaction_file , engine):
@@ -180,6 +195,22 @@ def run(path_file , recipe_file , interaction_file , engine):
                 This reinforces the idea that individuals are seeking practical solutions to maintain **structured and complete meals**, even with busier schedules and dual-income households. By focusing on simplifying main dish preparation, this trend reflects a societal adaptation to modern lifestyles, validating our analysis of cooking evolving into a **functional yet fulfilling necessity** ⚡.
                 """)
             
+            # Analyse des commentaires (Word Cloud général)
+            st.write("### Word Cloud: Frequent Terms in Comments 📝")
+            wordcloud_fig = create_wordcloud_plot(analyzer)
+            st.pyplot(wordcloud_fig)
+            st.write("""
+                Frequent terms like **"easy"** and **"quick"** highlight a focus on **efficiency** in cooking, reinforcing the trend toward simpler meals.
+            """)
+
+            # Analyse des termes associés à "time"
+            st.write("### Word Cloud: Context Around 'Time' ⏱️")
+            time_wordcloud_fig = create_time_wordcloud_plot(analyzer)
+            st.pyplot(time_wordcloud_fig)
+            st.write("""
+                This word cloud emphasizes how "time" in user comments often refers to cooking efficiency. Phrases like **"cut cooking time"** show a desire for quicker meals, while **"long time ago"** reflects frustrations with time-consuming recipes.
+            """)
+
 
         elif selected == 'Free Visualisation':
             st.write("## Tags Analysis")
