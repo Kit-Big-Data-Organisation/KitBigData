@@ -81,17 +81,17 @@ def create_categories_quick_recipe_chart(analyzer,_engine):
     return plotter.plot_categories_quick_recipe(_engine)
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def create_wordcloud_plot(analyzer):
+def create_wordcloud_plot(analyzer, _engine):
     comment_analyzer = CommentAnalyzer(analyzer.data[['review']].dropna())
     cleaned_comments = comment_analyzer.clean_comments()
-    word_frequencies = comment_analyzer.generate_word_frequencies()
+    word_frequencies = comment_analyzer.generate_word_frequencies(_engine)
     return DataPlotter.plot_wordcloud(word_frequencies)
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def create_time_wordcloud_plot(analyzer):
+def create_time_wordcloud_plot(analyzer, _engine):
     comment_analyzer = CommentAnalyzer(analyzer.data[['review']].dropna())
     cleaned_comments = comment_analyzer.clean_comments()
-    word_frequencies_time = comment_analyzer.generate_word_frequencies_associated_to_time()
+    word_frequencies_time = comment_analyzer.generate_word_frequencies_associated_to_time(_engine)
     return DataPlotter.plot_time_wordcloud(word_frequencies_time)
 
 
@@ -197,7 +197,7 @@ def run(path_file , recipe_file , interaction_file , engine):
             
             # Analyse des commentaires (Word Cloud général)
             st.write("### Word Cloud: Frequent Terms in Comments 📝")
-            wordcloud_fig = create_wordcloud_plot(analyzer)
+            wordcloud_fig = create_wordcloud_plot(analyzer, engine)
             st.pyplot(wordcloud_fig)
             st.write("""
                 Frequent terms like **"easy"** and **"quick"** highlight a focus on **efficiency** in cooking, reinforcing the trend toward simpler meals.
@@ -205,7 +205,7 @@ def run(path_file , recipe_file , interaction_file , engine):
 
             # Analyse des termes associés à "time"
             st.write("### Word Cloud: Context Around 'Time' ⏱️")
-            time_wordcloud_fig = create_time_wordcloud_plot(analyzer)
+            time_wordcloud_fig = create_time_wordcloud_plot(analyzer, engine)
             st.pyplot(time_wordcloud_fig)
             st.write("""
                 This word cloud emphasizes how "time" in user comments often refers to cooking efficiency. Phrases like **"cut cooking time"** show a desire for quicker meals, while **"long time ago"** reflects frustrations with time-consuming recipes.

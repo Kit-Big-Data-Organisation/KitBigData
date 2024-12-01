@@ -23,13 +23,22 @@ class CommentAnalyzer:
         self.comments['polarity'] = self.comments['text'].apply(lambda x: TextBlob(x).sentiment.polarity)
         return self.comments
 
-    def generate_word_frequencies(self, max_features=100):
+    def generate_word_frequencies(self, engine, max_features=100):
         """
         Calcule les fréquences des mots dans les commentaires.
         :param stop_words: Liste des mots à ignorer (par défaut en anglais).
         :param max_features: Nombre maximum de mots fréquents à retenir.
         :return: Un dictionnaire avec les mots et leurs fréquences.
         """
+        # Vérifier si les données existent déjà dans la base de données
+        try:
+            stored_data = pd.read_sql_table('word_frequencies', con=engine)
+            if not stored_data.empty:
+                print("Word frequencies found in database.")
+                return dict(zip(stored_data['word'], stored_data['frequency']))
+        except Exception as e:
+            print(f"Table not found or error loading data: {e}")
+
         # Stop words personnalisés
         custom_stop_words = ['recipe', 'used', 'thanks', 'make', 'just', 'really', 'didn', 'bit', 'great', 'good', 'added']
         # Fusionner 'english' (stop words par défaut) avec les stop words personnalisés
@@ -38,11 +47,30 @@ class CommentAnalyzer:
         word_matrix = vectorizer.fit_transform(self.comments['cleaned'])
         word_frequencies = dict(zip(vectorizer.get_feature_names_out(), word_matrix.sum(axis=0).A1))
 
+        # Enregistrer les résultats dans la base de données
+        try:
+            print("Saving word frequencies to database.")
+            word_frequencies_df = pd.DataFrame(list(word_frequencies.items()), columns=['word', 'frequency'])
+            word_frequencies_df.to_sql(name='word_frequencies', con=engine, if_exists='replace', index=False)
+            print("Word frequencies saved successfully.")
+        except Exception as e:
+            print(f"Failed to save word frequencies to database: {e}")
+            
         return word_frequencies
     
     
 
-    def generate_word_frequencies_associated_to_time(self, max_features=10):
+    def generate_word_frequencies_associated_to_time(self, engine, max_features=10):
+
+        # Vérifier si les données existent déjà dans la base de données
+        try:
+            stored_data = pd.read_sql_table('word_frequencies_time', con=engine)
+            if not stored_data.empty:
+                print("Word frequencies for 'time' found in database.")
+                return dict(zip(stored_data['phrase'], stored_data['frequency']))
+        except Exception as e:
+            print(f"Table not found or error loading data: {e}")
+
         def exclude_phrases_with_words(contexts, words_to_exclude):
             """
             Exclut les phrases contenant des mots ou expressions spécifiques.
@@ -98,6 +126,15 @@ class CommentAnalyzer:
         # Trier les mots les plus fréquents
         sorted_contexts = sorted(word_frequencies.items(), key=lambda x: x[1], reverse=True)
         top_contexts = dict(sorted_contexts[:max_features])
+
+        # Enregistrer les résultats dans la base de données
+        try:
+            print("Saving word frequencies to database.")
+            word_frequencies_df = pd.DataFrame(list(word_frequencies.items()), columns=['phrase', 'frequency'])
+            word_frequencies_df.to_sql(name='word_frequencies_time', con=engine, if_exists='replace', index=False)
+            print("Word frequencies saved successfully.")
+        except Exception as e:
+            print(f"Failed to save word frequencies to database: {e}")
 
         # Retourner les n mots les plus fréquents (au format liste de tuples)
         return top_contexts
