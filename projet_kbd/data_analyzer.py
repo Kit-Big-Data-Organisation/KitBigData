@@ -379,4 +379,69 @@ class DataAnalyzer:
         logger.info('Data saved to the database.')
 
         return rate_quick_recipe
+    
+    def get_categories_quick_recipe(self, engine):
+        """
+        Calcule les proportions des catégories de recettes rapides et sauvegarde les résultats dans la base de données.
+        """
+        logger.info("Starting the process to calculate quick recipe categories.")
+        
+        # Tenter de charger les données existantes depuis la base de données
+        try:
+            data = pd.read_sql_table('categories_quick_recipe', con=engine)
+            if not data.empty:
+                logger.info('Data found in the database. Returning existing data.')
+                return data
+            else:
+                logger.info('No data found in the table, proceeding with calculation.')
+        except Exception as e:
+            logger.error(f"Failed to load data from database: {e}")
+        
+        def contains_any_tag(tag_string, target_tags):
+            try:
+                # Safely evaluate the string to a list
+                tags_list = ast.literal_eval(tag_string)
+                # Check if any target tag is in the list of tags
+                return any(tag in target_tags for tag in tags_list)
+            except Exception as e:
+                logger.error(f"Error evaluating tags: {e}")
+                # In case of any error during evaluation, return False
+                return False
 
+        # Suppression des doublons basée sur 'id'
+        logger.info("Removing duplicates based on 'id'.")
+        unique_recipes = self.data.drop_duplicates(subset='id')
+        logger.info(f"Number of unique recipes after removing duplicates: {len(unique_recipes)}.")
+
+        # Filtrer les données entre 2002 et 2010
+        logger.info("Filtering recipes between the years 2002 and 2010.")
+        unique_recipes = unique_recipes[unique_recipes['year'].between(2002, 2010)]
+        logger.info(f"Number of recipes after filtering by year: {len(unique_recipes)}.")
+
+        # Définition des tags cibles et pertinents
+        target_tags = ['30-minutes-or-less', '15-minutes-or-less']
+        logger.info(f"Filtering recipes containing target tags: {target_tags}.")
+
+        # Filtrer les recettes contenant au moins un des tags cibles
+        quick_recipes = unique_recipes[unique_recipes['tags'].apply(lambda tags: contains_any_tag(tags, target_tags))]
+        logger.info(f"Number of quick recipes identified: {len(quick_recipes)}.")
+
+        # Extraire les tags associés aux types de plats
+        main_categories = ['main-dish', 'desserts', 'appetizers', 'soups-stews', 'salads', 'side-dishes', 'snacks']
+        logger.info(f"Extracting categories from quick recipes: {main_categories}.")
+
+        category_count = {category: quick_recipes['tags'].apply(lambda x: category in x).sum() for category in main_categories}
+        logger.info(f"Category counts calculated: {category_count}")
+
+        # Transformation en DataFrame (catégories en colonnes -> catégories en lignes)
+        category_df = pd.DataFrame(list(category_count.items()), columns=["Category", "Count"])
+        
+        # Sauvegarde des données dans la base de données
+        try:
+            logger.info("Saving category counts to the database.")
+            category_df.to_sql(name='categories_quick_recipe', con=engine, if_exists='replace', index=False)
+            logger.info('Data successfully saved to the database.')
+        except Exception as e:
+            logger.error(f"Failed to save category counts to the database: {e}")
+
+        return category_df

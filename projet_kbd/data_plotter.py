@@ -185,3 +185,42 @@ class DataPlotter:
         except Exception as e:
             logger.error(f"Failed to plot rate interaction quick recipes evolution: {e}")
             return None
+        
+    def plot_categories_quick_recipe(self, engine):
+        """
+        Trace un graphique montrant la distribution des catégories pour les quick recipes.
+        """
+        logger.info("Attempting to plot categories for quick recipes.")
+        try:
+            # Charger les données des catégories
+            category_df = self.data_analyzer.get_categories_quick_recipe(engine)
+
+            # Vérifier que les données ne sont pas vides et bien formatées
+            if category_df is not None and not category_df.empty and "Category" in category_df.columns:
+                logger.info("Data retrieved successfully, plotting.")
+
+                # Création du graphique
+                fig = px.bar(
+                    category_df,
+                    x='Category',
+                    y='Count',
+                    title='Distribution of Categories for Quick Recipes',
+                    labels={'Count': 'Number of Recipes', 'Category': 'Recipe Category'},
+                    text='Count'  # Affiche le nombre directement sur les barres
+                )
+
+                # Mise en forme
+                fig.update_traces(textposition='outside')
+                fig.update_layout(
+                    xaxis_title='Category',
+                    yaxis_title='Number of Recipes',
+                    showlegend=False
+                )
+
+                return fig
+            else:
+                logger.warning("No data available or improperly formatted for plotting.")
+                return None
+        except Exception as e:
+            logger.error(f"Failed to plot categories for quick recipes: {e}")
+            return None
