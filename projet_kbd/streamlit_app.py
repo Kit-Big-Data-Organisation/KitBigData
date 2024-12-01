@@ -6,7 +6,7 @@ import functools
 import pandas as pd
 import sqlalchemy
 from streamlit_option_menu import option_menu
-
+import utils
 
 
 @st.cache_data
@@ -40,11 +40,6 @@ def create_charts(analyzer, set_number):
     return plotter.plot_pie_chart_tags(set_number)
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def create_nutrition_histograms(analyzer):
-    plotter = DataPlotter(analyzer)
-    return plotter.plot_high_rating_nutrition()
-
-@st.cache_data(hash_funcs={DataAnalyzer: id})
 def create_oils_stacked_histograms(analyzer, _engine):
     plotter = DataPlotter(analyzer)
     return plotter.plot_oil_analysis(_engine)
@@ -63,6 +58,21 @@ def create_cuisine_evolution_charts(analyzer,_engine):
 def create_top_ingredients_table(analyzer,_engine):
     plotter = DataPlotter(analyzer)
     return plotter.plot_top_ingredients(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyze_cuisine_calories(analyzer , _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_calories_analysis(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyze_cuisine_minutes(analyzer , _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_cuisine_time_analysis(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyze_cuisine_nutritions(analyzer , _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_cuisine_nutritions(_engine)
 
 def run(path_file , recipe_file , interaction_file , engine):
         
@@ -92,11 +102,9 @@ def run(path_file , recipe_file , interaction_file , engine):
 
             col = st.columns([0.5 , 0.5])
             oils_analysis = create_oils_stacked_histograms(analyzer , engine)
-            cluster_charts_fig = create_nutrition_histograms(analyzer)
             with col[0]:
                 st.plotly_chart(oils_analysis)
-            with col[1]:
-                st.plotly_chart(cluster_charts_fig, use_container_width=True)
+
 
         elif selected == 'Cuisine Analysis':
 
@@ -106,19 +114,27 @@ def run(path_file , recipe_file , interaction_file , engine):
                 st.markdown('#### Cuisine Analysis')
                 cuisine_analysis = create_cuisine_charts(analyzer , engine)
                 st.plotly_chart(cuisine_analysis,use_container_width=True)
-
-                st.markdown('#### Top ingredients')
-                top_ingredients_cuisine = create_top_ingredients_table(analyzer , engine)
-                st.dataframe(top_ingredients_cuisine,use_container_width=True)
             
             with col[1]:
                 st.markdown('#### Cuisine Evolution')
                 cuisine_evolution = create_cuisine_evolution_charts(analyzer , engine)
                 st.plotly_chart(cuisine_evolution,use_container_width=True)
 
-        
-        
+                st.markdown('#### Cuisine nutrition analysis')
+                cuisine_calories = analyze_cuisine_calories(analyzer , engine)
+                st.plotly_chart(cuisine_calories , use_container_width=True)
 
+                cuisine_minutes = analyze_cuisine_minutes(analyzer , engine)
+                st.plotly_chart(cuisine_minutes ,use_container_width=True)
+        
+                cuisine_nutritions = analyze_cuisine_nutritions(analyzer , engine)
+                st.plotly_chart(cuisine_nutritions ,use_container_width=True)
+
+                st.markdown('#### Top ingredients')
+                top_ingredients_cuisine = create_top_ingredients_table(analyzer , engine)
+                styled_df = top_ingredients_cuisine.style.applymap(utils.highlight_cells)
+                st.dataframe(styled_df, hide_index = True , use_container_width=True)
+        
         elif selected == 'Free Visualisation':
             st.write("## Tags Analysis")
             col = st.columns([0.8,0.2])
