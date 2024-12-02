@@ -1,3 +1,49 @@
 # .gitignore
 Data/
 notebook/
+database/streamlit.db
+projet_kbd/main.py
+
+# Fichiers système macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Fichiers créés par macOS lors des transferts réseau ou stockage
+._*
+.Spotlight-V100
+.Trashes
+
+# Dossiers et fichiers générés par Python
+*.pyc
+__pycache__/
+*.py[cod]
+*.so
+
+# Environnements virtuels
+env/
+venv/
+
+# Fichiers de log
+*.log
+
+# Configuration Jupyter Notebook
+.ipynb_checkpoints/
+
+# Poetry
+.poetry/
+
+# IDE configuration files
+.vscode/
+.idea/
+*.iml
+
+# Dependencies
+*.egg
+*.egg-info/
+dist/
+build/
+pip-wheel-metadata/
+
+# Exclure les fichiers de base de données temporaires
+*.db
