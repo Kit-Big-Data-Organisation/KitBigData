@@ -72,3 +72,18 @@ class DataAnalyzer:
             top_tags_years[year] = [labels , sizes]
         
         return top_tags_years
+    
+    def filter_data_by_tags(self, tags_list):
+        
+        mask = self.data['tags'].apply(lambda x: any(tag in x for tag in tags_list))
+        # import pdb
+        # pdb.set_trace()
+        total_counts = self.data.groupby('year').size()
+        tags_counts = self.data[mask].groupby('year').size()
+        summary_df = pd.DataFrame({
+        'total_recipes': total_counts,
+        'recipes_with_tags': tags_counts
+        }).fillna(0).astype({'total_recipes': 'int', 'recipes_with_tags': 'int'})
+        summary_df['percentage'] = ((summary_df['recipes_with_tags'] / summary_df['total_recipes']) * 100).round(0).astype(int)
+        return summary_df.reset_index()
+    

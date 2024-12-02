@@ -42,3 +42,28 @@ class DataPlotter:
                 figs.append(fig)
         
         return figs
+    
+    def plot_recipe_histo_filter_tags(self, selected_tags):
+        summary_df = self.data_analyzer.filter_data_by_tags(selected_tags)
+        df = pd.DataFrame({
+        'Year': summary_df['year'],
+        'Percentage': summary_df['percentage']
+        })
+    
+        fig = px.bar(
+            df,
+            x='Year',
+            y='Percentage',
+            title='Percentage of Recipes with Selected Tags per Year',
+            labels={'Percentage': 'Percentage (%)', 'Year': 'Year'},
+            text='Percentage'
+        )
+        
+        fig.update_layout(
+            xaxis_title="Year",
+            yaxis_title="Percentage (%)",
+            uniformtext_minsize=8,
+            uniformtext_mode='hide'
+        )
+        return fig
+        
