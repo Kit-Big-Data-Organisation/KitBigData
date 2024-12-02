@@ -14,13 +14,13 @@ class CommentAnalyzer:
         """
         Nettoyer les commentaires pour faciliter les analyses textuelles.
         """
-        self.comments['cleaned'] = self.comments['review'].str.lower().str.replace(r'[^\w\s]', '', regex=True)
+        self.comments['cleaned'] = self.comments['review'].str.lower().str.replace(r'[^\w\s]', '', regex=True).str.strip()
 
     def sentiment_analysis(self):
         """
         Analyse des sentiments pour les commentaires.
         """
-        self.comments['polarity'] = self.comments['text'].apply(lambda x: TextBlob(x).sentiment.polarity)
+        self.comments['polarity'] = self.comments['cleaned'].apply(lambda x: TextBlob(x).sentiment.polarity)
         return self.comments
 
     def generate_word_frequencies(self, engine, max_features=100):

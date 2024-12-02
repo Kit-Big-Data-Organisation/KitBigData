@@ -5,9 +5,9 @@ import functools
 import os
 import json 
 import streamlit as st
-import utils
+import projet_kbd.utils as utils
 from sqlalchemy.types import Integer, Float, String
-from logger_config import logger
+from projet_kbd.logger_config import logger
 import ast
 
 class DataAnalyzer:
@@ -294,27 +294,12 @@ class DataAnalyzer:
         proportions = (target_counts / relevant_counts) * 100
         proportions_df = proportions.reset_index()
         proportions_df.columns = ['Year', 'Proportion']
+        proportions_df = proportions_df.fillna(0.0)
         logger.info('Proportions calculated.')
 
-        try:
-            # Tentative de chargement de la table pour vérifier si elle est vide
-            data = pd.read_sql_table('quick_recipe_proportion_table', con=engine)
-            if data.empty:
-                logger.info(f"The table {'quick_recipe_proportion_table'} is empty, proceeding to save data.")
-            else:
-                logger.info(f"The table {'quick_recipe_proportion_table'} contains data. New data will replace the existing data.")
-            
-            # Sauvegarde des données dans la base de données
-            proportions_df.to_sql(name='quick_recipe_proportion_table',con=engine,if_exists='replace')
-            logger.info('Data saved to the database.')
-
-        except Exception as e:
-            if 'does not exist' in str(e):
-                logger.info(f"The table {'quick_recipe_proportion_table'} does not exist. Creating new table and saving data.")
-                proportions_df.to_sql(name='quick_recipe_proportion_table', con=engine, if_exists='replace')
-                logger.info('Data saved to the database.')
-            else:
-                logger.error(f"Failed to save data to the database: {e}")
+        # Sauvegarde des données dans la base de données
+        proportions_df.to_sql(name='quick_recipe_proportion_table',con=engine,if_exists='replace')
+        logger.info('Data saved to the database.')
 
         return proportions_df
     
@@ -436,3 +421,4 @@ class DataAnalyzer:
             logger.error(f"Failed to save category counts to the database: {e}")
 
         return category_df
+    
