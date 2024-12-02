@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from wordcloud import WordCloud
 from plotly.subplots import make_subplots
+import utils
 from logger_config import logger
 
 class DataPlotter:
@@ -46,42 +47,9 @@ class DataPlotter:
         
         return figs
 
-
-    def plot_high_rating_nutrition(self):
-
-        high_rating_year  = self.data_analyzer.high_rating_nutritions()
-        NutriList=['cal', 'totalFat', 'sugar', 'sodium', 'protein', 'satFat', 'carbs']
-
-        fig = make_subplots(rows=len(NutriList), cols=1, shared_xaxes=True, vertical_spacing=0.02, subplot_titles=NutriList)
-
-        for i, nutrient in enumerate(NutriList):
-            years = sorted(high_rating_year.keys())
-            fig.add_trace(
-                go.Bar(x=years, y=[high_rating_year[year][nutrient] for year in years], name='High Rating', marker_color='blue'),
-                row=i + 1, col=1
-            )
-        fig.update_layout(
-            height=300 * len(NutriList),  
-            showlegend=True,
-            title_text="Comparaison annuelle des valeurs nutritionnelles"
-        )
-
-        return fig
-
     def plot_oil_analysis(self , engine):
 
-        custom_palette = {
-            'olive oil': '#8a3ab9', 
-            'vegetable oil': '#bc2a8d',
-            'canola oil': '#e95950',
-            'sesame oil': '#fccc63',
-            'peanut oil': '#4c68d7',
-            'cooking oil': '#30cfd0',
-            'salad oil': '#6a67ce',
-            'oil': '#48cfad',
-            'corn oil': '#a8e063',
-            'extra virgin olive oil': '#fd9644'
-        }
+        custom_palette = utils.custom_palette
 
         df_oils = self.data_analyzer.analyze_oils(engine)
         df_oils['color'] = df_oils['Oil Type'].map(custom_palette)
@@ -110,7 +78,10 @@ class DataPlotter:
         df_cuisine_evolution = self.data_analyzer.cuisine_evolution(engine)
         num_rows = 2
         num_cols = 4
-        fig = make_subplots(rows=num_rows, cols=num_cols, subplot_titles=[f'{cuisine} Cuisine' for cuisine in df_cuisine_evolution.columns if cuisine != 'Year'])
+        fig = make_subplots(rows=num_rows, cols=num_cols, 
+                            subplot_titles=[f'{cuisine} Cuisine' for cuisine in df_cuisine_evolution.columns if cuisine != 'Year'],
+                            vertical_spacing = 0.12,
+                            horizontal_spacing = 0.1)
 
         idx = 1
 
@@ -121,12 +92,17 @@ class DataPlotter:
                 row = (idx - 1) // num_cols + 1
                 col = (idx - 1) % num_cols + 1
 
-                trace = go.Scatter(x=df_cuisine_evolution.index, y=df_cuisine_evolution[cuisine], mode='lines', name=cuisine)
+                trace = go.Scatter(x=df_cuisine_evolution['Year'], y=df_cuisine_evolution[cuisine], mode='lines', name=cuisine)
                 fig.add_trace(trace, row=row, col=col)
 
                 idx += 1
 
-        fig.update_layout(height=900, width=1200)
+        fig.update_layout(
+            height=800,
+            width=800,
+            showlegend=False,
+            title_text="Cuisine Proportions Over Time"
+        )
         fig.update_xaxes(title_text="Year")
         fig.update_yaxes(title_text="Proportion")
 
@@ -135,8 +111,54 @@ class DataPlotter:
     def plot_top_ingredients(self , engine):
 
         df_top_ingredients = self.data_analyzer.top_commun_ingredients(engine)
+        print('top ingredients')
         print(df_top_ingredients)
         return df_top_ingredients
+    
+    def plot_calories_analysis(self , engine):
+    
+        df_calories = self.data_analyzer.analyse_cuisine_nutritions(engine)
+        df_calories.sort_values(by = 'cal' ,inplace = True)        
+        fig = px.bar(
+            df_calories,
+            x= 'cal',  
+            y= df_calories['cuisine'],   
+            orientation='h',
+            color = df_calories['cuisine'],
+            title="Calories Mean by Cuisine",
+            labels={'cal': 'Calories Mean', 'cuisine': 'Cuisine'} 
+        )    
+        return fig
+    
+    def plot_cuisine_time_analysis(self , engine):
+        df_times = self.data_analyzer.analyse_cuisine_nutritions(engine)
+        df_times.sort_values(by = 'minutes' ,inplace = True)
+        
+        fig = px.bar(
+            df_times,
+            x=df_times['cuisine'],  
+            y='minutes',
+            color = df_times['cuisine'],
+            title="Mean time of recipes by Cuisine in minutes",
+            labels={'minutes': 'Mean minutes', 'cuisine': 'Cuisine'} 
+        )    
+        return fig
+    
+    def plot_cuisine_nutritions(self , engine):
+        df_nutritions = self.data_analyzer.analyse_cuisine_nutritions(engine)
+        nutritions = [column for column in df_nutritions.columns if column not in ['minutes' , 'cal']]
+        df_nutritions = df_nutritions[nutritions]
+        final_long = df_nutritions.reset_index().melt(id_vars='cuisine', var_name='nutrient', value_name='value')
+        fig = px.bar(
+            final_long,
+            x ='cuisine',
+            y = 'value',
+            color = 'nutrient',
+            title= "Nutritional content by Cuisine in PDV",
+            labels={'value': 'PDV(%)', 'nutrient': 'Nutrient Type'},
+            barmode = 'group'
+        )    
+        return fig
     
     def plot_quick_recipes_evolution(self, engine):
         """

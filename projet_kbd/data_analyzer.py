@@ -5,6 +5,7 @@ import functools
 import os
 import json 
 import streamlit as st
+import utils
 from sqlalchemy.types import Integer, Float, String
 from logger_config import logger
 import ast
@@ -26,27 +27,7 @@ class DataAnalyzer:
             self.data = self.data[ (self.data[col] < colmax) & (self.data[col] > colmin) ]
 
         return self.data
-    
-    
-    def high_rating_nutritions(self):
-        
-        high_rating_year ={}
-        NutriList=['cal', 'totalFat', 'sugar', 'sodium', 'protein', 'satFat', 'carbs']
-
-        for year in range(2002 , 2011):
-            high_rating = {}
-            merged_year_high = self.data[(self.data['year'] == year) & (self.data['rating']>=3)]
-            for col in NutriList:
-                high_rating[col] = merged_year_high[col].mean()
-
-            high_rating_year[year] = high_rating
-
-        for year , nutritions in high_rating_year.items():
-            total = sum(value for key, value in nutritions.items() if key != 'cal')
-            for nutrition, value in nutritions.items():
-                if nutrition != "cal":
-                    high_rating_year[year][nutrition] = (value / total) * 100
-        return high_rating_year 
+     
     
     def analyze_oils(self , engine):
 
@@ -65,19 +46,7 @@ class DataAnalyzer:
         year_oil = {}
 
         for year in range(2002, 2011):
-            oil_types = {
-                'olive oil': 0,
-                'vegetable oil': 0,
-                'canola oil': 0,
-                'sesame oil': 0,
-                'peanut oil': 0,
-                'cooking oil': 0,
-                'salad oil': 0,
-                'oil' : 0,
-                'corn oil' : 0,
-                'extra virgin olive oil' : 0
-            }
-            
+            oil_types = utils.oil_types
             df_year = self.data[self.data['year'] == year]
             number_id = df_year['id'].nunique()
             
@@ -168,15 +137,14 @@ class DataAnalyzer:
         return set_number_tags
     
     def analyze_cuisines(self , engine):
-
+        
         try:
             data = pd.read_sql_table('cuisine_data', con=engine)
             if not data.empty:
-                print('data found')
                 return data
         except Exception as e:
             print(f"Failed to load data from database: {e}")
-
+        
         self.data = self.data.drop_duplicates(subset=['id'])
         id_count = self.data['id'].nunique()
 
@@ -184,7 +152,11 @@ class DataAnalyzer:
         for cuisine in self.data['cuisine'].unique():
             if cuisine != 'other':
                 df_cuisine = self.data[self.data['cuisine'] == cuisine]
-                year_ingredients[cuisine] = df_cuisine.shape[0]/id_count
+                proportion = df_cuisine.shape[0]/id_count
+                if proportion <= 0.008:
+                    year_ingredients['others'] = year_ingredients.get('others' , 0) + proportion
+                else:
+                    year_ingredients[cuisine] = proportion
             
         labels = year_ingredients.keys()
         sizes = year_ingredients.values()
@@ -204,13 +176,10 @@ class DataAnalyzer:
         try:
             data = pd.read_sql_table('cuisine_evolution_dataframe', con=engine)
             if not data.empty:
-                print('data found')
-                print(data)
                 return data
         except Exception as e:
             print(f"Failed to load data from database: {e}")
-
-        df_filtered = self.data[self.data['cuisine'] != 'other']
+        df_filtered = self.data[self.data['cuisine'].isin(utils.relevant_cuisines)]
         cuisine_counts = df_filtered.groupby(['year' , 'cuisine'])['id'].nunique()
         year_counts = df_filtered.groupby(['year'])['id'].nunique()
         proportion = cuisine_counts.div(year_counts , level = 'year')
@@ -227,26 +196,48 @@ class DataAnalyzer:
     def top_commun_ingredients(self , engine):
         
         try:
-            data = pd.read_sql_table('top_ingredients', con=engine)
+            data = pd.read_sql_table('cuisine_top_ingredients', con=engine)
             if not data.empty:
-                print('data found')
-                print(data)
                 return data
         except Exception as e:
             print(f"Failed to load data from database: {e}")
         
         self.data['ingredients'] = self.data['ingredients'].apply(eval)
+        self.data = self.data[self.data['cuisine'].isin(utils.relevant_cuisines)]
         df_cuisine = self.data.groupby('cuisine')
         ingredients_counts = df_cuisine['ingredients'].apply(lambda x : Counter([item for sublist in x for item in sublist]).most_common(5))
         ingredients_counts = ingredients_counts.apply(lambda x : [k for (k,_) in x])
-        top_ingredients = pd.DataFrame(ingredients_counts).reset_index()
-        print(top_ingredients)
+        top_ingredients = pd.DataFrame(ingredients_counts).reset_index('cuisine')
         ingredients_expanded = pd.DataFrame(top_ingredients['ingredients'].apply(pd.Series))
         ingredients_expanded.columns = [f'Top ingredient {i+1}' for i in range(ingredients_expanded.shape[1])]
         final_ingredients = pd.concat([top_ingredients.drop(columns = ['ingredients']) , ingredients_expanded] , axis = 1).astype('string')
-        print(final_ingredients)
-        final_ingredients.to_sql(name='top_ingredients', con=engine, if_exists='replace')
+        final_ingredients.drop
+        final_ingredients.to_sql(name='cuisine_top_ingredients', con=engine, if_exists='replace')
         return final_ingredients
+    
+    def analyse_cuisine_nutritions(self , engine):
+        
+        try:
+            data = pd.read_sql_table('cuisines_nutritions', con=engine)
+            if not data.empty:
+                return data
+        except Exception as e:
+            print(f"Failed to load data from database: {e}")
+        
+        self.data = self.data[self.data['cuisine'].isin(utils.relevant_cuisines)]
+        cuisines = self.data.groupby('cuisine')
+        cuisines_nutritions = pd.DataFrame()
+        for name , group in cuisines :
+            if name !='other':
+                nutrition_medians = group[['sugar', 'protein', 'carbs', 'totalFat', 'satFat', 'sodium', 'cal', 'minutes']].median()
+                nutrition_medians = pd.DataFrame(nutrition_medians).T
+                nutrition_medians['cuisine'] = name
+                cuisines_nutritions = pd.concat([cuisines_nutritions , nutrition_medians] , axis = 0)
+            
+        cuisines_nutritions = cuisines_nutritions.set_index('cuisine')
+        cuisines_nutritions.to_sql(name='cuisines_nutritions', con=engine, if_exists='replace')
+
+        return cuisines_nutritions
             
     def proportion_quick_recipe(self, engine):
         """
