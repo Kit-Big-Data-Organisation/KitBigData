@@ -1,13 +1,11 @@
-from data_analyzer import DataAnalyzer
-from data_plotter import DataPlotter
-import streamlit as st
-from data_loader import Dataloader
-import functools
 import pandas as pd
-import sqlalchemy
-from streamlit_option_menu import option_menu
+import streamlit as st
 import utils
 from comment_analyzer import CommentAnalyzer
+from data_analyzer import DataAnalyzer
+from data_loader import Dataloader
+from data_plotter import DataPlotter
+from streamlit_option_menu import option_menu
 
 
 @st.cache_data
@@ -25,7 +23,9 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     data = data_loader.processed_recipe_interaction(interactions_loader)
     analyzer = DataAnalyzer(data)
     analyzer.clean_from_outliers()
-    analyzer.data.to_sql(name="recipe_interaction", con=_engine, if_exists="replace")
+    analyzer.data.to_sql(
+        name="recipe_interaction", con=_engine, if_exists="replace"
+    )
     return analyzer
 
 
@@ -125,7 +125,9 @@ def run(path_file, recipe_file, interaction_file, engine):
 
     st.set_page_config(layout="wide")
 
-    analyzer = load_and_analyze_data(path_file, recipe_file, interaction_file, engine)
+    analyzer = load_and_analyze_data(
+        path_file, recipe_file, interaction_file, engine
+    )
     with st.sidebar:
         selected = option_menu(
             "Dashboard",
@@ -182,7 +184,9 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         with col[1]:
             st.markdown("#### Cuisine Evolution")
-            cuisine_evolution = create_cuisine_evolution_charts(analyzer, engine)
+            cuisine_evolution = create_cuisine_evolution_charts(
+                analyzer, engine
+            )
             st.plotly_chart(cuisine_evolution, use_container_width=True)
             st.markdown("#### Cuisine nutrition analysis")
             cuisine_calories = analyze_cuisine_calories(analyzer, engine)
@@ -195,8 +199,12 @@ def run(path_file, recipe_file, interaction_file, engine):
             st.plotly_chart(cuisine_nutritions, use_container_width=True)
 
             st.markdown("#### Top ingredients")
-            top_ingredients_cuisine = create_top_ingredients_table(analyzer, engine)
-            styled_df = top_ingredients_cuisine.style.applymap(utils.highlight_cells)
+            top_ingredients_cuisine = create_top_ingredients_table(
+                analyzer, engine
+            )
+            styled_df = top_ingredients_cuisine.style.applymap(
+                utils.highlight_cells
+            )
             st.dataframe(styled_df, hide_index=True, use_container_width=True)
 
     elif selected == "Sociological Insight":
@@ -204,9 +212,11 @@ def run(path_file, recipe_file, interaction_file, engine):
         st.write("### 🌟 Sociological Insight")
 
         col = st.columns([0.5, 0.5])
-        quick_recipe_fig = create_proportion_quick_recipe_charts(analyzer, engine)
-        interactions_quick_recipe_fig = create_rate_interactions_quick_recipe_charts(
+        quick_recipe_fig = create_proportion_quick_recipe_charts(
             analyzer, engine
+        )
+        interactions_quick_recipe_fig = (
+            create_rate_interactions_quick_recipe_charts(analyzer, engine)
         )
 
         # Affichage des graphiques dans les colonnes
@@ -231,7 +241,7 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         st.write(
             """
-                The graphs illustrate a steady rise in both the **proportion of quick recipes** 🍳 and the **engagement with these recipes** 💬 between 2002 and 2010. 
+                The graphs illustrate a steady rise in both the **proportion of quick recipes** 🍳 and the **engagement with these recipes** 💬 between 2002 and 2010.
 
                 This reflects a societal shift toward **convenience** and **time efficiency** 🕒 in cooking, driven by:
                 - **Busier schedules**: As lifestyles became more fast-paced, less time was available for traditional cooking.
@@ -253,9 +263,9 @@ def run(path_file, recipe_file, interaction_file, engine):
         )
         st.write(
             """
-                Building on our previous analysis, this graph further supports the observation that the rise in quick recipes primarily targets **main dishes**, which are traditionally more time-intensive to prepare compared to categories like snacks or soups. 
+                Building on our previous analysis, this graph further supports the observation that the rise in quick recipes primarily targets **main dishes**, which are traditionally more time-intensive to prepare compared to categories like snacks or soups.
 
-                The dominance of main dishes among quick recipes highlights how this shift toward **convenience and time efficiency** 🕒 is not limited to inherently fast-to-make foods, but extends to the cornerstone of a meal: the **main course**. 
+                The dominance of main dishes among quick recipes highlights how this shift toward **convenience and time efficiency** 🕒 is not limited to inherently fast-to-make foods, but extends to the cornerstone of a meal: the **main course**.
 
                 This reinforces the idea that individuals are seeking practical solutions to maintain **structured and complete meals**, even with busier schedules and dual-income households. By focusing on simplifying main dish preparation, this trend reflects a societal adaptation to modern lifestyles, validating our analysis of cooking evolving into a **functional yet fulfilling necessity** ⚡.
                 """
@@ -287,7 +297,10 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         with col[0]:
             set_number = st.slider(
-                "Select set of top 10 tags (0 for 1-10, 1 for 11-20, etc.)", 0, 9, 0
+                "Select set of top 10 tags (0 for 1-10, 1 for 11-20, etc.)",
+                0,
+                9,
+                0,
             )
             tags_chart = create_charts(analyzer, set_number)
             with st.container():

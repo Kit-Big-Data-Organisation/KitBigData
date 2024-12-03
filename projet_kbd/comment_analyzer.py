@@ -1,7 +1,6 @@
 import pandas as pd
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, CountVectorizer
 from textblob import TextBlob
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from projet_kbd.logger_config import logger
 
 
@@ -28,7 +27,8 @@ class CommentAnalyzer:
 
     def clean_comments(self) -> None:
         """
-        Clean comments by converting to lowercase, removing punctuation, and stripping whitespace.
+        Clean comments by converting to lowercase, removing punctuation,
+        and stripping whitespace.
 
         The cleaned comments are stored in a new column named 'cleaned'.
         """
@@ -47,7 +47,8 @@ class CommentAnalyzer:
         Returns
         -------
         pd.DataFrame
-            The original DataFrame with an additional 'polarity' column containing sentiment polarity scores.
+            The original DataFrame with an additional 'polarity' column
+            containing sentiment polarity scores.
         """
         self.comments["polarity"] = self.comments["cleaned"].apply(
             lambda x: TextBlob(x).sentiment.polarity
@@ -55,9 +56,12 @@ class CommentAnalyzer:
         logger.info("Sentiment analysis completed.")
         return self.comments
 
-    def generate_word_frequencies(self, engine, max_features: int = 100) -> dict:
+    def generate_word_frequencies(
+        self, engine, max_features: int = 100
+    ) -> dict:
         """
-        Compute word frequencies from cleaned comments and save them to a database.
+        Compute word frequencies from cleaned comments and save them to a
+        database.
 
         Parameters
         ----------
@@ -108,7 +112,10 @@ class CommentAnalyzer:
                 list(word_frequencies.items()), columns=["word", "frequency"]
             )
             word_frequencies_df.to_sql(
-                name="word_frequencies", con=engine, if_exists="replace", index=False
+                name="word_frequencies",
+                con=engine,
+                if_exists="replace",
+                index=False,
             )
             logger.info("Word frequencies saved successfully.")
         except Exception as e:
@@ -132,13 +139,18 @@ class CommentAnalyzer:
         Returns
         -------
         dict
-            A dictionary where keys are n-grams (phrases) and values are their frequencies.
+            A dictionary where keys are n-grams (phrases) and values
+            are their frequencies.
         """
         try:
-            stored_data = pd.read_sql_table("word_frequencies_time", con=engine)
+            stored_data = pd.read_sql_table(
+                "word_frequencies_time", con=engine
+            )
             if not stored_data.empty:
                 logger.info("Word frequencies for 'time' found in database.")
-                return dict(zip(stored_data["phrase"], stored_data["frequency"]))
+                return dict(
+                    zip(stored_data["phrase"], stored_data["frequency"])
+                )
         except Exception as e:
             logger.warning(f"Table not found or error loading data: {e}")
 
@@ -161,7 +173,9 @@ class CommentAnalyzer:
             return [
                 context
                 for context in contexts
-                if not any(word in context.lower() for word in words_to_exclude)
+                if not any(
+                    word in context.lower() for word in words_to_exclude
+                )
             ]
 
         def extract_context(text, target_word="time", window=6) -> str:

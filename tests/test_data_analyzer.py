@@ -1,8 +1,8 @@
-import pytest
-from projet_kbd import data_analyzer
 from unittest.mock import MagicMock, patch
 import pandas as pd
-import ast
+import pytest
+
+from projet_kbd import data_analyzer
 
 
 @pytest.fixture
@@ -95,7 +95,9 @@ def test_proportion_quick_recipe(
 
     # Vérifier que les données sont sauvegardées dans la base
     mock_to_sql.assert_called_once_with(
-        name="quick_recipe_proportion_table", con=mock_engine, if_exists="replace"
+        name="quick_recipe_proportion_table",
+        con=mock_engine,
+        if_exists="replace",
     )
 
 
@@ -138,7 +140,10 @@ def test_proportion_quick_recipe_calculation(
 
     # Expected proportions
     expected = pd.DataFrame(
-        {"Year": [2005, 2007, 2009, 2010], "Proportion": [50.0, 50.0, 100.0, 50.0]}
+        {
+            "Year": [2005, 2007, 2009, 2010],
+            "Proportion": [50.0, 50.0, 100.0, 50.0],
+        }
     )
 
     # Assert the output matches the expected DataFrame
@@ -205,14 +210,16 @@ def test_get_categories_quick_recipe(
     Test the `get_categories_quick_recipe` function.
 
     This test ensures the function calculates the counts of main categories
-    for quick recipes, handles missing database data, and stores the results in the database.
+    for quick recipes, handles missing database data, and stores the results
+    in the database.
 
     Parameters
     ----------
     mock_to_sql : MagicMock
         Mock for `pd.DataFrame.to_sql` to intercept database write operations.
     mock_read_sql_table : MagicMock
-        Mock for `pd.read_sql_table` to simulate reading from an empty database table.
+        Mock for `pd.read_sql_table` to simulate reading from an empty database
+        table.
     sample_data : pd.DataFrame
         Fixture containing realistic sample data for testing.
     mock_engine : MagicMock
@@ -220,8 +227,10 @@ def test_get_categories_quick_recipe(
 
     Assertions
     ----------
-    - The resulting DataFrame matches the expected category counts for quick recipes.
-    - The function writes the results to the database table `categories_quick_recipe`.
+    - The resulting DataFrame matches the expected category counts for
+    quick recipes.
+    - The function writes the results to the database table
+    `categories_quick_recipe`.
     """
     # Simulate an empty database table to force calculation
     mock_read_sql_table.return_value = pd.DataFrame()

@@ -26,17 +26,26 @@ textblob = "^0.18.0.post0"
 
 [tool.poetry.dev-dependencies]
 black = "*"  # Auto-formatting, compatible with PEP8
-flake8 = "*"  # Linting for PEP8 compliance
 mypy = "*"  # Static type checking
 sphinx = "*"  # Documentation generation
 ipykernel = "*"  # Jupyter kernel support
 
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+flake8 = "^7.1.1"
+
 [tool.flake8]
-max-line-length = 88  # Align with Black's default line length
-extend-ignore = [
-    "E203",  # Whitespace before ':' (Black compatibility for slicing)
-    "W503",  # Line break before binary operator (Black compatibility)
-]
+max-line-length = 79
+ignore = ["E203", "E266", "E501", "W503"]
+exclude = [".git", "__pycache__", "build", "dist"]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_third_party = ["pandas", "numpy", "matplotlib", "seaborn", "streamlit"]
 
 [build-system]
 requires = ["poetry-core"]

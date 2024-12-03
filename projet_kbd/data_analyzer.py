@@ -1,14 +1,10 @@
-import pandas as pd
-from collections import Counter
 import ast
-import functools
-import os
 import json
-import streamlit as st
+import os
+from collections import Counter
+import pandas as pd
 import projet_kbd.utils as utils
-from sqlalchemy.types import Integer, Float, String
 from projet_kbd.logger_config import logger
-import ast
 
 
 class DataAnalyzer:
@@ -293,7 +289,7 @@ class DataAnalyzer:
                 tags_list = ast.literal_eval(tag_string)
                 # Check if any target tag is in the list of tags
                 return any(tag in target_tags for tag in tags_list)
-            except:
+            except (ValueError, SyntaxError):
                 # In case of any error during evaluation, return False
                 return False
 
@@ -369,7 +365,7 @@ class DataAnalyzer:
                 tags_list = ast.literal_eval(tag_string)
                 # Check if any target tag is in the list of tags
                 return any(tag in target_tags for tag in tags_list)
-            except:
+            except (ValueError, SyntaxError):
                 # In case of any error during evaluation, return False
                 return False
 

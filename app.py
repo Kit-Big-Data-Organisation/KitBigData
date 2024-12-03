@@ -7,10 +7,9 @@ et permet à l'utilisateur d'entrer son nom pour afficher un message
 personnalisé.
 """
 
-import streamlit as st
-import pandas as pd
 import numpy as np
-
+import pandas as pd
+import streamlit as st
 
 # Titre de la page
 st.title("Projet Kit Big Data")

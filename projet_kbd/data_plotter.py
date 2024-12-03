@@ -1,11 +1,11 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.express as px
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
-from wordcloud import WordCloud
-from plotly.subplots import make_subplots
 import utils
 from logger_config import logger
+from plotly.subplots import make_subplots
+from wordcloud import WordCloud
 
 
 class DataPlotter:
@@ -19,7 +19,10 @@ class DataPlotter:
 
         df = pd.DataFrame({"Year": x_values, "Interactions": y_values})
         fig = px.line(
-            df, x="Year", y="Interactions", title="Number of Interactions per Year"
+            df,
+            x="Year",
+            y="Interactions",
+            title="Number of Interactions per Year",
         )
         return fig
 
@@ -28,7 +31,9 @@ class DataPlotter:
         x_values, y_values = self.data_analyzer.group_recipes_year()
 
         df = pd.DataFrame({"Year": x_values, "Recipes": y_values})
-        fig = px.line(df, x="Year", y="Recipes", title="Number of recipes per Year")
+        fig = px.line(
+            df, x="Year", y="Recipes", title="Number of recipes per Year"
+        )
         return fig
 
     def plot_pie_chart_tags(self, set_number):
@@ -65,7 +70,9 @@ class DataPlotter:
         )
 
         fig.update_layout(
-            xaxis_title="Year", yaxis_title="Proportion", legend_title="Oil Type"
+            xaxis_title="Year",
+            yaxis_title="Proportion",
+            legend_title="Oil Type",
         )
         return fig
 
@@ -192,7 +199,9 @@ class DataPlotter:
         Trace l'évolution de la proportion des recettes rapides au fil des années.
         Utilise les données calculées par la méthode preprocess_and_calculate_proportions de DataAnalyzer.
         """
-        logger.info("Attempting to plot the evolution of quick recipes proportions.")
+        logger.info(
+            "Attempting to plot the evolution of quick recipes proportions."
+        )
         try:
             proportions_df = self.data_analyzer.proportion_quick_recipe(engine)
             if proportions_df is not None and not proportions_df.empty:
@@ -264,7 +273,9 @@ class DataPlotter:
         logger.info("Attempting to plot categories for quick recipes.")
         try:
             # Charger les données des catégories
-            category_df = self.data_analyzer.get_categories_quick_recipe(engine)
+            category_df = self.data_analyzer.get_categories_quick_recipe(
+                engine
+            )
 
             # Vérifier que les données ne sont pas vides et bien formatées
             if (

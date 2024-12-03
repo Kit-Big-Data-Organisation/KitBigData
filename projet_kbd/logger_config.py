@@ -6,7 +6,9 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",  # Format du message
     handlers=[
         logging.StreamHandler(),  # Affichage dans la console
-        logging.FileHandler("recipe_analysis.log"),  # Enregistrement dans un fichier
+        logging.FileHandler(
+            "recipe_analysis.log"
+        ),  # Enregistrement dans un fichier
     ],
 )
 

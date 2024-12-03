@@ -1,6 +1,8 @@
-import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
 import pandas as pd
+import pytest
+
 from projet_kbd import comment_analyzer
 
 
@@ -111,5 +113,8 @@ def test_generate_word_frequencies(
 
     # Verify the results are saved to the database
     mock_to_sql.assert_called_once_with(
-        name="word_frequencies", con=mock_engine, if_exists="replace", index=False
+        name="word_frequencies",
+        con=mock_engine,
+        if_exists="replace",
+        index=False,
     )

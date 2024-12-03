@@ -1,4 +1,11 @@
-relevant_cuisines = ["asian", "mexican", "italian", "african", "greek", "american"]
+relevant_cuisines = [
+    "asian",
+    "mexican",
+    "italian",
+    "african",
+    "greek",
+    "american",
+]
 
 oil_types = {
     "olive oil": 0,

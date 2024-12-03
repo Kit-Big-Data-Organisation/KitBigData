@@ -1,5 +1,5 @@
-import utils
 import pandas as pd
+import utils
 
 
 class Dataloader:
@@ -46,7 +46,15 @@ class Dataloader:
 
     def adding_nutrition(self, data):
 
-        NutriList = ["cal", "totalFat", "sugar", "sodium", "protein", "satFat", "carbs"]
+        NutriList = [
+            "cal",
+            "totalFat",
+            "sugar",
+            "sodium",
+            "protein",
+            "satFat",
+            "carbs",
+        ]
         nutrition_df = pd.DataFrame(
             data["nutrition"].apply(eval).tolist(), columns=NutriList
         )
