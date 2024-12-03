@@ -1,8 +1,6 @@
 from unittest.mock import MagicMock, patch
-
 import pandas as pd
 import pytest
-
 from projet_kbd import comment_analyzer
 
 
@@ -15,7 +13,7 @@ def sample_comments():
         {
             "review": [
                 "Great recipe! Loved it.",
-                "Didn't work as expected :(",
+                "Didn't work as expected :",
                 "This recipe saved me so much time, thanks!",
                 "Too salty for my taste, but overall good.",
                 "Perfect recipe! Took some time but worth it.",
