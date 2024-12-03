@@ -25,17 +25,17 @@ scikit-learn = "^1.5.2"
 textblob = "^0.18.0.post0"
 
 [tool.poetry.dev-dependencies]
-black = "*" # For pep8 and style errors
-flake8 = "*" # For pep8
-mypy = "*"  # For type checking
-sphinx = "*"  # For generating documentation
-ipykernel = "*"
+black = "*"  # Auto-formatting, compatible with PEP8
+flake8 = "*"  # Linting for PEP8 compliance
+mypy = "*"  # Static type checking
+sphinx = "*"  # Documentation generation
+ipykernel = "*"  # Jupyter kernel support
 
 [tool.flake8]
-max-line-length = 88  # Même longueur de ligne que Black
-ignore = [
-    "E203",  # Espacement autour des slices (conflit avec Black)
-    "W503",  # Line break before binary operator (conflit avec Black)
+max-line-length = 88  # Align with Black's default line length
+extend-ignore = [
+    "E203",  # Whitespace before ':' (Black compatibility for slicing)
+    "W503",  # Line break before binary operator (Black compatibility)
 ]
 
 [build-system]

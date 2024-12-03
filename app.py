@@ -12,17 +12,16 @@ import pandas as pd
 import numpy as np
 
 
-
-
-
 # Titre de la page
 st.title("Projet Kit Big Data")
 
 # Texte introductif
-st.write("""
+st.write(
+    """
 Ceci est un exemple simple pour tester Streamlit.
 Nous allons afficher un graphique ci-dessous :
-""")
+"""
+)
 
 
 # Générer des données aléatoires
@@ -39,8 +38,7 @@ def generate_random_data():
         pd.DataFrame: Un DataFrame avec les données générées aléatoirement.
     """
     return pd.DataFrame(
-        np.random.randn(50, 3),
-        columns=['Colonne A', 'Colonne B', 'Colonne C']
+        np.random.randn(50, 3), columns=["Colonne A", "Colonne B", "Colonne C"]
     )
 
 

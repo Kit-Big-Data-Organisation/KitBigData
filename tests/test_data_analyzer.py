@@ -4,31 +4,38 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 import ast
 
+
 @pytest.fixture
 def mock_engine():
     """Mock l'objet SQLAlchemy engine."""
     return MagicMock()
 
+
 @pytest.fixture
 def sample_data():
-    return pd.DataFrame({
-        'id': [1, 2, 3, 4, 5, 6, 7],
-        'year': [2005, 2005, 2007, 2007, 2009, 2010, 2010],
-        'tags': [
-            "['30-minutes-or-less', 'main-dish']",   # Rapide, main-dish
-            "['4-hours-or-less', 'soups-stews']",   # Non rapide, soups-stews
-            "['15-minutes-or-less', 'desserts']",   # Rapide, desserts
-            "['60-minutes-or-less', 'appetizers']", # Non rapide, appetizers
-            "['15-minutes-or-less', 'salads']",     # Rapide, salads
-            "['4-hours-or-less', 'side-dishes']",   # Non rapide, side-dishes
-            "['30-minutes-or-less', 'snacks']"      # Rapide, snacks
-        ],
-        'interactions': ['abc', 'abc', 'abc', 'abc', 'abc', 100, 200]
-    })
+    return pd.DataFrame(
+        {
+            "id": [1, 2, 3, 4, 5, 6, 7],
+            "year": [2005, 2005, 2007, 2007, 2009, 2010, 2010],
+            "tags": [
+                "['30-minutes-or-less', 'main-dish']",  # Rapide, main-dish
+                "['4-hours-or-less', 'soups-stews']",  # Non rapide, soups-stews
+                "['15-minutes-or-less', 'desserts']",  # Rapide, desserts
+                "['60-minutes-or-less', 'appetizers']",  # Non rapide, appetizers
+                "['15-minutes-or-less', 'salads']",  # Rapide, salads
+                "['4-hours-or-less', 'side-dishes']",  # Non rapide, side-dishes
+                "['30-minutes-or-less', 'snacks']",  # Rapide, snacks
+            ],
+            "interactions": ["abc", "abc", "abc", "abc", "abc", 100, 200],
+        }
+    )
 
-@patch('projet_kbd.data_analyzer.pd.read_sql_table')
-@patch('projet_kbd.data_analyzer.pd.DataFrame.to_sql')
-def test_proportion_quick_recipe(mock_to_sql, mock_read_sql_table, sample_data, mock_engine):
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+def test_proportion_quick_recipe(
+    mock_to_sql, mock_read_sql_table, sample_data, mock_engine
+):
     """
     Test the `proportion_quick_recipe` function from the `data_analyzer` module.
 
@@ -75,33 +82,33 @@ def test_proportion_quick_recipe(mock_to_sql, mock_read_sql_table, sample_data, 
     """
     # Simuler une base de données vide pour forcer le calcul
     mock_read_sql_table.return_value = pd.DataFrame()
-    
+
     # Créer une instance avec des données fictives
     analyzer = data_analyzer.DataAnalyzer(data=sample_data)
 
-    
     # Appeler la fonction
     result = analyzer.proportion_quick_recipe(mock_engine)
-    
+
     # Vérifier que le DataFrame de résultat contient les colonnes attendues
-    assert 'Year' in result.columns
-    assert 'Proportion' in result.columns
-    
+    assert "Year" in result.columns
+    assert "Proportion" in result.columns
+
     # Vérifier que les données sont sauvegardées dans la base
     mock_to_sql.assert_called_once_with(
-        name='quick_recipe_proportion_table',
-        con=mock_engine,
-        if_exists='replace'
+        name="quick_recipe_proportion_table", con=mock_engine, if_exists="replace"
     )
 
-@patch('projet_kbd.data_analyzer.pd.read_sql_table')
-@patch('projet_kbd.data_analyzer.pd.DataFrame.to_sql')
-def test_proportion_quick_recipe_calculation(mock_to_sql, mock_read_sql_table, sample_data, mock_engine):
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+def test_proportion_quick_recipe_calculation(
+    mock_to_sql, mock_read_sql_table, sample_data, mock_engine
+):
     """
     Test the `proportion_quick_recipe` function.
 
     This test ensures the function calculates the proportion of quick recipes
-    relative to relevant recipes per year, correctly handles missing database data, 
+    relative to relevant recipes per year, correctly handles missing database data,
     and stores the results in the database.
 
     Parameters
@@ -130,23 +137,24 @@ def test_proportion_quick_recipe_calculation(mock_to_sql, mock_read_sql_table, s
     result = analyzer.proportion_quick_recipe(mock_engine)
 
     # Expected proportions
-    expected = pd.DataFrame({
-        'Year': [2005, 2007, 2009, 2010],
-        'Proportion': [50.0, 50.0, 100.0, 50.0]
-    })
+    expected = pd.DataFrame(
+        {"Year": [2005, 2007, 2009, 2010], "Proportion": [50.0, 50.0, 100.0, 50.0]}
+    )
 
     # Assert the output matches the expected DataFrame
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
 
 
-@patch('projet_kbd.data_analyzer.pd.read_sql_table')
-@patch('projet_kbd.data_analyzer.pd.DataFrame.to_sql')
-def test_get_quick_recipe_interaction_rate(mock_to_sql, mock_read_sql_table, sample_data, mock_engine):
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+def test_get_quick_recipe_interaction_rate(
+    mock_to_sql, mock_read_sql_table, sample_data, mock_engine
+):
     """
     Test the `get_quick_recipe_interaction_rate` function.
 
     This test ensures the function calculates the interaction rate for quick recipes
-    relative to all interactions per year, handles missing database data, 
+    relative to all interactions per year, handles missing database data,
     and stores the results in the database.
 
     Parameters
@@ -175,20 +183,24 @@ def test_get_quick_recipe_interaction_rate(mock_to_sql, mock_read_sql_table, sam
     result = analyzer.get_quick_recipe_interaction_rate(mock_engine)
 
     # Expected interaction rates
-    expected = pd.DataFrame({
-        'year': [2005, 2007, 2009, 2010],
-        'Quick_Tag_Interactions': [1, 1, 1, 1],
-        'Total_Interactions': [2, 2, 1, 2],
-        'Proportion': [50.0, 50.0, 100.0, 50.0]
-    })
+    expected = pd.DataFrame(
+        {
+            "year": [2005, 2007, 2009, 2010],
+            "Quick_Tag_Interactions": [1, 1, 1, 1],
+            "Total_Interactions": [2, 2, 1, 2],
+            "Proportion": [50.0, 50.0, 100.0, 50.0],
+        }
+    )
 
     # Assert the output matches the expected DataFrame
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
 
 
-@patch('projet_kbd.data_analyzer.pd.read_sql_table')
-@patch('projet_kbd.data_analyzer.pd.DataFrame.to_sql')
-def test_get_categories_quick_recipe(mock_to_sql, mock_read_sql_table, sample_data, mock_engine):
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+def test_get_categories_quick_recipe(
+    mock_to_sql, mock_read_sql_table, sample_data, mock_engine
+):
     """
     Test the `get_categories_quick_recipe` function.
 
@@ -221,10 +233,20 @@ def test_get_categories_quick_recipe(mock_to_sql, mock_read_sql_table, sample_da
     result = analyzer.get_categories_quick_recipe(mock_engine)
 
     # Expected category counts
-    expected = pd.DataFrame({
-        'Category': ['main-dish', 'desserts', 'appetizers', 'soups-stews', 'salads', 'side-dishes', 'snacks'],
-        'Count': [1, 1, 0, 0, 1, 0, 1]
-    })
+    expected = pd.DataFrame(
+        {
+            "Category": [
+                "main-dish",
+                "desserts",
+                "appetizers",
+                "soups-stews",
+                "salads",
+                "side-dishes",
+                "snacks",
+            ],
+            "Count": [1, 1, 0, 0, 1, 0, 1],
+        }
+    )
 
     # Assert the output matches the expected DataFrame
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)

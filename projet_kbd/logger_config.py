@@ -3,11 +3,11 @@ import logging
 # Configuration de base du logger
 logging.basicConfig(
     level=logging.INFO,  # Niveau minimum des messages à afficher
-    format='%(asctime)s - %(levelname)s - %(message)s',  # Format du message
+    format="%(asctime)s - %(levelname)s - %(message)s",  # Format du message
     handlers=[
         logging.StreamHandler(),  # Affichage dans la console
-        logging.FileHandler("recipe_analysis.log")  # Enregistrement dans un fichier
-    ]
+        logging.FileHandler("recipe_analysis.log"),  # Enregistrement dans un fichier
+    ],
 )
 
 # Création d'un logger que les autres modules peuvent importer
