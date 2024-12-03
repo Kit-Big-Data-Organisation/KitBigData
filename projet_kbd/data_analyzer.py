@@ -20,7 +20,9 @@ class DataAnalyzer:
             IQR = self.data[col].quantile(0.75) - self.data[col].quantile(0.25)
             colmax = self.data[col].quantile(0.75) + 1.5 * IQR
             colmin = self.data[col].quantile(0.25) - 1.5 * IQR
-            self.data = self.data[(self.data[col] < colmax) & (self.data[col] > colmin)]
+            self.data = self.data[
+                (self.data[col] < colmax) & (self.data[col] > colmin)
+            ]
 
         return self.data
 
@@ -60,7 +62,9 @@ class DataAnalyzer:
                 year_oil[year][oil] = year_oil[year][oil] / sum(oils.values())
 
         df_oils = (
-            pd.DataFrame(year_oil).T.reset_index().rename(columns={"index": "Year"})
+            pd.DataFrame(year_oil)
+            .T.reset_index()
+            .rename(columns={"index": "Year"})
         )
         df_oils = df_oils.melt(
             id_vars=["Year"], var_name="Oil Type", value_name="Proportion"
@@ -72,7 +76,10 @@ class DataAnalyzer:
     def group_interactions_year(self):
 
         grouped_interactions = self.data.groupby("year")["review"].count()
-        indices, values = grouped_interactions.index, grouped_interactions.values
+        indices, values = (
+            grouped_interactions.index,
+            grouped_interactions.values,
+        )
 
         return indices, values
 
@@ -123,7 +130,9 @@ class DataAnalyzer:
                     tag_year = self.get_top_tags(year)
                     start_idx = set_number * 10
                     end_idx = start_idx + 10 + 1
-                    labels = [k for (k, _) in tag_year[year]][start_idx:end_idx]
+                    labels = [k for (k, _) in tag_year[year]][
+                        start_idx:end_idx
+                    ]
                     sizes = [v for (_, v) in tag_year[year]][start_idx:end_idx]
                     top_tags_years[year] = [labels, sizes]
 
@@ -175,14 +184,20 @@ class DataAnalyzer:
                 return data
         except Exception as e:
             print(f"Failed to load data from database: {e}")
-        df_filtered = self.data[self.data["cuisine"].isin(utils.relevant_cuisines)]
-        cuisine_counts = df_filtered.groupby(["year", "cuisine"])["id"].nunique()
+        df_filtered = self.data[
+            self.data["cuisine"].isin(utils.relevant_cuisines)
+        ]
+        cuisine_counts = df_filtered.groupby(["year", "cuisine"])[
+            "id"
+        ].nunique()
         year_counts = df_filtered.groupby(["year"])["id"].nunique()
         proportion = cuisine_counts.div(year_counts, level="year")
         proportion_df = proportion.reset_index()
         proportion_df.columns = ["Year", "Cuisine", "Proportion"]
         cuisine_df = (
-            proportion_df.pivot(index="Year", columns="Cuisine", values="Proportion")
+            proportion_df.pivot(
+                index="Year", columns="Cuisine", values="Proportion"
+            )
             .reindex(range(2002, 2011))
             .fillna(0)
             * 100
@@ -203,23 +218,33 @@ class DataAnalyzer:
             print(f"Failed to load data from database: {e}")
 
         self.data["ingredients"] = self.data["ingredients"].apply(eval)
-        self.data = self.data[self.data["cuisine"].isin(utils.relevant_cuisines)]
+        self.data = self.data[
+            self.data["cuisine"].isin(utils.relevant_cuisines)
+        ]
         df_cuisine = self.data.groupby("cuisine")
         ingredients_counts = df_cuisine["ingredients"].apply(
-            lambda x: Counter([item for sublist in x for item in sublist]).most_common(
-                5
-            )
+            lambda x: Counter(
+                [item for sublist in x for item in sublist]
+            ).most_common(5)
         )
-        ingredients_counts = ingredients_counts.apply(lambda x: [k for (k, _) in x])
-        top_ingredients = pd.DataFrame(ingredients_counts).reset_index("cuisine")
+        ingredients_counts = ingredients_counts.apply(
+            lambda x: [k for (k, _) in x]
+        )
+        top_ingredients = pd.DataFrame(ingredients_counts).reset_index(
+            "cuisine"
+        )
         ingredients_expanded = pd.DataFrame(
             top_ingredients["ingredients"].apply(pd.Series)
         )
         ingredients_expanded.columns = [
-            f"Top ingredient {i+1}" for i in range(ingredients_expanded.shape[1])
+            f"Top ingredient {i+1}"
+            for i in range(ingredients_expanded.shape[1])
         ]
         final_ingredients = pd.concat(
-            [top_ingredients.drop(columns=["ingredients"]), ingredients_expanded],
+            [
+                top_ingredients.drop(columns=["ingredients"]),
+                ingredients_expanded,
+            ],
             axis=1,
         ).astype("string")
         final_ingredients.drop
@@ -237,7 +262,9 @@ class DataAnalyzer:
         except Exception as e:
             print(f"Failed to load data from database: {e}")
 
-        self.data = self.data[self.data["cuisine"].isin(utils.relevant_cuisines)]
+        self.data = self.data[
+            self.data["cuisine"].isin(utils.relevant_cuisines)
+        ]
         cuisines = self.data.groupby("cuisine")
         cuisines_nutritions = pd.DataFrame()
         for name, group in cuisines:
@@ -274,12 +301,16 @@ class DataAnalyzer:
         """
 
         try:
-            data = pd.read_sql_table("quick_recipe_proportion_table", con=engine)
+            data = pd.read_sql_table(
+                "quick_recipe_proportion_table", con=engine
+            )
             if not data.empty:
                 logger.info("Data found in the database.")
                 return data
             else:
-                logger.info("No data found in the table, calculating proportions.")
+                logger.info(
+                    "No data found in the table, calculating proportions."
+                )
         except Exception as e:
             logger.error(f"Failed to load data from database: {e}")
 
@@ -296,9 +327,13 @@ class DataAnalyzer:
         # Suppression des doublons basée sur 'id'
         unique_recipes = self.data.drop_duplicates(subset="id")
         # Filter the data to include only years 2002 to 2010
-        unique_recipes = unique_recipes[unique_recipes["year"].between(2002, 2010)]
+        unique_recipes = unique_recipes[
+            unique_recipes["year"].between(2002, 2010)
+        ]
 
-        logger.info("Duplicates removed from data and data between 2002 and 2010.")
+        logger.info(
+            "Duplicates removed from data and data between 2002 and 2010."
+        )
 
         # Définition des tags cibles et pertinents
         target_tags = ["30-minutes-or-less", "15-minutes-or-less"]
@@ -338,7 +373,9 @@ class DataAnalyzer:
 
         # Sauvegarde des données dans la base de données
         proportions_df.to_sql(
-            name="quick_recipe_proportion_table", con=engine, if_exists="replace"
+            name="quick_recipe_proportion_table",
+            con=engine,
+            if_exists="replace",
         )
         logger.info("Data saved to the database.")
 
@@ -379,7 +416,9 @@ class DataAnalyzer:
 
         # Compter les interactions totales par année
         total_interactions_by_year = (
-            self.data.groupby("year").size().reset_index(name="Total_Interactions")
+            self.data.groupby("year")
+            .size()
+            .reset_index(name="Total_Interactions")
         )
 
         # Compter les interactions pour les quicks recipe par année
@@ -409,7 +448,9 @@ class DataAnalyzer:
 
         # Sauvegarde des données dans la base de données
         rate_quick_recipe.to_sql(
-            name="rate_interactions_for_quick_recipe", con=engine, if_exists="replace"
+            name="rate_interactions_for_quick_recipe",
+            con=engine,
+            if_exists="replace",
         )
         logger.info("Data saved to the database.")
 
@@ -419,16 +460,22 @@ class DataAnalyzer:
         """
         Calcule les proportions des catégories de recettes rapides et sauvegarde les résultats dans la base de données.
         """
-        logger.info("Starting the process to calculate quick recipe categories.")
+        logger.info(
+            "Starting the process to calculate quick recipe categories."
+        )
 
         # Tenter de charger les données existantes depuis la base de données
         try:
             data = pd.read_sql_table("categories_quick_recipe", con=engine)
             if not data.empty:
-                logger.info("Data found in the database. Returning existing data.")
+                logger.info(
+                    "Data found in the database. Returning existing data."
+                )
                 return data
             else:
-                logger.info("No data found in the table, proceeding with calculation.")
+                logger.info(
+                    "No data found in the table, proceeding with calculation."
+                )
         except Exception as e:
             logger.error(f"Failed to load data from database: {e}")
 
@@ -452,14 +499,18 @@ class DataAnalyzer:
 
         # Filtrer les données entre 2002 et 2010
         logger.info("Filtering recipes between the years 2002 and 2010.")
-        unique_recipes = unique_recipes[unique_recipes["year"].between(2002, 2010)]
+        unique_recipes = unique_recipes[
+            unique_recipes["year"].between(2002, 2010)
+        ]
         logger.info(
             f"Number of recipes after filtering by year: {len(unique_recipes)}."
         )
 
         # Définition des tags cibles et pertinents
         target_tags = ["30-minutes-or-less", "15-minutes-or-less"]
-        logger.info(f"Filtering recipes containing target tags: {target_tags}.")
+        logger.info(
+            f"Filtering recipes containing target tags: {target_tags}."
+        )
 
         # Filtrer les recettes contenant au moins un des tags cibles
         quick_recipes = unique_recipes[
@@ -467,7 +518,9 @@ class DataAnalyzer:
                 lambda tags: contains_any_tag(tags, target_tags)
             )
         ]
-        logger.info(f"Number of quick recipes identified: {len(quick_recipes)}.")
+        logger.info(
+            f"Number of quick recipes identified: {len(quick_recipes)}."
+        )
 
         # Extraire les tags associés aux types de plats
         main_categories = [
@@ -479,10 +532,14 @@ class DataAnalyzer:
             "side-dishes",
             "snacks",
         ]
-        logger.info(f"Extracting categories from quick recipes: {main_categories}.")
+        logger.info(
+            f"Extracting categories from quick recipes: {main_categories}."
+        )
 
         category_count = {
-            category: quick_recipes["tags"].apply(lambda x: category in x).sum()
+            category: quick_recipes["tags"]
+            .apply(lambda x: category in x)
+            .sum()
             for category in main_categories
         }
         logger.info(f"Category counts calculated: {category_count}")
@@ -503,6 +560,8 @@ class DataAnalyzer:
             )
             logger.info("Data successfully saved to the database.")
         except Exception as e:
-            logger.error(f"Failed to save category counts to the database: {e}")
+            logger.error(
+                f"Failed to save category counts to the database: {e}"
+            )
 
         return category_df

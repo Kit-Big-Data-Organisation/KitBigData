@@ -34,6 +34,7 @@ ipykernel = "*"  # Jupyter kernel support
 isort = "^5.13.2"
 flake8 = "^7.1.1"
 pytest = "^8.3.4"
+flake8-pyproject = "^1.2.3"
 
 [tool.flake8]
 max-line-length = 79
@@ -45,7 +46,7 @@ line-length = 79
 
 [tool.isort]
 profile = "black"
-line_length = 88
+line_length = 79
 known_third_party = ["pandas", "numpy", "matplotlib", "seaborn", "streamlit"]
 
 [build-system]

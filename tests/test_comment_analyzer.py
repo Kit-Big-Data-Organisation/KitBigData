@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 import pandas as pd
 import pytest
 from projet_kbd import comment_analyzer
@@ -75,4 +75,3 @@ def test_sentiment_analysis(sample_comments):
     assert polarities[0] > 0  # Positive comment
     assert polarities[1] < 0  # Negative comment
     assert polarities[2] > 0  # Positive comment
-
