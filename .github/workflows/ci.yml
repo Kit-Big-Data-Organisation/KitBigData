@@ -39,6 +39,9 @@ jobs:
 
       - name: Format code with Black
         run: poetry run black .
+      
+      - name: Format code with Flake8
+        run: poetry run flake8 .
 
       - name: Run unit tests with Pytest
         run: poetry run pytest
