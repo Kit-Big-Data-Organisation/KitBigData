@@ -81,9 +81,7 @@ def test_sentiment_analysis(sample_comments):
 
 @patch("projet_kbd.comment_analyzer.pd.read_sql_table")
 @patch("projet_kbd.comment_analyzer.pd.DataFrame.to_sql")
-def test_generate_word_frequencies(
-    mock_to_sql, mock_read_sql_table, sample_comments, mock_engine
-):
+def test_generate_word_frequencies(mock_to_sql, mock_read_sql_table, sample_comments, mock_engine):
     """
     Test the `generate_word_frequencies` function to ensure word frequencies are calculated and saved.
     """
