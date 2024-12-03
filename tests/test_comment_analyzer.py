@@ -56,7 +56,8 @@ def test_clean_comments(sample_comments):
 
 def test_sentiment_analysis(sample_comments):
     """
-    Test the `sentiment_analysis` function to ensure sentiment polarity is calculated correctly.
+    Test the `sentiment_analysis` function to ensure sentiment polarity is
+    calculated correctly.
     """
     # Create an instance of CommentAnalyzer
     analyzer = comment_analyzer.CommentAnalyzer(sample_comments)

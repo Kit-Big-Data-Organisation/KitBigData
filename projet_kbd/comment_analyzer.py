@@ -189,7 +189,8 @@ class CommentAnalyzer:
             target_word : str, optional
                 The target word to extract context around (default is 'time').
             window : int, optional
-                The number of words to extract before and after the target word (default is 6).
+                The number of words to extract before and after the target word
+                (default is 6).
 
             Returns
             -------

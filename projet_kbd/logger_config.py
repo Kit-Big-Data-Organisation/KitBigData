@@ -15,15 +15,16 @@ logging.basicConfig(
 # Création d'un logger que les autres modules peuvent importer
 logger = logging.getLogger(__name__)
 """
-Logger configuré pour l'application.
+Logger configured for the application.
 
-Ce logger est configuré pour afficher les messages dans la console et les enregistrer dans le fichier
-"log/recipe_analysis.log". Les messages incluent le timestamp, le niveau de log et le message.
+This logger is configured to display messages in the console and save them in
+the file "log/recipe_analysis.log". The messages include the timestamp, log
+level, and message.
 
 Usage:
     from logger_config import logger
 
-    logger.info("Message d'information")
-    logger.warning("Message d'avertissement")
-    logger.error("Message d'erreur")
+    logger.info("Information message")
+    logger.warning("Warning message")
+    logger.error("Error message")
 """

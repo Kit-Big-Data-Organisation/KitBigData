@@ -66,7 +66,9 @@ class DataPlotter:
             y="Proportion",
             color="Oil Type",
             color_discrete_map=custom_palette,
-            title="Proportion of Different Oils by Year, Ordered by Total Proportion",
+            title="""
+            Proportion of Different Oils by Year, Ordered by Total Proportion
+            """
         )
 
         fig.update_layout(
@@ -196,8 +198,9 @@ class DataPlotter:
 
     def plot_quick_recipes_evolution(self, engine):
         """
-        Trace l'évolution de la proportion des recettes rapides au fil des années.
-        Utilise les données calculées par la méthode preprocess_and_calculate_proportions de DataAnalyzer.
+        Plots the evolution of the proportion of quick recipes over the years.
+        Uses data calculated by the preprocess_and_calculate_proportions
+        method of DataAnalyzer.
         """
         logger.info(
             "Attempting to plot the evolution of quick recipes proportions."
@@ -210,7 +213,9 @@ class DataPlotter:
                     proportions_df,
                     x="Year",
                     y="Proportion",
-                    title="Evolution of the Proportion of Quick Recipes Over the Years",
+                    title='''
+                    Evolution of the Proportion of Quick Recipes Over the Years
+                    ''',
                     labels={"Proportion": "Proportion (%)", "Year": "Year"},
                     markers=True,
                 )
@@ -229,10 +234,12 @@ class DataPlotter:
 
     def plot_rate_interactions_quick_recipe(self, engine):
         """
-        Trace l'évolution de la proportion du nombre d'interaction pour les recettes rapides.
+        Trace l'évolution de la proportion du nombre d'interaction pour les
+        recettes rapides.
         """
         logger.info(
-            "Attempting to plot the evolution of the rate of the interactions for quick recipes."
+            '''Attempting to plot the evolution of the rate of the interactions
+            for quick recipes.'''
         )
         try:
             rate_inter_quick_recipe = (
@@ -247,7 +254,8 @@ class DataPlotter:
                     rate_inter_quick_recipe,
                     x="year",
                     y="Proportion",
-                    title="Proportion of Interactions for Quick-Tagged Recipes by Year",
+                    title='''Proportion of Interactions for Quick-Tagged
+                    Recipes by Year''',
                     labels={"Proportion": "Proportion (%)", "year": "year"},
                     markers=True,
                 )
@@ -268,7 +276,8 @@ class DataPlotter:
 
     def plot_categories_quick_recipe(self, engine):
         """
-        Trace un graphique montrant la distribution des catégories pour les quick recipes.
+        Trace un graphique montrant la distribution des catégories pour les
+        quick recipes.
         """
         logger.info("Attempting to plot categories for quick recipes.")
         try:
@@ -295,7 +304,7 @@ class DataPlotter:
                         "Count": "Number of Recipes",
                         "Category": "Recipe Category",
                     },
-                    text="Count",  # Affiche le nombre directement sur les barres
+                    text="Count",
                 )
 
                 # Mise en forme

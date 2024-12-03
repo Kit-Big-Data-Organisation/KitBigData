@@ -148,7 +148,14 @@ def run(path_file, recipe_file, interaction_file, engine):
         # Texte indiquant la période d'analyse
         st.write(
             """
-            Based on the graphs above, we observe that both the number of recipes and the number of interactions peak between 2002 and 2010. Before 2002, the data is sparse, with significantly fewer recipes and interactions recorded. After 2010, there is a noticeable decline in both metrics. To ensure a meaningful analysis, we will focus on the period between 2002 and 2010, where the data is most abundant and representative of user engagement.
+            Based on the graphs above, we observe that both the number of
+            recipes and the number of interactions peak between 2002 and
+            2010. Before 2002, the data is sparse, with significantly fewer
+            recipes and interactions recorded. After 2010, there is a
+            noticeable decline in both metrics. To ensure a meaningful
+            analysis, we will focus on the period between 2002 and 2010,
+            where the data is most abundant and representative of user
+            engagement.
             """
         )
 
@@ -241,15 +248,24 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         st.write(
             """
-                The graphs illustrate a steady rise in both the **proportion of quick recipes** 🍳 and the **engagement with these recipes** 💬 between 2002 and 2010.
+            The graphs illustrate a steady rise in both the **proportion
+            of quick recipes** 🍳 and the **engagement with these recipes**
+            💬 between 2002 and 2010.
 
-                This reflects a societal shift toward **convenience** and **time efficiency** 🕒 in cooking, driven by:
-                - **Busier schedules**: As lifestyles became more fast-paced, less time was available for traditional cooking.
-                - **Dual-income households**: With more families having both partners working, the demand for quick meal solutions increased.
-                - **Work-life balance**: The emphasis on balancing professional and personal lives encouraged time-saving habits in the kitchen.
+            This reflects a societal shift toward **convenience** and
+            **time efficiency** 🕒 in cooking, driven by:
+            - **Busier schedules**: As lifestyles became more fast-paced, less
+              time was available for traditional cooking.
+            - **Dual-income households**: With more families having both
+            partners working, the demand for quick meal solutions increased.
+            - **Work-life balance**: The emphasis on balancing professional and
+              personal lives encouraged time-saving habits in the kitchen.
 
-                As a result, cooking evolved from being a **traditional, time-intensive activity** to a **functional necessity** ⚡, catering to individuals seeking fast and practical meal preparation.
-                """
+            As a result, cooking evolved from being a **traditional,
+            time-intensive activity** to a **functional necessity** ⚡,
+            catering to individuals seeking fast and practical meal
+            preparation.
+            """
         )
 
         # Analuse Quick recipe categories
@@ -263,12 +279,23 @@ def run(path_file, recipe_file, interaction_file, engine):
         )
         st.write(
             """
-                Building on our previous analysis, this graph further supports the observation that the rise in quick recipes primarily targets **main dishes**, which are traditionally more time-intensive to prepare compared to categories like snacks or soups.
+            Building on our previous analysis, this graph further supports the
+            observation that the rise in quick recipes primarily targets **main
+            dishes**, which are traditionally more time-intensive to prepare
+            compared to categories like snacks or soups.
 
-                The dominance of main dishes among quick recipes highlights how this shift toward **convenience and time efficiency** 🕒 is not limited to inherently fast-to-make foods, but extends to the cornerstone of a meal: the **main course**.
+            The dominance of main dishes among quick recipes highlights how
+            this shift toward **convenience and time efficiency** 🕒 is not
+            limited to inherently fast-to-make foods, but extends to the
+            cornerstone of a meal: the **main course**.
 
-                This reinforces the idea that individuals are seeking practical solutions to maintain **structured and complete meals**, even with busier schedules and dual-income households. By focusing on simplifying main dish preparation, this trend reflects a societal adaptation to modern lifestyles, validating our analysis of cooking evolving into a **functional yet fulfilling necessity** ⚡.
-                """
+            This reinforces the idea that individuals are seeking practical
+            solutions to maintain **structured and complete meals**, even with
+            busier schedules and dual-income households. By focusing on
+            simplifying main dish preparation, this trend reflects a societal
+            adaptation to modern lifestyles, validating our analysis of cooking
+            evolving into a **functional yet fulfilling necessity** ⚡.
+            """
         )
 
         # Analyse des commentaires (Word Cloud général)
@@ -277,7 +304,9 @@ def run(path_file, recipe_file, interaction_file, engine):
         st.pyplot(wordcloud_fig)
         st.write(
             """
-                Frequent terms like **"easy"** and **"quick"** highlight a focus on **efficiency** in cooking, reinforcing the trend toward simpler meals.
+            Frequent terms like **"easy"** and **"quick"** highlight a focus on
+            **efficiency** in cooking, reinforcing the trend toward simpler
+            meals.
             """
         )
 
@@ -287,7 +316,10 @@ def run(path_file, recipe_file, interaction_file, engine):
         st.pyplot(time_wordcloud_fig)
         st.write(
             """
-                This word cloud emphasizes how "time" in user comments often refers to cooking efficiency. Phrases like **"cut cooking time"** show a desire for quicker meals, while **"long time ago"** reflects frustrations with time-consuming recipes.
+            This word cloud emphasizes how "time" in user comments often refers
+            to cooking efficiency. Phrases like **"cut cooking time"** show a
+            desire for quicker meals, while **"long time ago"** reflects
+            frustrations with time-consuming recipes.
             """
         )
 

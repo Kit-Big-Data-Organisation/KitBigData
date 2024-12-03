@@ -296,8 +296,9 @@ class DataAnalyzer:
 
     def proportion_quick_recipe(self, engine):
         """
-        Calcule la proportion des recettes rapides et tente de récupérer les données existantes de la base de données.
-        Si les données ne sont pas trouvées, procède au calcul et sauvegarde le résultat dans la base de données.
+        Calculates the proportion of quick recipes and attempts to retrieve
+        existing data from the database. If the data is not found, proceeds
+        with the calculation and saves the result in the database.
         """
 
         try:
@@ -391,7 +392,9 @@ class DataAnalyzer:
                 return existing_data
             else:
                 logger.info(
-                    "No data found in the table, calculation of the number of interaction for quick recipe per year."
+                    """ No data found in the table, calculation of the number
+                    of interaction for quick recipe per year.
+                    """
                 )
         except Exception as e:
             logger.error(f"Failed to load data from database: {e}")
@@ -458,7 +461,8 @@ class DataAnalyzer:
 
     def get_categories_quick_recipe(self, engine):
         """
-        Calcule les proportions des catégories de recettes rapides et sauvegarde les résultats dans la base de données.
+        Calculates the proportions of quick recipe categories and saves the
+        results in the database.
         """
         logger.info(
             "Starting the process to calculate quick recipe categories."
@@ -494,7 +498,9 @@ class DataAnalyzer:
         logger.info("Removing duplicates based on 'id'.")
         unique_recipes = self.data.drop_duplicates(subset="id")
         logger.info(
-            f"Number of unique recipes after removing duplicates: {len(unique_recipes)}."
+            f"""Number of unique recipes after
+            removing duplicates: {len(unique_recipes)}.
+            """
         )
 
         # Filtrer les données entre 2002 et 2010
@@ -503,7 +509,9 @@ class DataAnalyzer:
             unique_recipes["year"].between(2002, 2010)
         ]
         logger.info(
-            f"Number of recipes after filtering by year: {len(unique_recipes)}."
+            f"""Number of recipes after
+            filtering by year: {len(unique_recipes)}.
+            """
         )
 
         # Définition des tags cibles et pertinents
@@ -544,7 +552,6 @@ class DataAnalyzer:
         }
         logger.info(f"Category counts calculated: {category_count}")
 
-        # Transformation en DataFrame (catégories en colonnes -> catégories en lignes)
         category_df = pd.DataFrame(
             list(category_count.items()), columns=["Category", "Count"]
         )
