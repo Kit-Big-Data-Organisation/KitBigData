@@ -149,13 +149,14 @@ def run(path_file, recipe_file, interaction_file, engine):
         st.write(
             """
             Based on the graphs above, we observe that both the number of
-            recipes and the number of interactions peak between 2002 and
-            2010. Before 2002, the data is sparse, with significantly fewer
-            recipes and interactions recorded. After 2010, there is a
-            noticeable decline in both metrics. To ensure a meaningful
-            analysis, we will focus on the period between 2002 and 2010,
-            where the data is most abundant and representative of user
-            engagement.
+            recipes and the number of interactions peak between
+            2002 and 2010.
+            \nBefore 2002, the data is sparse, with significantly fewer
+            recipes and interactions recorded.
+            \nAfter 2010, there is a noticeable decline in both metrics. To
+            ensure a meaningful analysis, we will focus on the period between
+            2002 and 2010, where the data is most abundant and representative
+            of user engagement.
             """
         )
 
