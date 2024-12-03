@@ -54,7 +54,7 @@ class Dataloader:
     def adding_cuisines(self , data):
         data['cuisine'] = data['tags'].apply(utils.determine_cuisine)
         return data
-
+    
     
     def processed_recipe_interaction(self , interaction_loader):
         return (self.merge_recipe_interaction(interaction_loader)

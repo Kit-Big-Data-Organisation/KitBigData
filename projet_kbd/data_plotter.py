@@ -2,9 +2,10 @@ import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+from wordcloud import WordCloud
 from plotly.subplots import make_subplots
 import utils
-
+from logger_config import logger
 
 class DataPlotter:
 
@@ -158,3 +159,127 @@ class DataPlotter:
             barmode = 'group'
         )    
         return fig
+    
+    def plot_quick_recipes_evolution(self, engine):
+        """
+        Trace l'évolution de la proportion des recettes rapides au fil des années.
+        Utilise les données calculées par la méthode preprocess_and_calculate_proportions de DataAnalyzer.
+        """
+        logger.info("Attempting to plot the evolution of quick recipes proportions.")
+        try:
+            proportions_df = self.data_analyzer.proportion_quick_recipe(engine)
+            if proportions_df is not None and not proportions_df.empty:
+                logger.info("Data retrieved successfully, plotting.")
+                fig = px.line(proportions_df, x='Year', y='Proportion', 
+                              title='Evolution of the Proportion of Quick Recipes Over the Years',
+                              labels={'Proportion': 'Proportion (%)', 'Year': 'Year'},
+                              markers=True)
+                fig.update_layout(xaxis_title='Year',
+                                  yaxis_title='Proportion of Quick Recipes (%)',
+                                  showlegend=False)
+                return fig
+            else:
+                logger.warning("No data available to plot.")
+                return None
+        except Exception as e:
+            logger.error(f"Failed to plot quick recipes evolution: {e}")
+            return None
+
+    def plot_rate_interactions_quick_recipe(self,engine):
+        """
+        Trace l'évolution de la proportion du nombre d'interaction pour les recettes rapides.
+        """
+        logger.info("Attempting to plot the evolution of the rate of the interactions for quick recipes.")
+        try:
+            rate_inter_quick_recipe = self.data_analyzer.get_quick_recipe_interaction_rate(engine)
+            if rate_inter_quick_recipe is not None and not rate_inter_quick_recipe.empty:
+                logger.info("Data retrieved successfully, plotting.")
+                fig = px.line(rate_inter_quick_recipe, x='year', y='Proportion', 
+                              title='Proportion of Interactions for Quick-Tagged Recipes by Year',
+                              labels={'Proportion': 'Proportion (%)', 'year': 'year'},
+                              markers=True)
+                fig.update_layout(xaxis_title='Year',
+                                  yaxis_title='Rate of interactions for quick recipe (%)',
+                                  showlegend=False)
+                return fig
+            else:
+                logger.warning("No data available to plot.")
+                return None
+        except Exception as e:
+            logger.error(f"Failed to plot rate interaction quick recipes evolution: {e}")
+            return None
+        
+    def plot_categories_quick_recipe(self, engine):
+        """
+        Trace un graphique montrant la distribution des catégories pour les quick recipes.
+        """
+        logger.info("Attempting to plot categories for quick recipes.")
+        try:
+            # Charger les données des catégories
+            category_df = self.data_analyzer.get_categories_quick_recipe(engine)
+
+            # Vérifier que les données ne sont pas vides et bien formatées
+            if category_df is not None and not category_df.empty and "Category" in category_df.columns:
+                logger.info("Data retrieved successfully, plotting.")
+
+                # Création du graphique
+                fig = px.bar(
+                    category_df,
+                    x='Category',
+                    y='Count',
+                    title='Distribution of Categories for Quick Recipes',
+                    labels={'Count': 'Number of Recipes', 'Category': 'Recipe Category'},
+                    text='Count'  # Affiche le nombre directement sur les barres
+                )
+
+                # Mise en forme
+                fig.update_traces(textposition='outside')
+                fig.update_layout(
+                    xaxis_title='Category',
+                    yaxis_title='Number of Recipes',
+                    showlegend=False
+                )
+
+                return fig
+            else:
+                logger.warning("No data available or improperly formatted for plotting.")
+                return None
+        except Exception as e:
+            logger.error(f"Failed to plot categories for quick recipes: {e}")
+            return None
+
+
+    # Analyse des commentaires
+
+    @staticmethod
+    def plot_wordcloud(word_frequencies, title="Word Cloud"):
+        """
+        Affiche un Word Cloud à partir des fréquences des mots.
+        :param word_frequencies: Dictionnaire des mots et leurs fréquences.
+        :param title: Titre du Word Cloud.
+        """
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_frequencies)
+        # Générer la figure Matplotlib
+        fig, ax = plt.subplots()
+        ax.imshow(wordcloud, interpolation='bilinear')
+        ax.axis("off")
+        return fig
+    
+    @staticmethod
+    def plot_time_wordcloud(word_frequencies_time):
+        """
+        Génère un Word Cloud pour les mots associés à "time".
+        """
+        wordcloud = WordCloud(
+            width=800,
+            height=400,
+            background_color='white'
+        ).generate_from_frequencies(word_frequencies_time)
+        
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.imshow(wordcloud, interpolation='bilinear')
+        ax.axis('off')
+        plt.tight_layout()
+        return fig
+
+    
