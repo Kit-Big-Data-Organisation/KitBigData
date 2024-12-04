@@ -6,27 +6,40 @@ from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
+from logger_config import logger
+
 
 
 @st.cache_data
 def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
+
     try:
+        logger.info("Attempting to load data from the database.")
         data = pd.read_sql_table("recipe_interaction", con=_engine)
         if not data.empty:
-            print("data found")
+            logger.info("Data successfully loaded from the database.")
             return DataAnalyzer(data)
     except Exception as e:
-        print(f"Failed to load data from database: {e}")
+        logger.error(f"Failed to load data from database: {e}", exc_info=True)
 
-    data_loader = Dataloader(path_file, recipe_file)
-    interactions_loader = Dataloader(path_file, interaction_file)
-    data = data_loader.processed_recipe_interaction(interactions_loader)
-    analyzer = DataAnalyzer(data)
-    analyzer.clean_from_outliers()
-    analyzer.data.to_sql(
-        name="recipe_interaction", con=_engine, if_exists="replace"
-    )
-    return analyzer
+    try:
+        logger.info("Loading data from files.")
+        data_loader = Dataloader(path_file, recipe_file)
+        interactions_loader = Dataloader(path_file, interaction_file)
+        data = data_loader.processed_recipe_interaction(interactions_loader)
+        analyzer = DataAnalyzer(data)
+
+        logger.info("Cleaning data from outliers.")
+        analyzer.clean_from_outliers()
+
+        logger.info("Writing processed data back to the database.")
+        analyzer.data.to_sql(name="recipe_interaction", con=_engine, if_exists="replace")
+
+        logger.info("Data processing complete.")
+        return analyzer
+    except Exception as e:
+        logger.error(f"Error during data processing: {e}", exc_info=True)
+        raise
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
