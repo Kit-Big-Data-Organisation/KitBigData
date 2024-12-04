@@ -1,8 +1,14 @@
 # .gitignore
-Data/*
-!Data/
+
 notebook/
-database/streamlit.db
+
+# Ignorer tout dans Data sauf .gitkeep
+Data/*
+!Data/.gitkeep
+
+# Ignorer tout dans database sauf .gitkeep
+database/*
+!database/.gitkeep
 
 # Fichiers système macOS
 .DS_Store
