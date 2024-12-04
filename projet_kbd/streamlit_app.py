@@ -32,6 +32,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
 
         logger.info("Cleaning data from outliers.")
         analyzer.clean_from_outliers()
+        logger.info("Data cleaning complete.")
 
         try:
             logger.info("Writing processed data back to the database.")
