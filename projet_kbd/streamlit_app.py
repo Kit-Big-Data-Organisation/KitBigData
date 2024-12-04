@@ -103,17 +103,17 @@ def create_categories_quick_recipe_chart(analyzer, _engine):
     return plotter.plot_categories_quick_recipe(_engine)
 
 
-@st.cache_data(hash_funcs={DataAnalyzer: id})
-def create_wordcloud_plot(analyzer, _engine):
-    comment_analyzer = CommentAnalyzer(analyzer.data[["review"]].dropna())
+@st.cache_data
+def create_wordcloud_plot(_analyzer, _engine):
+    comment_analyzer = CommentAnalyzer(_analyzer.data[["review"]].dropna())
     comment_analyzer.clean_comments()
     word_frequencies = comment_analyzer.generate_word_frequencies(_engine)
     return DataPlotter.plot_wordcloud(word_frequencies)
 
 
-@st.cache_data(hash_funcs={DataAnalyzer: id})
-def create_time_wordcloud_plot(analyzer, _engine):
-    comment_analyzer = CommentAnalyzer(analyzer.data[["review"]].dropna())
+@st.cache_data
+def create_time_wordcloud_plot(_analyzer, _engine):
+    comment_analyzer = CommentAnalyzer(_analyzer.data[["review"]].dropna())
     comment_analyzer.clean_comments()
     word_frequencies_time = (
         comment_analyzer.generate_word_frequencies_associated_to_time(_engine)
