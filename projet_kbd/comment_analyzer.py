@@ -1,3 +1,18 @@
+"""
+Comment Analyzer Module
+=======================
+
+This module provides tools for analyzing user comments, including:
+- Cleaning comments.
+- Performing sentiment analysis.
+- Generating word frequencies and analyzing contextual word usage.
+
+Classes
+-------
+CommentAnalyzer:
+    Main class for processing and analyzing user comments.
+"""
+
 import pandas as pd
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, CountVectorizer
 from textblob import TextBlob
@@ -31,6 +46,10 @@ class CommentAnalyzer:
         and stripping whitespace.
 
         The cleaned comments are stored in a new column named 'cleaned'.
+
+        Notes
+        -----
+        This method modifies the `comments` attribute in place.
         """
         self.comments["cleaned"] = (
             self.comments["review"]
@@ -49,6 +68,11 @@ class CommentAnalyzer:
         pd.DataFrame
             The original DataFrame with an additional 'polarity' column
             containing sentiment polarity scores.
+
+        Notes
+        -----
+        The `clean_comments` method should be called before this one to
+        ensure that comments are cleaned.
         """
         self.comments["polarity"] = self.comments["cleaned"].apply(
             lambda x: TextBlob(x).sentiment.polarity
@@ -74,6 +98,12 @@ class CommentAnalyzer:
         -------
         dict
             A dictionary where keys are words and values are their frequencies.
+
+        Notes
+        -----
+        If a table named "word_frequencies" already exists in the database,
+        this method will return the existing data instead of recomputing
+        frequencies.
         """
         try:
             stored_data = pd.read_sql_table("word_frequencies", con=engine)
@@ -141,6 +171,11 @@ class CommentAnalyzer:
         dict
             A dictionary where keys are n-grams (phrases) and values
             are their frequencies.
+
+        Notes
+        -----
+        This method extracts contexts around the word 'time' and computes
+        word frequencies based on these contexts.
         """
         try:
             stored_data = pd.read_sql_table(
