@@ -7,14 +7,20 @@ from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
 from logger_config import logger
+from sqlalchemy import inspect
 from sqlalchemy.exc import SQLAlchemyError
 
 
 
 @st.cache_data
 def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
-
+    # Vérifier si la table existe et la créer si nécessaire
     try:
+        if 'recipe_interaction' not in inspect(_engine).get_table_names():
+            # Création d'une table vide si elle n'existe pas
+            pd.DataFrame().to_sql('recipe_interaction', con=_engine, if_exists='replace', index=False)
+            logger.info("Table 'recipe_interaction' created because it did not exist.")
+        
         logger.info("Attempting to load data from the database.")
         data = pd.read_sql_table("recipe_interaction", con=_engine)
         if not data.empty:
@@ -23,6 +29,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     except Exception as e:
         logger.error(f"Failed to load data from database: {e}", exc_info=True)
 
+    # Charger et analyser les données depuis les fichiers si la table est vide ou en cas d'erreur
     try:
         logger.info("Loading data from files.")
         data_loader = Dataloader(path_file, recipe_file)
@@ -36,11 +43,10 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
 
         try:
             logger.info("Writing processed data back to the database.")
-            analyzer.data.to_sql(name="recipe_interaction", con=_engine, if_exists="replace", index=False)
+            analyzer.data.to_sql(name="recipe_interaction", con=_engine, if_exists='replace', index=False)
             logger.info("Data successfully written to the database.")
         except SQLAlchemyError as e:
             logger.error("An error occurred while writing to the database.", exc_info=True)
-            # Gérer ou relancer l'erreur selon le besoin de l'application
             raise
         except Exception as e:
             logger.error("An unexpected error occurred during database operations.", exc_info=True)
