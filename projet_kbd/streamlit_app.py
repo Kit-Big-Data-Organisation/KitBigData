@@ -7,6 +7,7 @@ from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
 from logger_config import logger
+from sqlalchemy import SQLAlchemyError
 
 
 
@@ -32,8 +33,17 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
         logger.info("Cleaning data from outliers.")
         analyzer.clean_from_outliers()
 
-        logger.info("Writing processed data back to the database.")
-        analyzer.data.to_sql(name="recipe_interaction", con=_engine, if_exists="replace")
+        try:
+            logger.info("Writing processed data back to the database.")
+            analyzer.data.to_sql(name="recipe_interaction", con=_engine, if_exists="replace", index=False)
+            logger.info("Data successfully written to the database.")
+        except SQLAlchemyError as e:
+            logger.error("An error occurred while writing to the database.", exc_info=True)
+            # Gérer ou relancer l'erreur selon le besoin de l'application
+            raise
+        except Exception as e:
+            logger.error("An unexpected error occurred during database operations.", exc_info=True)
+            raise
 
         logger.info("Data processing complete.")
         return analyzer
