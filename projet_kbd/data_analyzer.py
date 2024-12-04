@@ -130,14 +130,9 @@ class DataAnalyzer:
         df_oils = pd.DataFrame(year_oil).T.reset_index().rename(columns={'index': 'Year'})
         df_oils = df_oils.melt(id_vars=['Year'], var_name='Oil Type', value_name='Proportion')
         
-        oils_collection = engine.collection('oils_dataframe')
-        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
-        oils_collection.document('data').delete()
-
-        # Ajouter ou mettre à jour le document avec de nouvelles données
-        oils_data = df_oils.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
-        for oil_data in oils_data:
-            oils_collection.document('data').set(oil_data)
+        collection_ref = engine.collection('oils_dataframe')
+            for index, row in df_oils.iterrows():
+                collection_ref.document(str(index)).set(row.to_dict())
 
         return df_oils
 
