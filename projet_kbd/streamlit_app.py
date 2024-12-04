@@ -7,7 +7,7 @@ from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
 from logger_config import logger
-from sqlalchemy import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError
 
 
 
