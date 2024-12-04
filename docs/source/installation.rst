@@ -59,7 +59,7 @@ Environment Notes
 
 Poetry automatically manages a virtual environment for the project. If you need to deactivate the environment, simply exit the shell:
 
-```bash
+```
 exit
 ```
 

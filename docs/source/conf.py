@@ -20,7 +20,8 @@ release = '1'
 
 extensions = [
     "sphinx.ext.autodoc",  # Générer automatiquement la documentation depuis les docstrings
-    "sphinx.ext.napoleon",  # Support des docstrings au format Google et NumPy
+    "sphinx.ext.napoleon", # Support des docstrings au format Google et NumPy
+    "sphinx.ext.viewcode", # Lien vers le code source
 ]
 
 templates_path = ['_templates']
@@ -31,5 +32,5 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
