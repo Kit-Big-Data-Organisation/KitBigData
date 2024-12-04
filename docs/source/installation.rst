@@ -1,52 +1,66 @@
 Installation
 ============
 
-To install the project, follow the steps below:
+To install and run the project, follow the steps below:
 
-1. **Clone the project repository:**
+1. Clone the project repository:
 
-    ```bash
-    git clone https://github.com/Kit-Big-Data-Organisation/KitBigData.git
-    cd projet_kbd
-    ```
+```
+git clone https://github.com/Kit-Big-Data-Organisation/KitBigData.git
+cd projet_kbd
+```
 
-2. **Install Poetry if it is not already installed:**
+2. Install Poetry if it is not already installed:
 
-    ```bash
-    curl -sSL https://install.python-poetry.org | python3 -
-    ```
+```
+pip install poetry
+```
 
-3. **Install the project dependencies with Poetry:**
+3. Install the project dependencies with Poetry:
 
-    ```bash
-    poetry install
-    ```
+```
+poetry install
+``` 
 
-4. **Activate the Poetry virtual environment:**
+4. Activate the Poetry virtual environment:
 
-    ```bash
-    poetry shell
-    ```
+```
+poetry shell
+``` 
 
-5. **Run the project:**
+5. Run the project:
 
-    ```bash
-    streamlit run main.py
-    ```
+```
+streamlit run projet_kbd/main.py
+```
 
-6. **Run tests (optional):**
-If the project includes tests, you can run them using:
+6. (Optional) Run tests:
 
-    ```bash
-    pytest
-    ```
+```
+pytest
+```
 
-**Environment Notes**
+
+---
+
+Data Files
+----------
+
+The project requires the following data files:
+- `RAW_recipes.csv`
+- `RAW_interactions.csv`
+
+These files will be **downloaded automatically** into the `Data/` directory when you run the project for the first time. No manual intervention is needed.
+
+---
+
+Environment Notes
 -----------------
-Poetry automatically manages a virtual environment for the project. If you need to deactivate the environment, simply exit the shell:
-    ```bash
-    exit
-    ```
 
-For more details on Poetry, visit the [official documentation](https://python-poetry.org/docs/).
+Poetry automatically manages a virtual environment for the project. If you need to deactivate the environment, simply exit the shell:
+
+```bash
+exit
+```
+
 

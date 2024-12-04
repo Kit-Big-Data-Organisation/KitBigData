@@ -9,6 +9,7 @@ Submodules
 
    projet_kbd.comment_analyzer
    projet_kbd.data_analyzer
+   projet_kbd.data_downloader
    projet_kbd.data_loader
    projet_kbd.data_plotter
    projet_kbd.logger_config

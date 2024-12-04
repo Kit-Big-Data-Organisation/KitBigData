@@ -1,8 +1,8 @@
 # .gitignore
-Data/
+Data/*
+!Data/
 notebook/
 database/streamlit.db
-projet_kbd/main.py
 
 # Fichiers système macOS
 .DS_Store
