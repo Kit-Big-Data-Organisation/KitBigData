@@ -25,8 +25,8 @@ import gdown
 from projet_kbd.logger_config import logger
 
 DATA_FILES = {
-    "RAW_recipes.csv": "https://drive.google.com/uc?id=1QyYM5oSH0Rpi91MLpYDfwb8rCvRPFqKR",
-    "RAW_interactions.csv": "https://drive.google.com/uc?id=1xAIEvkIreWBI2uQ6-7w9scGnY_ksruy3",
+    "RAW_recipes.csv": "https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w",
+    "RAW_interactions.csv": "https://drive.google.com/uc?id=1ikGYx3h741P2JIkFwIclhciiIGeBWpTL",
 }
 
 
