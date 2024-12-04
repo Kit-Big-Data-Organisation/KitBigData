@@ -29,47 +29,51 @@ class DataAnalyzer:
     def analyze_oils(self, engine):
 
         try:
-            data = pd.read_sql_table("oils_dataframe", con=engine)
+            data = pd.read_sql_table('oils_dataframe', con=engine)
             if not data.empty:
-                print("data found")
+                print('data found')
                 return data
         except Exception as e:
             print(f"Failed to load data from database: {e}")
 
-        self.data.drop_duplicates(subset=["id"], inplace=True)
-
-        self.data["ingredients"] = self.data["ingredients"].apply(eval)
+        self.data.drop_duplicates(subset=['id'], inplace=True)
+        
+        self.data['ingredients'] = self.data['ingredients'].apply(eval)
 
         year_oil = {}
 
         for year in range(2002, 2011):
-            oil_types = utils.oil_types
-            df_year = self.data[self.data["year"] == year]
-            number_id = df_year["id"].nunique()
-
+            oil_types = {
+                'olive oil': 0,
+                'vegetable oil': 0,
+                'canola oil': 0,
+                'sesame oil': 0,
+                'peanut oil': 0,
+                'cooking oil': 0,
+                'salad oil': 0,
+                'oil' : 0,
+                'corn oil' : 0,
+                'extra virgin olive oil' : 0
+            }
+            
+            df_year = self.data[self.data['year'] == year]
+            number_id = df_year['id'].nunique()
+            
             for _, row in df_year.iterrows():
-                ingredients_set = set(row["ingredients"])
+                ingredients_set = set(row['ingredients'])
                 for oil_type in oil_types.keys():
                     if oil_type in ingredients_set:
                         oil_types[oil_type] += 1
-
-            year_oil[year] = {
-                oil: count / number_id for oil, count in oil_types.items()
-            }
+            
+            year_oil[year] = {oil: count / number_id for oil, count in oil_types.items()}
 
         for year, oils in year_oil.items():
             for oil in oils:
-                year_oil[year][oil] = year_oil[year][oil] / sum(oils.values())
+                year_oil[year][oil] =  year_oil[year][oil]/sum(oils.values())
 
-        df_oils = (
-            pd.DataFrame(year_oil)
-            .T.reset_index()
-            .rename(columns={"index": "Year"})
-        )
-        df_oils = df_oils.melt(
-            id_vars=["Year"], var_name="Oil Type", value_name="Proportion"
-        )
-        df_oils.to_sql(name="oils_dataframe", con=engine, if_exists="replace")
+        df_oils = pd.DataFrame(year_oil).T.reset_index().rename(columns={'index': 'Year'})
+        df_oils = df_oils.melt(id_vars=['Year'], var_name='Oil Type', value_name='Proportion')
+        df_oils.to_sql(name='oils_dataframe', con=engine, if_exists='replace')
 
         return df_oils
 
