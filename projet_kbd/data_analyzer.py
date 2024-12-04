@@ -131,8 +131,8 @@ class DataAnalyzer:
         df_oils = df_oils.melt(id_vars=['Year'], var_name='Oil Type', value_name='Proportion')
         
         collection_ref = engine.collection('oils_dataframe')
-            for index, row in df_oils.iterrows():
-                collection_ref.document(str(index)).set(row.to_dict())
+        for index, row in df_oils.iterrows():
+            collection_ref.document(str(index)).set(row.to_dict())
 
         return df_oils
 
