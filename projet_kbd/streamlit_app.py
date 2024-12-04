@@ -13,15 +13,18 @@ from sqlalchemy.exc import SQLAlchemyError
 
 @st.cache_data
 def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
-
     try:
-        logger.info("Attempting to load data from the database.")
-        data = pd.read_sql_table("recipe_interaction", con=_engine)
+        logger.info("Attempting to load data from Firestore.")
+        collection_ref = _engine.collection('recipe_interaction')
+        docs = collection_ref.stream()
+        data_dicts = [doc.to_dict() for doc in docs]
+        data = pd.DataFrame(data_dicts)
+        
         if not data.empty:
-            logger.info("Data successfully loaded from the database.")
+            logger.info("Data successfully loaded from Firestore.")
             return DataAnalyzer(data)
     except Exception as e:
-        logger.warning(f"Failed to load data from database: {e}", exc_info=True)
+        logger.warning(f"Failed to load data from Firestore: {e}", exc_info=True)
 
     try:
         logger.info("Loading data from files.")
@@ -35,15 +38,13 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
         logger.info("Data cleaning complete.")
 
         try:
-            logger.info("Writing processed data back to the database.")
-            analyzer.data.to_sql(name="recipe_interaction", con=_engine, if_exists="replace", index=False)
-            logger.info("Data successfully written to the database.")
-        except SQLAlchemyError as e:
-            logger.error("An error occurred while writing to the database.", exc_info=True)
-            # Gérer ou relancer l'erreur selon le besoin de l'application
-            raise
+            logger.info("Writing processed data back to Firestore.")
+            collection_ref = _engine.collection('recipe_interaction')
+            for index, row in data.iterrows():
+                collection_ref.document(str(index)).set(row.to_dict())
+            logger.info("Data successfully written to Firestore.")
         except Exception as e:
-            logger.error("An unexpected error occurred during database operations.", exc_info=True)
+            logger.error("An unexpected error occurred during Firestore operations.", exc_info=True)
             raise
 
         logger.info("Data processing complete.")

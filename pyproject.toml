@@ -25,6 +25,8 @@ scikit-learn = "^1.5.2"
 textblob = "^0.18.0.post0"
 gdown = "^5.2.0"
 sphinx-rtd-theme = "^3.0.2"
+firebase-admin = "^6.6.0"
+google-cloud-firestore = "^2.19.0"
 
 [tool.poetry.dev-dependencies]
 black = "*"  # Auto-formatting, compatible with PEP8

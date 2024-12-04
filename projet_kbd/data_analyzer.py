@@ -86,7 +86,8 @@ class DataAnalyzer:
         """
 
         try:
-            data = pd.read_sql_table("oils_dataframe", con=engine)
+            oils_collection = engine.collection('oils_dataframe')
+            data = pd.DataFrame([doc.to_dict() for doc in oils_collection.stream()])
             if not data.empty:
                 logger.info("Data found in the database.")
                 return data
@@ -128,7 +129,15 @@ class DataAnalyzer:
 
         df_oils = pd.DataFrame(year_oil).T.reset_index().rename(columns={'index': 'Year'})
         df_oils = df_oils.melt(id_vars=['Year'], var_name='Oil Type', value_name='Proportion')
-        df_oils.to_sql(name='oils_dataframe', con=engine, if_exists='replace')
+        
+        oils_collection = engine.collection('oils_dataframe')
+        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
+        oils_collection.document('data').delete()
+
+        # Ajouter ou mettre à jour le document avec de nouvelles données
+        oils_data = df_oils.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
+        for oil_data in oils_data:
+            oils_collection.document('data').set(oil_data)
 
         return df_oils
 
@@ -263,7 +272,8 @@ class DataAnalyzer:
 
         """
         try:
-            data = pd.read_sql_table("cuisine_data", con=engine)
+            cuisines_collection = engine.collection('cuisine_data')
+            data = pd.DataFrame([doc.to_dict() for doc in cuisines_collection.stream()])
             if not data.empty:
                 return data
         except Exception as e:
@@ -289,7 +299,14 @@ class DataAnalyzer:
 
         cuisine_df = pd.DataFrame({"Cuisine": labels, "Proportion": sizes})
 
-        cuisine_df.to_sql(name="cuisine_data", con=engine, if_exists="replace")
+        cuisines_collection = engine.collection('cuisine_data')
+        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
+        cuisines_collection.document('data').delete()
+
+        # Ajouter ou mettre à jour le document avec de nouvelles données
+        cuisines_data = cuisine_df.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
+        for cuisine_data in cuisines_data:
+            cuisines_collection.document('data').set(cuisine_data)
 
         return cuisine_df
 
@@ -309,7 +326,8 @@ class DataAnalyzer:
                 A DataFrame with cuisine proportions for each year.
         """
         try:
-            data = pd.read_sql_table("cuisine_evolution_dataframe", con=engine)
+            cuisines_evolution_collection = engine.collection('cuisine_evolution_dataframe')
+            data = pd.DataFrame([doc.to_dict() for doc in cuisines_evolution_collection.stream()])
             if not data.empty:
                 return data
         except Exception as e:
@@ -332,9 +350,14 @@ class DataAnalyzer:
             .fillna(0)
             * 100
         )
-        cuisine_df.to_sql(
-            name="cuisine_evolution_dataframe", con=engine, if_exists="replace"
-        )
+        cuisines_evolution_collection = engine.collection('cuisine_evolution_dataframe')
+        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
+        cuisines_evolution_collection.document('data').delete()
+
+        # Ajouter ou mettre à jour le document avec de nouvelles données
+        cuisines_evolution_data = cuisine_df.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
+        for cuisine_evolution_data in cuisines_evolution_data:
+            cuisines_evolution_collection.document('data').set(cuisine_evolution_data)
 
         return cuisine_df
 
@@ -355,7 +378,8 @@ class DataAnalyzer:
             A DataFrame with the top common ingredients for each cuisine.
         """
         try:
-            data = pd.read_sql_table("cuisine_top_ingredients", con=engine)
+            ingredients_collection = engine.collection('cuisine_top_ingredients')
+            data = pd.DataFrame([doc.to_dict() for doc in ingredients_collection.stream()])
             if not data.empty:
                 return data
         except Exception as e:
@@ -392,9 +416,14 @@ class DataAnalyzer:
             axis=1,
         ).astype("string")
         final_ingredients.drop
-        final_ingredients.to_sql(
-            name="cuisine_top_ingredients", con=engine, if_exists="replace"
-        )
+        ingredients_collection = engine.collection('cuisine_top_ingredients')
+        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
+        ingredients_collection.document('data').delete()
+
+        # Ajouter ou mettre à jour le document avec de nouvelles données
+        ingredients_data = final_ingredients.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
+        for ingredient_data in ingredients_data:
+            ingredients_collection.document('data').set(ingredient_data)
         return final_ingredients
 
     def analyse_cuisine_nutritions(self, engine):
@@ -413,7 +442,12 @@ class DataAnalyzer:
             A DataFrame with the median nutrition values for each cuisine.
         """
         try:
-            data = pd.read_sql_table("cuisines_nutritions", con=engine)
+            cuisines_nutritions_collection = engine.collection('cuisines_nutritions')
+            data = pd.DataFrame([doc.to_dict() for doc in cuisines_nutritions_collection.stream()])
+            cuisines_nutritions_collection = engine.collection('cuisines_nutritions')
+            cuisines_nutritions_docs = cuisines_nutritions_collection.stream()
+            for doc in cuisines_nutritions_docs:
+                doc.reference.delete()
             if not data.empty:
                 return data
         except Exception as e:
@@ -445,9 +479,14 @@ class DataAnalyzer:
                 )
 
         cuisines_nutritions = cuisines_nutritions.set_index("cuisine")
-        cuisines_nutritions.to_sql(
-            name="cuisines_nutritions", con=engine, if_exists="replace"
-        )
+        cuisines_nutritions_collection = engine.collection('cuisines_nutritions')
+        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
+        cuisines_nutritions_collection.document('data').delete()
+
+        # Ajouter ou mettre à jour le document avec de nouvelles données
+        cuisines_nutritions_data = cuisines_nutritions.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
+        for cuisine_nutrition_data in cuisines_nutritions_data:
+            cuisines_nutritions_collection.document('data').set(cuisine_nutrition_data)
 
         return cuisines_nutritions
 
@@ -467,9 +506,8 @@ class DataAnalyzer:
             A DataFrame with the proportion of quick recipes for each year.
         """
         try:
-            data = pd.read_sql_table(
-                "quick_recipe_proportion_table", con=engine
-            )
+            quick_recipe_proportion_collection = engine.collection('quick_recipe_proportion_table')
+            data = pd.DataFrame([doc.to_dict() for doc in quick_recipe_proportion_collection.stream()])
             if not data.empty:
                 logger.info("Data found in the database.")
                 return data
@@ -538,11 +576,14 @@ class DataAnalyzer:
         logger.info("Proportions calculated.")
 
         # Sauvegarde des données dans la base de données
-        proportions_df.to_sql(
-            name="quick_recipe_proportion_table",
-            con=engine,
-            if_exists="replace",
-        )
+        quick_recipe_proportion_collection = engine.collection('quick_recipe_proportion_table')
+        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
+        quick_recipe_proportion_collection.document('data').delete()
+
+        # Ajouter ou mettre à jour le document avec de nouvelles données
+        quick_recipe_proportion_data = proportions_df.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
+        for proportion_data in quick_recipe_proportion_data:
+            quick_recipe_proportion_collection.document('data').set(proportion_data)
         logger.info("Data saved to the database.")
 
         return proportions_df
@@ -563,9 +604,8 @@ class DataAnalyzer:
             A DataFrame with the rate of interactions for quick recipes.
         """
         try:
-            existing_data = pd.read_sql_table(
-                "rate_interactions_for_quick_recipe", con=engine
-            )
+            rate_interactions_collection = engine.collection('rate_interactions_for_quick_recipe')
+            existing_data = pd.DataFrame([doc.to_dict() for doc in rate_interactions_collection.stream()])
             if not existing_data.empty:
                 logger.info("Data found in the database.")
                 return existing_data
@@ -629,11 +669,14 @@ class DataAnalyzer:
         ]
 
         # Sauvegarde des données dans la base de données
-        rate_quick_recipe.to_sql(
-            name="rate_interactions_for_quick_recipe",
-            con=engine,
-            if_exists="replace",
-        )
+        rate_interactions_collection = engine.collection('rate_interactions_for_quick_recipe')
+        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
+        rate_interactions_collection.document('data').delete()
+
+        # Ajouter ou mettre à jour le document avec de nouvelles données
+        rate_interactions_data = rate_quick_recipe.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
+        for interaction_data in rate_interactions_data:
+            rate_interactions_collection.document('data').set(interaction_data)
         logger.info("Data saved to the database.")
 
         return rate_quick_recipe
@@ -659,7 +702,8 @@ class DataAnalyzer:
 
         # Tenter de charger les données existantes depuis la base de données
         try:
-            data = pd.read_sql_table("categories_quick_recipe", con=engine)
+            categories_quick_recipe_collection = engine.collection('categories_quick_recipe')
+            data = pd.DataFrame([doc.to_dict() for doc in categories_quick_recipe_collection.stream()])
             if not data.empty:
                 logger.info(
                     "Data found in the database. Returning existing data."
@@ -748,12 +792,14 @@ class DataAnalyzer:
         # Sauvegarde des données dans la base de données
         try:
             logger.info("Saving category counts to the database.")
-            category_df.to_sql(
-                name="categories_quick_recipe",
-                con=engine,
-                if_exists="replace",
-                index=False,
-            )
+            categories_quick_recipe_collection = engine.collection('categories_quick_recipe')
+            # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
+            categories_quick_recipe_collection.document('data').delete()
+
+            # Ajouter ou mettre à jour le document avec de nouvelles données
+            categories_quick_recipe_data = category_df.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
+            for category_data in categories_quick_recipe_data:
+                categories_quick_recipe_collection.document('data').set(category_data)
             logger.info("Data successfully saved to the database.")
         except Exception as e:
             logger.error(
