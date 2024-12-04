@@ -1,20 +1,61 @@
+"""
+Data Analyzer Module
+====================
+
+This module provides functionalities for analyzing and processing recipe
+data, including cleaning data, generating insights, and interacting with
+databases.
+
+Classes
+-------
+DataAnalyzer:
+    Main class for data processing and analysis.
+"""
+
 import ast
 import json
 import os
 from collections import Counter
 import pandas as pd
-import projet_kbd.utils as utils
+import utils
 from projet_kbd.logger_config import logger
 
 
 class DataAnalyzer:
+    """
+    A class for analyzing and processing recipe data.
 
-    def __init__(self, data):
+    Attributes
+    ----------
+    data : pd.DataFrame
+        The DataFrame containing recipe data.
+    """
 
+    def __init__(self, data: pd.DataFrame):
+        """
+        Initialize the DataAnalyzer with a DataFrame.
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            The DataFrame containing recipe data.
+        """
         self.data = data
 
-    def clean_from_outliers(self):
+    def clean_from_outliers(self) -> pd.DataFrame:
+        """
+        Remove outliers from numerical features based on the interquartile
+        range (IQR).
 
+        Numerical features cleaned:
+        - `minutes`: The time required to prepare a recipe.
+        - `cal`: The calorie count of a recipe.
+
+        Returns
+        -------
+        pd.DataFrame
+            The DataFrame with outliers removed.
+        """
         numerical_features = ["minutes", "cal"]
         for col in numerical_features:
             IQR = self.data[col].quantile(0.75) - self.data[col].quantile(0.25)
@@ -27,21 +68,35 @@ class DataAnalyzer:
         return self.data
 
     def analyze_oils(self, engine):
+        """
+        Analyze the proportions of oil types used in recipes over the years.
+
+        If the data is not found in the database, it calculates proportions
+        for each oil type by year and saves the results.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with oil type proportions for each year.
+        """
 
         try:
-            data = pd.read_sql_table('oils_dataframe', con=engine)
+            data = pd.read_sql_table("oils_dataframe", con=engine)
             if not data.empty:
-                print('data found')
+                logger.info("Data found in the database.")
                 return data
         except Exception as e:
-            print(f"Failed to load data from database: {e}")
+            logger.warning(f"Failed to load data from the database: {e}")
 
-        self.data.drop_duplicates(subset=['id'], inplace=True)
-        
-        self.data['ingredients'] = self.data['ingredients'].apply(eval)
+        self.data.drop_duplicates(subset=["id"], inplace=True)
+        self.data["ingredients"] = self.data["ingredients"].apply(eval)
 
         year_oil = {}
-
         for year in range(2002, 2011):
             oil_types = {
                 'olive oil': 0,
@@ -77,8 +132,16 @@ class DataAnalyzer:
 
         return df_oils
 
-    def group_interactions_year(self):
+    def group_interactions_year(self) -> tuple:
+        """
+        Count the number of interactions (reviews) grouped by year.
 
+        Returns
+        -------
+        tuple
+            A tuple containing the indices (years) and the values (review
+            counts).
+        """
         grouped_interactions = self.data.groupby("year")["review"].count()
         indices, values = (
             grouped_interactions.index,
@@ -87,18 +150,37 @@ class DataAnalyzer:
 
         return indices, values
 
-    def group_recipes_year(self):
+    def group_recipes_year(self) -> tuple:
+        """
+        Count the number of unique recipes grouped by year.
 
+        Returns
+        -------
+        tuple
+            A tuple containing the indices (years) and the values (recipe
+            counts).
+        """
         grouped_recipes = self.data.groupby("year")["id"].nunique()
         indices, values = grouped_recipes.index, grouped_recipes.values
 
         return indices, values
 
-    def get_tags(self, year):
+    def get_tags(self, year: int) -> Counter:
+        """
+        Extract all tags used in recipes for a given year.
 
+        Parameters
+        ----------
+        year : int
+            The year to filter recipes by.
+
+        Returns
+        -------
+        Counter
+            A Counter object containing the frequency of each tag.
+        """
         tags = Counter()
-        current = self.data
-        current = current[current["year"] == year]
+        current = self.data[self.data["year"] == year]
         tags_df = current["tags"]
 
         for row in tags_df:
@@ -107,26 +189,43 @@ class DataAnalyzer:
 
         return tags
 
-    def get_top_tags(self, year):
+    def get_top_tags(self, year: int) -> dict:
+        """
+        Get the top 100 tags for a specific year.
 
+        Parameters
+        ----------
+        year : int
+            The year to filter recipes by.
+
+        Returns
+        -------
+        dict
+            A dictionary where the year is the key and the top tags are the
+            values.
+        """
         top_commun_year = {}
-
         tag_year = self.get_tags(year)
-
         top_commun_year[year] = tag_year.most_common(100)
 
         return top_commun_year
 
-    def get_top_tag_per_year(self):
+    def get_top_tag_per_year(self) -> dict:
+        """
+        Extract the top tags for each year in the dataset.
 
+        Returns
+        -------
+        dict
+            A dictionary containing the top tags for each year from 2002 to
+            2010.
+        """
         file_path = "top_tags.json"
 
         if os.path.exists(file_path):
             with open(file_path, "r") as file:
                 set_number_tags = json.load(file)
-
         else:
-
             set_number_tags = {}
             for set_number in range(0, 10):
                 top_tags_years = {}
@@ -148,7 +247,21 @@ class DataAnalyzer:
         return set_number_tags
 
     def analyze_cuisines(self, engine):
+        """
+        Analyze the proportions of cuisines in the dataset and save the results
+        in the database.
 
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with cuisine proportions.
+
+        """
         try:
             data = pd.read_sql_table("cuisine_data", con=engine)
             if not data.empty:
@@ -181,7 +294,20 @@ class DataAnalyzer:
         return cuisine_df
 
     def cuisine_evolution(self, engine):
+        """
+        Analyze the evolution of cuisine proportions over the years and save
+        the results in the database.
 
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+            Returns
+            -------
+            pd.DataFrame
+                A DataFrame with cuisine proportions for each year.
+        """
         try:
             data = pd.read_sql_table("cuisine_evolution_dataframe", con=engine)
             if not data.empty:
@@ -213,7 +339,21 @@ class DataAnalyzer:
         return cuisine_df
 
     def top_commun_ingredients(self, engine):
+        """
+        Analyze the top common ingredients for each cuisine and save the
+        results
+        in the database.
 
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the top common ingredients for each cuisine.
+        """
         try:
             data = pd.read_sql_table("cuisine_top_ingredients", con=engine)
             if not data.empty:
@@ -258,7 +398,20 @@ class DataAnalyzer:
         return final_ingredients
 
     def analyse_cuisine_nutritions(self, engine):
+        """
+        Analyze the median nutrition values for each cuisine and save the
+        results in the database.
 
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the median nutrition values for each cuisine.
+        """
         try:
             data = pd.read_sql_table("cuisines_nutritions", con=engine)
             if not data.empty:
@@ -300,11 +453,19 @@ class DataAnalyzer:
 
     def proportion_quick_recipe(self, engine):
         """
-        Calculates the proportion of quick recipes and attempts to retrieve
-        existing data from the database. If the data is not found, proceeds
-        with the calculation and saves the result in the database.
-        """
+        Calculate the proportion of quick recipes (30 minutes or less) over the
+        years and save the results in the database.
 
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the proportion of quick recipes for each year.
+        """
         try:
             data = pd.read_sql_table(
                 "quick_recipe_proportion_table", con=engine
@@ -387,6 +548,20 @@ class DataAnalyzer:
         return proportions_df
 
     def get_quick_recipe_interaction_rate(self, engine):
+        """
+        Calculate the rate of interactions for quick recipes (30 minutes or
+        less) over the years and save the results in the database.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the rate of interactions for quick recipes.
+        """
         try:
             existing_data = pd.read_sql_table(
                 "rate_interactions_for_quick_recipe", con=engine
@@ -465,8 +640,18 @@ class DataAnalyzer:
 
     def get_categories_quick_recipe(self, engine):
         """
-        Calculates the proportions of quick recipe categories and saves the
-        results in the database.
+        Calculate the categories of quick recipes (30 minutes or less) and save
+        the results in the database.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the categories of quick recipes.
         """
         logger.info(
             "Starting the process to calculate quick recipe categories."
