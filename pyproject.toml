@@ -25,18 +25,29 @@ scikit-learn = "^1.5.2"
 textblob = "^0.18.0.post0"
 
 [tool.poetry.dev-dependencies]
-black = "*" # For pep8 and style errors
-flake8 = "*" # For pep8
-mypy = "*"  # For type checking
-sphinx = "*"  # For generating documentation
-ipykernel = "*"
+black = "*"  # Auto-formatting, compatible with PEP8
+mypy = "*"  # Static type checking
+sphinx = "*"  # Documentation generation
+ipykernel = "*"  # Jupyter kernel support
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+flake8 = "^7.1.1"
+pytest = "^8.3.4"
+flake8-pyproject = "^1.2.3"
 
 [tool.flake8]
-max-line-length = 88  # Même longueur de ligne que Black
-ignore = [
-    "E203",  # Espacement autour des slices (conflit avec Black)
-    "W503",  # Line break before binary operator (conflit avec Black)
-]
+max-line-length = 79
+ignore = ["E203", "E266", "W503"]
+exclude = [".git", "__pycache__", "build", "dist", "./projet_kbd/main.py"]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+known_third_party = ["pandas", "numpy", "matplotlib", "seaborn", "streamlit"]
 
 [build-system]
 requires = ["poetry-core"]
