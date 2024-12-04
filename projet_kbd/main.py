@@ -4,9 +4,28 @@ from google.cloud import firestore
 from projet_kbd.data_downloader import download_data
 from projet_kbd.logger_config import logger
 import streamlit_app
+import json 
 
-# Configuration des clés d'accès à Firebase Firestore
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/credentials/projet-kbd-firebase-adminsdk-e9vub-2f01ddb3d9.json"
+# Recréer le JSON Firebase à partir des secrets
+firebase_credentials = {
+    "type": os.getenv("FIREBASE_TYPE"),
+    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+    "auth_uri": os.getenv("FIREBASE_AUTH_URI"),
+    "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_CERT_URL"),
+    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL"),
+    "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN"),
+}
+# Sauvegarder les informations dans un fichier temporaire si nécessaire
+with open("firebase_credentials.json", "w") as f:
+    json.dump(firebase_credentials, f)
+
+# Initialiser Firestore
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "firebase_credentials.json"
 
 # Initialisation de Firestore
 def get_firestore_db():
