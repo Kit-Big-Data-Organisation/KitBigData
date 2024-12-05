@@ -62,16 +62,20 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
 
     logger.info("📊 Adding data to the database")
     # Sauvegarder les données nettoyées dans la base avec `to_sql`
-    try:
-        analyzer.data.to_sql(
-            name="recipe_interaction",
-            con=_engine,
-            if_exists="replace",  # Remplace la table existante si elle existe
-            index=False  # N'ajoute pas l'index comme colonne
-        )
-        logger.info("✅ Data successfully saved to the 'recipe_interaction' table.")
-    except Exception as e:
-        logger.error(f"❌ Failed to save data to the database: {e}")
+    create_data_table_query = text(f"""
+    CREATE TABLE IF NOT EXISTS recipe_interaction (
+        recipe_id INTEGER,
+        user_id INTEGER,
+        date DATE,
+        rating INTEGER,
+        review TEXT,
+        interaction_type TEXT,
+        PRIMARY KEY (recipe_id, user_id)
+    );
+    """)
+    with _engine.connect() as conn:
+        conn.execute(create_data_table_query)
+    logger.info("✅ Table 'recipe_interaction' created successfully.")
 
     return analyzer
 
