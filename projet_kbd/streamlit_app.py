@@ -15,7 +15,7 @@ from sqlalchemy.exc import SQLAlchemyError
 def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     
     def write_data_in_batches(collection_ref, data, batch_size=500):
-        batch = _engine.batch()
+        batch = db.batch()
         for index, row in data.iterrows():
             # Ajoutez l'écriture au batch
             doc_ref = collection_ref.document(str(index))
@@ -25,7 +25,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
             if (index + 1) % batch_size == 0:
                 batch.commit()
                 print(f"Committed batch at index: {index}")
-                batch = _engine.batch()  # Créer un nouveau batch
+                batch = db.batch()  # Créer un nouveau batch
 
         # Commit des documents restants
         batch.commit()
