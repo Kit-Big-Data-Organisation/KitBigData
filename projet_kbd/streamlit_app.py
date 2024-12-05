@@ -10,11 +10,11 @@ from sqlalchemy.sql import text
 from logger_config import logger
 
 
-@st.cache_data
-def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
+
+def load_and_analyze_data(path_file, recipe_file, interaction_file, engine):
     try:
         # Tentative de charger les données depuis la base de données
-        data = pd.read_sql_table("recipe_interaction", con=_engine)
+        data = pd.read_sql_table("recipe_interaction", con=engine)
         if not data.empty:
             logger.info("Data found in the database.")
             return DataAnalyzer(data)
@@ -32,7 +32,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     logger.info("Data cleaned from outliers.")
 
     try:
-        with _engine.connect() as conn:
+        with engine.connect() as conn:
             result = conn.execute(text("SELECT 1"))
             print(f"Test query result: {result.fetchone()}")
     except Exception as e:
@@ -40,7 +40,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
 
     # Test léger d'écriture dans la base
     try:
-        with _engine.connect() as conn:
+        with engine.connect() as conn:
             conn.execute(text("CREATE TABLE IF NOT EXISTS test_table (test_col INTEGER);"))
             conn.execute(text("INSERT INTO test_table (test_col) VALUES (42);"))
             print("Test write to database successful.")
