@@ -89,7 +89,9 @@ def create_database_and_verify_table(db_path, table_name):
             with engine.connect() as conn:
                 conn.execute(create_table_query)
             logger.info(f"✅ Table '{table_name}' created successfully.")
-
+        # Close the engine connection
+        engine.dispose()
+        logger.info("Database connection closed.")
         return engine
 
     except SQLAlchemyError as e:
