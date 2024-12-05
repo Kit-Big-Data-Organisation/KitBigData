@@ -34,10 +34,10 @@ db_manager = DatabaseManager()
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def load_and_analyze_data(path_file, recipe_file, interaction_file, engine):
+def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     try:
         # Attache l'engine au DatabaseManager
-        db_manager.attach_engine(engine)
+        db_manager.attach_engine(_engine)
 
         # Charger les données depuis la base
         with db_manager.get_session() as session:
