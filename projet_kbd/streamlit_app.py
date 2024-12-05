@@ -13,6 +13,24 @@ from sqlalchemy.exc import SQLAlchemyError
 
 @st.cache_data
 def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
+    
+    def write_data_in_batches(collection_ref, data, batch_size=500):
+        batch = db.batch()
+        for index, row in data.iterrows():
+            # Ajoutez l'écriture au batch
+            doc_ref = collection_ref.document(str(index))
+            batch.set(doc_ref, row.to_dict())
+            
+            # Exécutez le batch quand il atteint la taille limite
+            if (index + 1) % batch_size == 0:
+                batch.commit()
+                print(f"Committed batch at index: {index}")
+                batch = db.batch()  # Créer un nouveau batch
+
+        # Commit des documents restants
+        batch.commit()
+        print("Final batch committed.")
+
     try:
         logger.info("Attempting to load data from Firestore.")
         collection_ref = _engine.collection('recipe_interaction')
@@ -40,8 +58,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
         try:
             logger.info("Writing processed data back to Firestore.")
             collection_ref = _engine.collection('recipe_interaction')
-            for index, row in data.iterrows():
-                collection_ref.document(str(index)).set(row.to_dict())
+            write_data_in_batches(collection_ref, data)
             logger.info("Data successfully written to Firestore.")
         except Exception as e:
             logger.error("An unexpected error occurred during Firestore operations.", exc_info=True)
