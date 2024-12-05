@@ -8,13 +8,14 @@ the `cProfile` module.
 
 import os
 import cProfile
-from sqlalchemy import create_engine, text, inspect
+from sqlalchemy import create_engine, text, inspect, 
 from sqlalchemy.exc import SQLAlchemyError
 from streamlit_sqlalchemy import StreamlitAlchemyMixin
 import streamlit as st
 from projet_kbd.data_downloader import download_data
 from projet_kbd.logger_config import logger
 import streamlit_app
+from sqlalchemy.engine import Engine
 
 # Define base directory (KitBigData)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -120,7 +121,10 @@ if __name__ == "__main__":
     try:
         # Ensure the database exists and get the engine
         engine = create_database_and_verify_table(DB_PATH, "test_table")
-
+        
+        if not isinstance(_engine, Engine):
+            raise ValueError("Le paramètre `_engine` n'est pas un objet SQLAlchemy Engine valide.")
+        logger.info("Le paramètre `_engine` est un objet SQLAlchemy Engine valide.")
         # Attach the engine to the DatabaseManager
         db_manager.attach_engine(engine)
 

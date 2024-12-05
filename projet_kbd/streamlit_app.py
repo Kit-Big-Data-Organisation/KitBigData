@@ -41,19 +41,6 @@ db_manager = DatabaseManager()
 def load_and_analyze_data(path_file, recipe_file, interaction_file, db_path):
     
     engine = create_engine(f"sqlite:///{db_path}")
-    try:
-        # Attache l'engine au DatabaseManager
-        db_manager.attach_engine(engine)
-
-        # Charger les données depuis la base
-        with db_manager.get_session() as session:
-            data = pd.read_sql_table("recipe_interaction", con=session.bind)
-            if not data.empty:
-                logger.info("Data found in the database.")
-                return DataAnalyzer(data)
-
-    except Exception as e:
-        logger.error(f"Failed to load data from database: {e}")
 
     # Charger les données depuis les fichiers si la base est vide
     data_loader = Dataloader(path_file, recipe_file)
