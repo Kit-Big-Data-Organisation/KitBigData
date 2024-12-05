@@ -38,9 +38,7 @@ db_manager = DatabaseManager()
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def load_and_analyze_data(path_file, recipe_file, interaction_file, db_path):
-    
-    engine = create_engine(f"sqlite:///{db_path}")
+def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
 
     # Charger les données depuis les fichiers si la base est vide
     data_loader = Dataloader(path_file, recipe_file)
@@ -53,16 +51,17 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, db_path):
 
     logger.info("📊 Adding data to the database")
     
-    # Check if the database file exists
-    if not os.path.exists(db_path):
-        engine.connect().close()
-        logger.info(f"✅ Database file successfully created at {db_path}")
-    else:
-        logger.info(f"ℹ️ Database already exists at {db_path}")
+    try:
+        # Tente d'exécuter une requête simple
+        with _engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        logger.info("✅ Connexion réussie à la base de données.")
+    except Exception as e:
+        logger.error(f"❌ Échec de connexion à la base de données : {e}")
 
     table_name = "recipe_interaction"
     # Check if the table exists
-    inspector = inspect(engine)
+    inspector = inspect(_engine)
     if table_name in inspector.get_table_names():
         logger.info(f"✅ Table '{table_name}' already exists in the database.")
     else:
@@ -73,7 +72,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, db_path):
             test_col TEXT
         );
         """)
-        with engine.connect() as conn:
+        with _engine.connect() as conn:
             conn.execute(create_table_query)
         logger.info(f"✅ Table '{table_name}' created successfully.")
 
@@ -101,8 +100,6 @@ def create_wordcloud_plot(_analyzer, _engine):
 
 
 def run(path_file, recipe_file, interaction_file, engine):
-    # Attache l'engine au DatabaseManager
-    db_manager.attach_engine(engine)
 
     analyzer = load_and_analyze_data(path_file, recipe_file, interaction_file, engine)
 

@@ -139,7 +139,7 @@ if __name__ == "__main__":
         logger.info("Starting the Streamlit application...")
         # Run the Streamlit app
         app = streamlit_app.run(
-            DATA_DIR, RECIPES_FILE, INTERACTIONS_FILE, DB_PATH
+            DATA_DIR, RECIPES_FILE, INTERACTIONS_FILE, engine
         )
 
         # Disable the profiler
