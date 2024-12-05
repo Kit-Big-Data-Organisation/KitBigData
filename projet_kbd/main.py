@@ -40,9 +40,10 @@ def create_database_if_not_exists(db_path):
         # Create the database file
         engine = sqlalchemy.create_engine(f"sqlite:///{db_path}")
         engine.connect()  # This will create the database file
-        logger.info(f"Database created at {db_path}.")
-    else:
-        logger.info(f"Database already exists at {db_path}.")
+        if os.path.exists(DB_PATH):
+            print(f"Database file exists at {DB_PATH}")
+        else:
+            print("Database file does not exist. Please check creation logic.")
 
 
 def validate_data_files(data_dir):

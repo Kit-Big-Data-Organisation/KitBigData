@@ -6,6 +6,7 @@ from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
+from sqlalchemy.sql import text
 from logger_config import logger
 
 
@@ -32,24 +33,21 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
 
     try:
         with _engine.connect() as conn:
-            conn.execute("SELECT 1;")
-            logger.info("Connection to database successful.")
+            result = conn.execute(text("SELECT 1"))
+            print(f"Test query result: {result.fetchone()}")
     except Exception as e:
         logger.error(f"Failed to connect to the database: {e}")
-        return None
 
     # Test léger d'écriture dans la base
     try:
-        test_data = pd.DataFrame({"test_col": [42]})  # Une petite donnée de test
-        test_data.to_sql(name="test_table", con=_engine, if_exists="replace", index=False)
-        print("Test write to the database was successful.")
-        
-        # Nettoyer la base en supprimant la table de test
         with _engine.connect() as conn:
-            conn.execute("DROP TABLE IF EXISTS test_table;")
-            print("Test table removed successfully.")
+            conn.execute(text("CREATE TABLE IF NOT EXISTS test_table (test_col INTEGER);"))
+            conn.execute(text("INSERT INTO test_table (test_col) VALUES (42);"))
+            print("Test write to database successful.")
+            conn.execute(text("DROP TABLE test_table;"))
+            print("Test table dropped successfully.")
     except Exception as e:
-        print(f"Failed to perform test write to the database: {e}")
+        logger.error(f"Error during test write: {e}")
 
     # Retourner les données analysées
     return analyzer
