@@ -30,6 +30,14 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     analyzer.clean_from_outliers()
     logger.info("Data cleaned from outliers.")
 
+    try:
+        with _engine.connect() as conn:
+            conn.execute("SELECT 1;")
+            logger.info("Connection to database successful.")
+    except Exception as e:
+        logger.error(f"Failed to connect to the database: {e}")
+        return None
+
     # Test léger d'écriture dans la base
     try:
         test_data = pd.DataFrame({"test_col": [42]})  # Une petite donnée de test
