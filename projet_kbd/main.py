@@ -122,7 +122,7 @@ if __name__ == "__main__":
         # Ensure the database exists and get the engine
         engine = create_database_and_verify_table(DB_PATH, "test_table")
         
-        if not isinstance(_engine, Engine):
+        if not isinstance(engine, Engine):
             raise ValueError("Le paramètre `_engine` n'est pas un objet SQLAlchemy Engine valide.")
         logger.info("Le paramètre `_engine` est un objet SQLAlchemy Engine valide.")
         # Attach the engine to the DatabaseManager
