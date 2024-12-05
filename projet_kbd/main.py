@@ -65,11 +65,14 @@ def create_database_and_verify_table(db_path, table_name):
             with engine.connect() as conn:
                 conn.execute(f"CREATE TABLE {table_name} (id INTEGER PRIMARY KEY, test_col TEXT);")
             print(f"✅ Table '{table_name}' created successfully.")
+        
+        return engine  # Retourne l'objet engine pour un usage ultérieur
 
     except SQLAlchemyError as e:
         print(f"❌ SQLAlchemy error occurred while working with the database: {e}")
     except Exception as e:
         print(f"❌ Unexpected error occurred: {e}")
+  
 
 
 def validate_data_files(data_dir):
@@ -92,7 +95,7 @@ def validate_data_files(data_dir):
 if __name__ == "__main__":
     try:
         # Ensure the database exists
-        create_database_and_verify_table(DB_PATH, "test_table")
+        engine = create_database_and_verify_table(DB_PATH, "test_table")
 
         # Ensure data files are available and validated
         download_data(DATA_DIR)
