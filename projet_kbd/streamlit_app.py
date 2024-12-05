@@ -39,9 +39,11 @@ db_manager = DatabaseManager()
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
 def load_and_analyze_data(path_file, recipe_file, interaction_file, db_path):
+    
+    engine = create_engine(f"sqlite:///{db_path}")
     try:
         # Attache l'engine au DatabaseManager
-        db_manager.attach_engine(_engine)
+        db_manager.attach_engine(engine)
 
         # Charger les données depuis la base
         with db_manager.get_session() as session:
@@ -63,7 +65,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, db_path):
     logger.info("🧹 Data cleaned from outliers.")
 
     logger.info("📊 Adding data to the database")
-    engine = create_engine(f"sqlite:///{db_path}")
+    
     # Check if the database file exists
     if not os.path.exists(db_path):
         engine.connect().close()
