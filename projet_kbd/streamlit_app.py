@@ -10,6 +10,8 @@ from streamlit_sqlalchemy import StreamlitAlchemyMixin
 from sqlalchemy import create_engine, text
 from logger_config import logger
 
+st.set_page_config(layout="wide")
+
 
 # Classe pour gérer la base de données avec StreamlitAlchemyMixin
 class DatabaseManager(StreamlitAlchemyMixin):
@@ -90,7 +92,7 @@ def create_wordcloud_plot(_analyzer, _engine):
 
 
 def run(path_file, recipe_file, interaction_file, engine):
-    st.set_page_config(layout="wide")
+    
 
     # Attache l'engine au DatabaseManager
     db_manager.attach_engine(engine)
