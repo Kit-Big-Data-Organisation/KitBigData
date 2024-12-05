@@ -12,10 +12,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 
 @st.cache_data
-def load_and_analyze_data(path_file, recipe_file, interaction_file, db):
+def load_and_analyze_data(path_file, recipe_file, interaction_file, _db):
     def write_data_in_batches(collection_name, data, batch_size=500):
-        collection_ref = db.collection(collection_name)  # db est toujours nécessaire ici
-        batch = db.batch()
+        collection_ref = _db.collection(collection_name)  # db est toujours nécessaire ici
+        batch = _db.batch()
 
         try:
             for index, row in data.iterrows():
@@ -25,7 +25,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, db):
                 if (index + 1) % batch_size == 0:
                     batch.commit()
                     logger.info(f"Committed batch at index: {index}")
-                    batch = db.batch()
+                    batch = _db.batch()
 
             # Commit des documents restants
             if batch:
@@ -36,7 +36,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, db):
             raise
 
     def write_data_in_segments(collection_name, data, segment_size=10000, batch_size=500):
-        collection_ref = db.collection(collection_name)  # db est votre client Firestore
+        collection_ref = _db.collection(collection_name)  # db est votre client Firestore
         num_segments = len(data) // segment_size + 1
 
         try:
@@ -53,7 +53,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, db):
 
     try:
         logger.info("Attempting to load data from Firestore.")
-        collection_ref = db.collection('recipe_interaction')
+        collection_ref = _db.collection('recipe_interaction')
         docs = collection_ref.stream()
         data_dicts = [doc.to_dict() for doc in docs]
 
