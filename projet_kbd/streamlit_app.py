@@ -104,7 +104,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     else:
         logger.info(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
         try: 
-            rows_inserted = batch_insert_to_sql(data, table_name, _engine, chunk_size=1000)
+            rows_inserted = batch_insert_to_sql(data, table_name, _engine, chunk_size=1)
             print(f"Total des lignes insérées : {rows_inserted}")
         except Exception as e:
             logger.error(f"❌ Error while writing data to the database: {e}")
