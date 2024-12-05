@@ -8,7 +8,7 @@ the `cProfile` module.
 
 import os
 import cProfile
-from sqlalchemy import create_engine, text, inspect, 
+from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.exc import SQLAlchemyError
 from streamlit_sqlalchemy import StreamlitAlchemyMixin
 import streamlit as st
