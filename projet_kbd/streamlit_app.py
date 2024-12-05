@@ -8,15 +8,17 @@ from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
 from streamlit_sqlalchemy import StreamlitAlchemyMixin
 from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
 from logger_config import logger
 
+# Configuration Streamlit (doit être appelée en premier)
 st.set_page_config(layout="wide")
 
 
 # Classe pour gérer la base de données avec StreamlitAlchemyMixin
 class DatabaseManager(StreamlitAlchemyMixin):
     def __init__(self):
-        self.engine = None  # Placeholder for le moteur SQLAlchemy
+        self.engine = None  # Placeholder pour le moteur SQLAlchemy
 
     def attach_engine(self, engine):
         """Attache un moteur SQLAlchemy au DatabaseManager."""
@@ -26,7 +28,9 @@ class DatabaseManager(StreamlitAlchemyMixin):
         """Renvoie une session SQLAlchemy."""
         if not self.engine:
             raise ValueError("Aucun moteur SQLAlchemy n'est attaché au DatabaseManager.")
-        return self.get_sessionmaker(self.engine)()
+        # Utilise sessionmaker pour créer une session liée à l'engine
+        Session = sessionmaker(bind=self.engine)
+        return Session()  # Renvoie une session
 
 
 # Instance de DatabaseManager
@@ -92,8 +96,6 @@ def create_wordcloud_plot(_analyzer, _engine):
 
 
 def run(path_file, recipe_file, interaction_file, engine):
-    
-
     # Attache l'engine au DatabaseManager
     db_manager.attach_engine(engine)
 
