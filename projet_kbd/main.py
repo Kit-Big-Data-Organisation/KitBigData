@@ -92,7 +92,7 @@ def validate_data_files(data_dir):
 if __name__ == "__main__":
     try:
         # Ensure the database exists
-        create_database_and_verify_table(DB_PATH)
+        create_database_and_verify_table(DB_PATH, "test_table")
 
         # Ensure data files are available and validated
         download_data(DATA_DIR)
