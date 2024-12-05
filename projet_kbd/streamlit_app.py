@@ -45,8 +45,12 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     data = data_loader.processed_recipe_interaction(interactions_loader)
     logger.info("📂 Data loaded successfully from files.")
     analyzer = DataAnalyzer(data)
-    analyzer.clean_from_outliers()
-    logger.info("🧹 Data cleaned from outliers.")
+    try:
+        analyzer.clean_data()
+        logger.info("🧹 Data cleaned successfully.")
+    except Exception as e:
+        logger.error(f"❌ Error while cleaning data: {e}")
+        return None
 
     logger.info("📊 Adding data to the database")
     if not isinstance(_engine, Engine):
