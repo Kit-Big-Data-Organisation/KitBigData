@@ -12,6 +12,9 @@ import sqlalchemy
 from projet_kbd.data_downloader import download_data
 from projet_kbd.logger_config import logger
 import streamlit_app
+from sqlalchemy import inspect
+from sqlalchemy.exc import SQLAlchemyError
+
 
 # Define base directory (KitBigData)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -23,27 +26,47 @@ RECIPES_FILE = "RAW_recipes.csv"
 INTERACTIONS_FILE = "RAW_interactions.csv"
 
 # Create SQLAlchemy engine dynamically
-engine = sqlalchemy.create_engine(f'sqlite:///{DB_PATH}')
+#engine = sqlalchemy.create_engine(f'sqlite:///{DB_PATH}')
 
 
-def create_database_if_not_exists(db_path):
+def create_database_and_verify_table(db_path, table_name):
     """
-    Creates the SQLite database file if it does not already exist.
+    Ensures the SQLite database and a specific table exist. If the database
+    or table does not exist, it creates them.
 
     Args:
         db_path (str): The path to the SQLite database file.
+        table_name (str): The name of the table to verify or create.
     """
-    if not os.path.exists(db_path):
-        # Ensure the directory exists
+    try:
+        # Assure-toi que le répertoire contenant le fichier existe
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
-        # Create the database file
+        # Crée une connexion avec la base de données
         engine = sqlalchemy.create_engine(f"sqlite:///{db_path}")
-        engine.connect()  # This will create the database file
-        if os.path.exists(DB_PATH):
-            print(f"Database file exists at {DB_PATH}")
+
+        # Vérifie si le fichier de la base existe
+        if not os.path.exists(db_path):
+            engine.connect().close()
+            print(f"✅ Database file successfully created at {db_path}")
         else:
-            print("Database file does not exist. Please check creation logic.")
+            print(f"ℹ️ Database already exists at {db_path}")
+
+        # Vérifie si la table existe
+        inspector = inspect(engine)
+        if table_name in inspector.get_table_names():
+            print(f"✅ Table '{table_name}' already exists in the database.")
+        else:
+            print(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
+            # Exemple de création de table
+            with engine.connect() as conn:
+                conn.execute(f"CREATE TABLE {table_name} (id INTEGER PRIMARY KEY, test_col TEXT);")
+            print(f"✅ Table '{table_name}' created successfully.")
+
+    except SQLAlchemyError as e:
+        print(f"❌ SQLAlchemy error occurred while working with the database: {e}")
+    except Exception as e:
+        print(f"❌ Unexpected error occurred: {e}")
 
 
 def validate_data_files(data_dir):
@@ -66,7 +89,7 @@ def validate_data_files(data_dir):
 if __name__ == "__main__":
     try:
         # Ensure the database exists
-        create_database_if_not_exists(DB_PATH)
+        create_database_and_verify_table(DB_PATH)
 
         # Ensure data files are available and validated
         download_data(DATA_DIR)
