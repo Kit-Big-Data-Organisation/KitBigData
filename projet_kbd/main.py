@@ -41,9 +41,12 @@ def create_database_and_verify_table(db_path, table_name):
     try:
         # Assure-toi que le répertoire contenant le fichier existe
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        logger.info(f"Database path: {db_path}")
 
+        logger.info(f"Creating database at: {db_path}")
         # Crée une connexion avec la base de données
         engine = sqlalchemy.create_engine(f"sqlite:///{db_path}")
+        logger.info("Database connection established.")
 
         # Vérifie si le fichier de la base existe
         if not os.path.exists(db_path):
