@@ -8,13 +8,14 @@ the `cProfile` module.
 
 import os
 import cProfile
-import sqlalchemy
+from sqlalchemy import create_engine, text
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import inspect
+from streamlit_sqlalchemy import StreamlitAlchemyMixin
+import streamlit as st
 from projet_kbd.data_downloader import download_data
 from projet_kbd.logger_config import logger
 import streamlit_app
-from sqlalchemy import inspect
-from sqlalchemy.exc import SQLAlchemyError
-
 
 # Define base directory (KitBigData)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -25,9 +26,16 @@ DATA_DIR = os.path.join(BASE_DIR, "Data")
 RECIPES_FILE = "RAW_recipes.csv"
 INTERACTIONS_FILE = "RAW_interactions.csv"
 
-# Create SQLAlchemy engine dynamically
-#engine = sqlalchemy.create_engine(f'sqlite:///{DB_PATH}')
 
+# Streamlit SQLAlchemy mixin class
+class DatabaseManager(StreamlitAlchemyMixin):
+    pass
+
+
+db_manager = DatabaseManager()
+
+# Create and verify database and table
+@st.cache_resource
 def create_database_and_verify_table(db_path, table_name):
     """
     Ensures the SQLite database and a specific table exist. If the database
@@ -46,7 +54,7 @@ def create_database_and_verify_table(db_path, table_name):
         print(f"Database path: {db_path}")
 
         # Crée une connexion avec la base de données
-        engine = sqlalchemy.create_engine(f"sqlite:///{db_path}")
+        engine = create_engine(f"sqlite:///{db_path}")
         print("Database connection established.")
 
         # Vérifie si le fichier de la base existe
@@ -57,7 +65,7 @@ def create_database_and_verify_table(db_path, table_name):
             print(f"ℹ️ Database already exists at {db_path}")
 
         # Vérifie si la table existe
-        inspector = sqlalchemy.inspect(engine)
+        inspector = inspect(engine)
         if table_name in inspector.get_table_names():
             print(f"✅ Table '{table_name}' already exists in the database.")
         else:
@@ -82,9 +90,7 @@ def create_database_and_verify_table(db_path, table_name):
         print(f"❌ Unexpected error occurred: {e}")
         raise
 
-  
-
-
+# Validate data files
 def validate_data_files(data_dir):
     """
     Ensures that the required data files exist after the download step.
@@ -101,11 +107,13 @@ def validate_data_files(data_dir):
             raise FileNotFoundError(f"Required file not found: {file_path}")
         logger.info(f"File validated: {file_path}")
 
-
 if __name__ == "__main__":
     try:
-        # Ensure the database exists
+        # Ensure the database exists and get the engine
         engine = create_database_and_verify_table(DB_PATH, "test_table")
+
+        # Attach the engine to the DatabaseManager
+        db_manager.bind_engine(engine)
 
         # Ensure data files are available and validated
         download_data(DATA_DIR)

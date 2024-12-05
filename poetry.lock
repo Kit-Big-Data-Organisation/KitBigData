@@ -3893,6 +3893,21 @@ files = [
 streamlit = ">=1.36"
 
 [[package]]
+name = "streamlit-sqlalchemy"
+version = "0.2.4"
+description = "Some templating for streamlit and sqlalchemy"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "streamlit_sqlalchemy-0.2.4-py3-none-any.whl", hash = "sha256:7ddf2ebce4c059e4797ba69c1e7baf9ee95639278d4fd9c195f947f1f28c604a"},
+    {file = "streamlit_sqlalchemy-0.2.4.tar.gz", hash = "sha256:faa6afaa15eff29290a1866393085f2bc7e0e2f61b68bccf51824a6691275620"},
+]
+
+[package.dependencies]
+sqlalchemy = "*"
+streamlit = ">=1.29.0"
+
+[[package]]
 name = "tenacity"
 version = "9.0.0"
 description = "Retry code until it succeeds"
@@ -4339,4 +4354,4 @@ pillow = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.11"
-content-hash = "daa36410b2cd72cad6e1243f056741a165054f94c2bb36af914e19873cea2c75"
+content-hash = "d87f10306276e866730cd81f213b14f52da2260bdc91b248aca8263cec93d2fc"
