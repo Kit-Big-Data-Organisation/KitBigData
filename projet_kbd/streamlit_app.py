@@ -6,6 +6,7 @@ from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
+from logger_config import logger
 
 
 @st.cache_data
@@ -14,17 +15,20 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
         # Tentative de charger les données depuis la base de données
         data = pd.read_sql_table("recipe_interaction", con=_engine)
         if not data.empty:
-            print("Data found in the database.")
+            logger.info("Data found in the database.")
             return DataAnalyzer(data)
     except Exception as e:
-        print(f"Failed to load data from database: {e}")
+        logger.error(f"Failed to load data from database: {e}")
 
     # Charger les données depuis les fichiers
     data_loader = Dataloader(path_file, recipe_file)
     interactions_loader = Dataloader(path_file, interaction_file)
     data = data_loader.processed_recipe_interaction(interactions_loader)
+    logger.info("Data loaded successfully.")
     analyzer = DataAnalyzer(data)
+    logger.info("DataAnalyzer created successfully.")
     analyzer.clean_from_outliers()
+    logger.info("Data cleaned from outliers.")
 
     # Test léger d'écriture dans la base
     try:
