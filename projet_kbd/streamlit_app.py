@@ -10,7 +10,6 @@ from streamlit_sqlalchemy import StreamlitAlchemyMixin
 from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
-
 from logger_config import logger
 
 # Configuration Streamlit (doit être appelée en premier)
@@ -50,6 +49,9 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     logger.info("🧹 Data cleaned from outliers.")
 
     logger.info("📊 Adding data to the database")
+    if not isinstance(_engine, Engine):
+            raise ValueError("Le paramètre `_engine` n'est pas un objet SQLAlchemy Engine valide.")
+    logger.info("Le paramètre `_engine` est un objet SQLAlchemy Engine valide.")
     
     try:
         # Tente d'exécuter une requête simple
