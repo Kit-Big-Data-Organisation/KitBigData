@@ -50,7 +50,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
 
     logger.info("📊 Adding data to the database")
     if not isinstance(_engine, Engine):
-            raise ValueError("Le paramètre `_engine` n'est pas un objet SQLAlchemy Engine valide.")
+        raise ValueError("Le paramètre `_engine` n'est pas un objet SQLAlchemy Engine valide.")
     logger.info("Le paramètre `_engine` est un objet SQLAlchemy Engine valide.")
     
     try:
