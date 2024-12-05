@@ -78,14 +78,12 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
         logger.info(f"✅ Table '{table_name}' already exists in the database.")
     else:
         logger.info(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
-        create_table_query = text(f"""
-        CREATE TABLE {table_name} (
-            id INTEGER PRIMARY KEY,
-            test_col TEXT
-        );
-        """)
-        with _engine.connect() as conn:
-            conn.execute(create_table_query)
+        try: 
+            data.to_sql(table_name, _engine, if_exists="replace", index=False)
+        except Exception as e:
+            logger.error(f"❌ Error while writing data to the database: {e}")
+            return None
+    
         logger.info(f"✅ Table '{table_name}' created successfully.")
 
     return analyzer
