@@ -9,6 +9,8 @@ from streamlit_option_menu import option_menu
 from streamlit_sqlalchemy import StreamlitAlchemyMixin
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.engine import Engine
+
 from logger_config import logger
 
 # Configuration Streamlit (doit être appelée en premier)
@@ -73,6 +75,9 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
         PRIMARY KEY (recipe_id, user_id)
     );
     """)
+    if not isinstance(_engine, Engine):
+        raise ValueError("Le paramètre `_engine` n'est pas un objet SQLAlchemy Engine valide.")
+    
     with _engine.connect() as conn:
         conn.execute(create_data_table_query)
     logger.info("✅ Table 'recipe_interaction' created successfully.")
