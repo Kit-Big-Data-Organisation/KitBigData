@@ -18,19 +18,17 @@ st.set_page_config(layout="wide")
 # Classe pour gérer la base de données avec StreamlitAlchemyMixin
 class DatabaseManager(StreamlitAlchemyMixin):
     def __init__(self):
-        self.engine = None  # Placeholder pour le moteur SQLAlchemy
+        self.engine = None  # Placeholder for the SQLAlchemy engine
 
     def attach_engine(self, engine):
-        """Attache un moteur SQLAlchemy au DatabaseManager."""
+        """Attach an SQLAlchemy engine to the manager."""
         self.engine = engine
 
-    def get_session(self):
-        """Renvoie une session SQLAlchemy."""
+    def get_engine(self):
+        """Get the attached SQLAlchemy engine."""
         if not self.engine:
-            raise ValueError("Aucun moteur SQLAlchemy n'est attaché au DatabaseManager.")
-        # Utilise sessionmaker pour créer une session liée à l'engine
-        Session = sessionmaker(bind=self.engine)
-        return Session()  # Renvoie une session
+            raise ValueError("No engine attached to the DatabaseManager.")
+        return self.engine
 
 
 # Instance de DatabaseManager
@@ -57,20 +55,23 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     data_loader = Dataloader(path_file, recipe_file)
     interactions_loader = Dataloader(path_file, interaction_file)
     data = data_loader.processed_recipe_interaction(interactions_loader)
-    logger.info("Data loaded successfully.")
+    logger.info("📂 Data loaded successfully from files.")
     analyzer = DataAnalyzer(data)
     analyzer.clean_from_outliers()
-    logger.info("Data cleaned from outliers.")
+    logger.info("🧹 Data cleaned from outliers.")
 
-    # Test léger d'écriture dans la base
+    logger.info("📊 Adding data to the database")
+    # Sauvegarder les données nettoyées dans la base avec `to_sql`
     try:
-        with db_manager.get_session() as session:
-            session.execute(text("CREATE TABLE IF NOT EXISTS test_table (test_col INTEGER);"))
-            session.execute(text("INSERT INTO test_table (test_col) VALUES (42);"))
-            logger.info("Test write to database successful.")
-            session.execute(text("DROP TABLE test_table;"))
+        analyzer.data.to_sql(
+            name="recipe_interaction",
+            con=_engine,
+            if_exists="replace",  # Remplace la table existante si elle existe
+            index=False  # N'ajoute pas l'index comme colonne
+        )
+        logger.info("✅ Data successfully saved to the 'recipe_interaction' table.")
     except Exception as e:
-        logger.error(f"Error during test write: {e}")
+        logger.error(f"❌ Failed to save data to the database: {e}")
 
     return analyzer
 
