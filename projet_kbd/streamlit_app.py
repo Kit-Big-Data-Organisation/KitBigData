@@ -50,14 +50,6 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     logger.info("🧹 Data cleaned from outliers.")
 
     logger.info("📊 Adding data to the database")
-    
-    try:
-        # Tente d'exécuter une requête simple
-        with _engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-        logger.info("✅ Connexion réussie à la base de données.")
-    except Exception as e:
-        logger.error(f"❌ Échec de connexion à la base de données : {e}")
 
     table_name = "recipe_interaction"
     # Check if the table exists
