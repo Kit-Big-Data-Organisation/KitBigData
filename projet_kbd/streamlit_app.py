@@ -50,15 +50,28 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     logger.info("🧹 Data cleaned from outliers.")
 
     logger.info("📊 Adding data to the database")
-
     table_name = "recipe_interaction"
+    # Check if the table exists
+    #inspector = inspect(_engine)
+    #if table_name in inspector.get_table_names():
+    #    logger.info(f"✅ Table '{table_name}' already exists in the database.")
+    #else:
+    #   data.to_sql(table_name, _engine, if_exists="replace", index=False)
+    #    logger.info(f"✅ Table '{table_name}' created successfully.")
     # Check if the table exists
     inspector = inspect(_engine)
     if table_name in inspector.get_table_names():
         logger.info(f"✅ Table '{table_name}' already exists in the database.")
     else:
         logger.info(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
-        data.to_sql(table_name, _engine, if_exists="replace", index=False)
+        create_table_query = text(f"""
+        CREATE TABLE {table_name} (
+            id INTEGER PRIMARY KEY,
+            test_col TEXT
+        );
+        """)
+        with _engine.connect() as conn:
+            conn.execute(create_table_query)
         logger.info(f"✅ Table '{table_name}' created successfully.")
 
     return analyzer
