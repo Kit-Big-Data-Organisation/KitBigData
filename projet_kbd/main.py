@@ -8,9 +8,8 @@ the `cProfile` module.
 
 import os
 import cProfile
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import inspect
 from streamlit_sqlalchemy import StreamlitAlchemyMixin
 import streamlit as st
 from projet_kbd.data_downloader import download_data
@@ -29,12 +28,23 @@ INTERACTIONS_FILE = "RAW_interactions.csv"
 
 # Streamlit SQLAlchemy mixin class
 class DatabaseManager(StreamlitAlchemyMixin):
-    pass
+    def __init__(self):
+        self.engine = None  # Placeholder for the SQLAlchemy engine
+
+    def attach_engine(self, engine):
+        """Attach an SQLAlchemy engine to the manager."""
+        self.engine = engine
+
+    def get_engine(self):
+        """Get the attached SQLAlchemy engine."""
+        if not self.engine:
+            raise ValueError("No engine attached to the DatabaseManager.")
+        return self.engine
 
 
 db_manager = DatabaseManager()
 
-# Create and verify database and table
+
 @st.cache_resource
 def create_database_and_verify_table(db_path, table_name):
     """
@@ -49,28 +59,26 @@ def create_database_and_verify_table(db_path, table_name):
         sqlalchemy.engine.Engine: The SQLAlchemy engine connected to the database.
     """
     try:
-        # Assure-toi que le répertoire contenant le fichier existe
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
-        print(f"Database path: {db_path}")
+        logger.info(f"Database path: {db_path}")
 
-        # Crée une connexion avec la base de données
+        # Create database engine
         engine = create_engine(f"sqlite:///{db_path}")
-        print("Database connection established.")
+        logger.info("Database connection established.")
 
-        # Vérifie si le fichier de la base existe
+        # Check if the database file exists
         if not os.path.exists(db_path):
             engine.connect().close()
-            print(f"✅ Database file successfully created at {db_path}")
+            logger.info(f"✅ Database file successfully created at {db_path}")
         else:
-            print(f"ℹ️ Database already exists at {db_path}")
+            logger.info(f"ℹ️ Database already exists at {db_path}")
 
-        # Vérifie si la table existe
+        # Check if the table exists
         inspector = inspect(engine)
         if table_name in inspector.get_table_names():
-            print(f"✅ Table '{table_name}' already exists in the database.")
+            logger.info(f"✅ Table '{table_name}' already exists in the database.")
         else:
-            print(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
-            # Utilisation de `text` pour encapsuler la requête brute
+            logger.info(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
             create_table_query = text(f"""
             CREATE TABLE {table_name} (
                 id INTEGER PRIMARY KEY,
@@ -79,18 +87,18 @@ def create_database_and_verify_table(db_path, table_name):
             """)
             with engine.connect() as conn:
                 conn.execute(create_table_query)
-            print(f"✅ Table '{table_name}' created successfully.")
+            logger.info(f"✅ Table '{table_name}' created successfully.")
 
-        return engine  # Retourne l'objet engine pour un usage ultérieur
+        return engine
 
     except SQLAlchemyError as e:
-        print(f"❌ SQLAlchemy error occurred while working with the database: {e}")
+        logger.error(f"❌ SQLAlchemy error occurred while working with the database: {e}")
         raise
     except Exception as e:
-        print(f"❌ Unexpected error occurred: {e}")
+        logger.error(f"❌ Unexpected error occurred: {e}")
         raise
 
-# Validate data files
+
 def validate_data_files(data_dir):
     """
     Ensures that the required data files exist after the download step.
@@ -107,13 +115,14 @@ def validate_data_files(data_dir):
             raise FileNotFoundError(f"Required file not found: {file_path}")
         logger.info(f"File validated: {file_path}")
 
+
 if __name__ == "__main__":
     try:
         # Ensure the database exists and get the engine
         engine = create_database_and_verify_table(DB_PATH, "test_table")
 
         # Attach the engine to the DatabaseManager
-        db_manager.bind_engine(engine)
+        db_manager.attach_engine(engine)
 
         # Ensure data files are available and validated
         download_data(DATA_DIR)

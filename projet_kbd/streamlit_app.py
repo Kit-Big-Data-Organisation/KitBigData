@@ -13,7 +13,18 @@ from logger_config import logger
 
 # Classe pour gérer la base de données avec StreamlitAlchemyMixin
 class DatabaseManager(StreamlitAlchemyMixin):
-    pass
+    def __init__(self):
+        self.engine = None  # Placeholder for le moteur SQLAlchemy
+
+    def attach_engine(self, engine):
+        """Attache un moteur SQLAlchemy au DatabaseManager."""
+        self.engine = engine
+
+    def get_session(self):
+        """Renvoie une session SQLAlchemy."""
+        if not self.engine:
+            raise ValueError("Aucun moteur SQLAlchemy n'est attaché au DatabaseManager.")
+        return self.get_sessionmaker(self.engine)()
 
 
 # Instance de DatabaseManager
@@ -23,8 +34,8 @@ db_manager = DatabaseManager()
 @st.cache_data(hash_funcs={DataAnalyzer: id})
 def load_and_analyze_data(path_file, recipe_file, interaction_file, engine):
     try:
-        # Lier l'engine à DatabaseManager
-        db_manager.bind_engine(engine)
+        # Attache l'engine au DatabaseManager
+        db_manager.attach_engine(engine)
 
         # Charger les données depuis la base
         with db_manager.get_session() as session:
@@ -81,8 +92,8 @@ def create_wordcloud_plot(_analyzer, _engine):
 def run(path_file, recipe_file, interaction_file, engine):
     st.set_page_config(layout="wide")
 
-    # Lier l'engine à DatabaseManager
-    db_manager.bind_engine(engine)
+    # Attache l'engine au DatabaseManager
+    db_manager.attach_engine(engine)
 
     analyzer = load_and_analyze_data(path_file, recipe_file, interaction_file, engine)
 
