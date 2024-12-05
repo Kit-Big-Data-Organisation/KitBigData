@@ -28,7 +28,6 @@ INTERACTIONS_FILE = "RAW_interactions.csv"
 # Create SQLAlchemy engine dynamically
 #engine = sqlalchemy.create_engine(f'sqlite:///{DB_PATH}')
 
-
 def create_database_and_verify_table(db_path, table_name):
     """
     Ensures the SQLite database and a specific table exist. If the database
@@ -37,16 +36,18 @@ def create_database_and_verify_table(db_path, table_name):
     Args:
         db_path (str): The path to the SQLite database file.
         table_name (str): The name of the table to verify or create.
+
+    Returns:
+        sqlalchemy.engine.Engine: The SQLAlchemy engine connected to the database.
     """
     try:
         # Assure-toi que le répertoire contenant le fichier existe
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
-        logger.info(f"Database path: {db_path}")
+        print(f"Database path: {db_path}")
 
-        logger.info(f"Creating database at: {db_path}")
         # Crée une connexion avec la base de données
         engine = sqlalchemy.create_engine(f"sqlite:///{db_path}")
-        logger.info("Database connection established.")
+        print("Database connection established.")
 
         # Vérifie si le fichier de la base existe
         if not os.path.exists(db_path):
@@ -56,22 +57,31 @@ def create_database_and_verify_table(db_path, table_name):
             print(f"ℹ️ Database already exists at {db_path}")
 
         # Vérifie si la table existe
-        inspector = inspect(engine)
+        inspector = sqlalchemy.inspect(engine)
         if table_name in inspector.get_table_names():
             print(f"✅ Table '{table_name}' already exists in the database.")
         else:
             print(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
-            # Exemple de création de table
+            # Utilisation de `text` pour encapsuler la requête brute
+            create_table_query = text(f"""
+            CREATE TABLE {table_name} (
+                id INTEGER PRIMARY KEY,
+                test_col TEXT
+            );
+            """)
             with engine.connect() as conn:
-                conn.execute(f"CREATE TABLE {table_name} (id INTEGER PRIMARY KEY, test_col TEXT);")
+                conn.execute(create_table_query)
             print(f"✅ Table '{table_name}' created successfully.")
-        
+
         return engine  # Retourne l'objet engine pour un usage ultérieur
 
     except SQLAlchemyError as e:
         print(f"❌ SQLAlchemy error occurred while working with the database: {e}")
+        raise
     except Exception as e:
         print(f"❌ Unexpected error occurred: {e}")
+        raise
+
   
 
 
