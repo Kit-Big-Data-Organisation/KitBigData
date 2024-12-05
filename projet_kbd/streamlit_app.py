@@ -46,8 +46,8 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     logger.info("📂 Data loaded successfully from files.")
     analyzer = DataAnalyzer(data)
     try:
-        analyzer.clean_data()
-        logger.info("🧹 Data cleaned successfully.")
+        analyzer.clean_from_outliers()
+        logger.info("🧹 Data cleaned successfully."
     except Exception as e:
         logger.error(f"❌ Error while cleaning data: {e}")
         return None
