@@ -294,15 +294,10 @@ class DataAnalyzer:
 
         cuisine_df = pd.DataFrame({"Cuisine": labels, "Proportion": sizes})
 
-        cuisines_collection = engine.collection('cuisine_data')
-        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
-        cuisines_collection.document('data').delete()
-
-        # Ajouter ou mettre à jour le document avec de nouvelles données
-        cuisines_data = cuisine_df.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
-        for cuisine_data in cuisines_data:
-            cuisines_collection.document('data').set(cuisine_data)
-
+        collection_ref = engine.collection('cuisine_data')
+        for index, row in cuisine_df.iterrows():
+            collection_ref.document(str(index)).set(row.to_dict())
+        logger.info("Data saved to the database.")
         return cuisine_df
 
     def cuisine_evolution(self, engine):
@@ -345,14 +340,10 @@ class DataAnalyzer:
             .fillna(0)
             * 100
         )
-        cuisines_evolution_collection = engine.collection('cuisine_evolution_dataframe')
-        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
-        cuisines_evolution_collection.document('data').delete()
-
-        # Ajouter ou mettre à jour le document avec de nouvelles données
-        cuisines_evolution_data = cuisine_df.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
-        for cuisine_evolution_data in cuisines_evolution_data:
-            cuisines_evolution_collection.document('data').set(cuisine_evolution_data)
+        collection_ref = engine.collection('cuisine_evolution_dataframe')
+        for index, row in cuisine_df.iterrows():
+            collection_ref.document(str(index)).set(row.to_dict())
+        logger.info("Data saved to the database.")
 
         return cuisine_df
 
@@ -411,14 +402,12 @@ class DataAnalyzer:
             axis=1,
         ).astype("string")
         final_ingredients.drop
-        ingredients_collection = engine.collection('cuisine_top_ingredients')
-        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
-        ingredients_collection.document('data').delete()
 
-        # Ajouter ou mettre à jour le document avec de nouvelles données
-        ingredients_data = final_ingredients.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
-        for ingredient_data in ingredients_data:
-            ingredients_collection.document('data').set(ingredient_data)
+        collection_ref = engine.collection('cuisine_top_ingredients')
+        for index, row in final_ingredients.iterrows():
+            collection_ref.document(str(index)).set(row.to_dict())
+        logger.info("Data saved to the database.")
+
         return final_ingredients
 
     def analyse_cuisine_nutritions(self, engine):
@@ -474,14 +463,11 @@ class DataAnalyzer:
                 )
 
         cuisines_nutritions = cuisines_nutritions.set_index("cuisine")
-        cuisines_nutritions_collection = engine.collection('cuisines_nutritions')
-        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
-        cuisines_nutritions_collection.document('data').delete()
-
-        # Ajouter ou mettre à jour le document avec de nouvelles données
-        cuisines_nutritions_data = cuisines_nutritions.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
-        for cuisine_nutrition_data in cuisines_nutritions_data:
-            cuisines_nutritions_collection.document('data').set(cuisine_nutrition_data)
+        
+        collection_ref = engine.collection('cuisines_nutritions')
+        for index, row in cuisines_nutritions.iterrows():
+            collection_ref.document(str(index)).set(row.to_dict())
+        logger.info("Data saved to the database.")
 
         return cuisines_nutritions
 
@@ -571,16 +557,11 @@ class DataAnalyzer:
         logger.info("Proportions calculated.")
 
         # Sauvegarde des données dans la base de données
-        quick_recipe_proportion_collection = engine.collection('quick_recipe_proportion_table')
-        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
-        quick_recipe_proportion_collection.document('data').delete()
-
-        # Ajouter ou mettre à jour le document avec de nouvelles données
-        quick_recipe_proportion_data = proportions_df.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
-        for proportion_data in quick_recipe_proportion_data:
-            quick_recipe_proportion_collection.document('data').set(proportion_data)
+        collection_ref = engine.collection('quick_recipe_proportion_table')
+        for index, row in proportions_df.iterrows():
+            collection_ref.document(str(index)).set(row.to_dict())
         logger.info("Data saved to the database.")
-
+        
         return proportions_df
 
     def get_quick_recipe_interaction_rate(self, engine):
@@ -664,14 +645,9 @@ class DataAnalyzer:
         ]
 
         # Sauvegarde des données dans la base de données
-        rate_interactions_collection = engine.collection('rate_interactions_for_quick_recipe')
-        # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
-        rate_interactions_collection.document('data').delete()
-
-        # Ajouter ou mettre à jour le document avec de nouvelles données
-        rate_interactions_data = rate_quick_recipe.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
-        for interaction_data in rate_interactions_data:
-            rate_interactions_collection.document('data').set(interaction_data)
+        collection_ref = engine.collection('rate_interactions_for_quick_recipe')
+        for index, row in rate_quick_recipe.iterrows():
+            collection_ref.document(str(index)).set(row.to_dict())
         logger.info("Data saved to the database.")
 
         return rate_quick_recipe
@@ -787,15 +763,11 @@ class DataAnalyzer:
         # Sauvegarde des données dans la base de données
         try:
             logger.info("Saving category counts to the database.")
-            categories_quick_recipe_collection = engine.collection('categories_quick_recipe')
-            # Effacer la collection si nécessaire (simuler 'if_exists="replace"')
-            categories_quick_recipe_collection.document('data').delete()
-
-            # Ajouter ou mettre à jour le document avec de nouvelles données
-            categories_quick_recipe_data = category_df.to_dict(orient='records')  # Convertir DataFrame en liste de dictionnaires
-            for category_data in categories_quick_recipe_data:
-                categories_quick_recipe_collection.document('data').set(category_data)
-            logger.info("Data successfully saved to the database.")
+            # Sauvegarde des données dans la base de données
+            collection_ref = engine.collection('categories_quick_recipe')
+            for index, row in category_df.iterrows():
+                collection_ref.document(str(index)).set(row.to_dict())
+            logger.info("Data saved to the database.")
         except Exception as e:
             logger.error(
                 f"Failed to save category counts to the database: {e}"
