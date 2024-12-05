@@ -50,14 +50,16 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     logger.info("🧹 Data cleaned from outliers.")
 
     logger.info("📊 Adding data to the database")
+    
+    try:
+        # Tente d'exécuter une requête simple
+        with _engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        logger.info("✅ Connexion réussie à la base de données.")
+    except Exception as e:
+        logger.error(f"❌ Échec de connexion à la base de données : {e}")
+
     table_name = "recipe_interaction"
-    # Check if the table exists
-    #inspector = inspect(_engine)
-    #if table_name in inspector.get_table_names():
-    #    logger.info(f"✅ Table '{table_name}' already exists in the database.")
-    #else:
-    #   data.to_sql(table_name, _engine, if_exists="replace", index=False)
-    #    logger.info(f"✅ Table '{table_name}' created successfully.")
     # Check if the table exists
     inspector = inspect(_engine)
     if table_name in inspector.get_table_names():
