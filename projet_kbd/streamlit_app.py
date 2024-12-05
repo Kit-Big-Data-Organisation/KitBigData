@@ -1,16 +1,16 @@
 import pandas as pd
 import streamlit as st
 import utils
-from comment_analyzer import CommentAnalyzer
-from data_analyzer import DataAnalyzer
-from data_loader import Dataloader
-from data_plotter import DataPlotter
+from projet_kbd.comment_analyzer import CommentAnalyzer
+from projet_kbd.data_analyzer import DataAnalyzer
+from projet_kbd.data_loader import Dataloader
+from projet_kbd.data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
 from streamlit_sqlalchemy import StreamlitAlchemyMixin
 from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
-from logger_config import logger
+from projet_kbd.logger_config import logger
 
 # Configuration Streamlit (doit être appelée en premier)
 st.set_page_config(layout="wide")
