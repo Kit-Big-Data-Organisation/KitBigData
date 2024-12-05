@@ -12,58 +12,17 @@ from sqlalchemy.exc import SQLAlchemyError
 
 
 @st.cache_data
-def load_and_analyze_data(path_file, recipe_file, interaction_file, _db):
-    def write_data_in_batches(collection_name, data, batch_size=500):
-        collection_ref = _db.collection(collection_name)  # db est toujours nécessaire ici
-        batch = _db.batch()
-
-        try:
-            for index, row in data.iterrows():
-                doc_ref = collection_ref.document(str(index))
-                batch.set(doc_ref, row.to_dict())
-
-                if (index + 1) % batch_size == 0:
-                    batch.commit()
-                    logger.info(f"Committed batch at index: {index}")
-                    batch = _db.batch()
-
-            # Commit des documents restants
-            if batch:
-                batch.commit()
-                logger.info("Final batch committed.")
-        except Exception as e:
-            logger.error(f"Error during batch writing: {e}", exc_info=True)
-            raise
-
-    def write_data_in_segments(collection_name, data, segment_size=10000, batch_size=500):
-        collection_ref = _db.collection(collection_name)  # db est votre client Firestore
-        num_segments = len(data) // segment_size + 1
-
-        try:
-            for i in range(num_segments):
-                start_idx = i * segment_size
-                end_idx = min((i + 1) * segment_size, len(data))
-                segment = data.iloc[start_idx:end_idx]
-
-                logger.info(f"Processing segment {i + 1}/{num_segments}, rows {start_idx} to {end_idx}")
-                write_data_in_batches(collection_name, segment, batch_size=batch_size)
-        except Exception as e:
-            logger.error(f"Error during segmented writing: {e}", exc_info=True)
-            raise
-
+def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     try:
         logger.info("Attempting to load data from Firestore.")
-        collection_ref = _db.collection('recipe_interaction')
+        collection_ref = _engine.collection('recipe_interaction')
         docs = collection_ref.stream()
         data_dicts = [doc.to_dict() for doc in docs]
-
-        if data_dicts:
-            data = pd.DataFrame(data_dicts)
+        data = pd.DataFrame(data_dicts)
+        
+        if not data.empty:
             logger.info("Data successfully loaded from Firestore.")
             return DataAnalyzer(data)
-        else:
-            logger.warning("No data found in Firestore collection.")
-            raise ValueError("Firestore collection is empty.")
     except Exception as e:
         logger.warning(f"Failed to load data from Firestore: {e}", exc_info=True)
 
@@ -80,7 +39,10 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _db):
 
         try:
             logger.info("Writing processed data back to Firestore.")
-            write_data_in_segments("recipe_interaction", data)
+            collection_ref = _engine.collection('recipe_interaction')
+            for index, row in data.iterrows():
+                collection_ref.document(str(index)).set(row.to_dict())
+            logger.info("Data successfully written to Firestore.")
         except Exception as e:
             logger.error("An unexpected error occurred during Firestore operations.", exc_info=True)
             raise
