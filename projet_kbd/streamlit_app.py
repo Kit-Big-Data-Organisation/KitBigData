@@ -11,22 +11,37 @@ from streamlit_option_menu import option_menu
 @st.cache_data
 def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     try:
+        # Tentative de charger les données depuis la base de données
         data = pd.read_sql_table("recipe_interaction", con=_engine)
         if not data.empty:
-            print("data found")
+            print("Data found in the database.")
             return DataAnalyzer(data)
     except Exception as e:
         print(f"Failed to load data from database: {e}")
 
+    # Charger les données depuis les fichiers
     data_loader = Dataloader(path_file, recipe_file)
     interactions_loader = Dataloader(path_file, interaction_file)
     data = data_loader.processed_recipe_interaction(interactions_loader)
     analyzer = DataAnalyzer(data)
     analyzer.clean_from_outliers()
-    analyzer.data.to_sql(
-        name="recipe_interaction", con=_engine, if_exists="replace"
-    )
+
+    # Test léger d'écriture dans la base
+    try:
+        test_data = pd.DataFrame({"test_col": [42]})  # Une petite donnée de test
+        test_data.to_sql(name="test_table", con=_engine, if_exists="replace", index=False)
+        print("Test write to the database was successful.")
+        
+        # Nettoyer la base en supprimant la table de test
+        with _engine.connect() as conn:
+            conn.execute("DROP TABLE IF EXISTS test_table;")
+            print("Test table removed successfully.")
+    except Exception as e:
+        print(f"Failed to perform test write to the database: {e}")
+
+    # Retourner les données analysées
     return analyzer
+
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
