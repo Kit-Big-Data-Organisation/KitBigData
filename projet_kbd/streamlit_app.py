@@ -7,7 +7,7 @@ from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
 from streamlit_sqlalchemy import StreamlitAlchemyMixin
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
 
@@ -38,7 +38,7 @@ db_manager = DatabaseManager()
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
+def load_and_analyze_data(path_file, recipe_file, interaction_file, db_path):
     try:
         # Attache l'engine au DatabaseManager
         db_manager.attach_engine(_engine)
@@ -63,24 +63,30 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     logger.info("🧹 Data cleaned from outliers.")
 
     logger.info("📊 Adding data to the database")
-    # Sauvegarder les données nettoyées dans la base avec `to_sql`
-    create_data_table_query = text(f"""
-    CREATE TABLE IF NOT EXISTS recipe_interaction (
-        recipe_id INTEGER,
-        user_id INTEGER,
-        date DATE,
-        rating INTEGER,
-        review TEXT,
-        interaction_type TEXT,
-        PRIMARY KEY (recipe_id, user_id)
-    );
-    """)
-    if not isinstance(_engine, Engine):
-        raise ValueError("Le paramètre `_engine` n'est pas un objet SQLAlchemy Engine valide.")
-    
-    with _engine.connect() as conn:
-        conn.execute(create_data_table_query)
-    logger.info("✅ Table 'recipe_interaction' created successfully.")
+    engine = create_engine(f"sqlite:///{db_path}")
+    # Check if the database file exists
+    if not os.path.exists(db_path):
+        engine.connect().close()
+        logger.info(f"✅ Database file successfully created at {db_path}")
+    else:
+        logger.info(f"ℹ️ Database already exists at {db_path}")
+
+    table_name = "recipe_interaction"
+    # Check if the table exists
+    inspector = inspect(engine)
+    if table_name in inspector.get_table_names():
+        logger.info(f"✅ Table '{table_name}' already exists in the database.")
+    else:
+        logger.info(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
+        create_table_query = text(f"""
+        CREATE TABLE {table_name} (
+            id INTEGER PRIMARY KEY,
+            test_col TEXT
+        );
+        """)
+        with engine.connect() as conn:
+            conn.execute(create_table_query)
+        logger.info(f"✅ Table '{table_name}' created successfully.")
 
     return analyzer
 
