@@ -6,7 +6,7 @@ from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
-from sqlalchemy.sql import text
+import sqlalchemy
 from logger_config import logger
 
 
@@ -33,7 +33,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, engine):
 
     try:
         with engine.connect() as conn:
-            result = conn.execute(text("SELECT 1"))
+            result = conn.execute(sqlalchemy.sql.text("SELECT 1"))
             print(f"Test query result: {result.fetchone()}")
     except Exception as e:
         logger.error(f"Failed to connect to the database: {e}")
@@ -41,10 +41,10 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, engine):
     # Test léger d'écriture dans la base
     try:
         with engine.connect() as conn:
-            conn.execute(text("CREATE TABLE IF NOT EXISTS test_table (test_col INTEGER);"))
-            conn.execute(text("INSERT INTO test_table (test_col) VALUES (42);"))
+            conn.execute(sqlalchemy.sql.text("CREATE TABLE IF NOT EXISTS test_table (test_col INTEGER);"))
+            conn.execute(sqlalchemy.sql.text("INSERT INTO test_table (test_col) VALUES (42);"))
             print("Test write to database successful.")
-            conn.execute(text("DROP TABLE test_table;"))
+            conn.execute(sqlalchemy.sql.text("DROP TABLE test_table;"))
             print("Test table dropped successfully.")
     except Exception as e:
         logger.error(f"Error during test write: {e}")
