@@ -71,6 +71,31 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     except Exception as e:
         logger.error(f"❌ Échec de connexion à la base de données : {e}")
 
+    def batch_insert_to_sql(df, table_name, engine, chunk_size=1000):
+        """
+        Insère un DataFrame dans une base SQL par lots.
+
+        Args:
+            df (pd.DataFrame): Le DataFrame à insérer.
+            table_name (str): Le nom de la table SQL.
+            engine (sqlalchemy.engine.Engine): Connexion SQLAlchemy.
+            chunk_size (int): Taille des lots pour l'insertion.
+
+        Returns:
+            int: Nombre total de lignes insérées.
+        """
+        total_rows = 0
+        with engine.connect() as conn:
+            for i in range(0, len(df), chunk_size):
+                chunk = df.iloc[i : i + chunk_size]
+                try:
+                    chunk.to_sql(name=table_name, con=conn, if_exists="append", index=False)
+                    total_rows += len(chunk)
+                    print(f"✅ {len(chunk)} lignes insérées (batch {i // chunk_size + 1}).")
+                except Exception as e:
+                    print(f"❌ Erreur lors de l'insertion du batch {i // chunk_size + 1}: {e}")
+        return total_rows
+    
     table_name = "recipe_interaction"
     # Check if the table exists
     inspector = inspect(_engine)
@@ -79,7 +104,8 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     else:
         logger.info(f"ℹ️ Table '{table_name}' does not exist. Creating it now...")
         try: 
-            data.to_sql(table_name, _engine, if_exists="replace", index=False)
+            rows_inserted = batch_insert_to_sql(data, table_name, _engine, chunk_size=1000)
+            print(f"Total des lignes insérées : {rows_inserted}")
         except Exception as e:
             logger.error(f"❌ Error while writing data to the database: {e}")
             return None
