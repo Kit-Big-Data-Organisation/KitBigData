@@ -8,7 +8,9 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../projet_kbd'))
+
+# Ajoutez le chemin absolu du projet au PYTHONPATH
+sys.path.insert(0, os.path.abspath('../../'))  # Chemin vers la racine du projet
 
 project = 'Projet Kit Big Data'
 copyright = '2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia'
