@@ -13,7 +13,7 @@ Dataloader:
 """
 
 import pandas as pd
-import utils
+from projet_kbd import utils
 from projet_kbd.logger_config import logger
 
 
