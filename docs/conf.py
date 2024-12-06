@@ -19,7 +19,7 @@ release = '1'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "sphinx.ext.autodoc",  # Générer automatiquement la documentation depuis les docstrings
+    "sphinx.ext.autodoc",  # Générer la documentation depuis les docstrings
     "sphinx.ext.napoleon", # Support des docstrings au format Google et NumPy
     "sphinx.ext.viewcode", # Lien vers le code source
 ]
