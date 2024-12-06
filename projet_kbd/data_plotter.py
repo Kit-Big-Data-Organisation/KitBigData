@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from projet_kbd import utils
+import projet_kbd.utils as utils
 from projet_kbd.logger_config import logger
 from plotly.subplots import make_subplots
 from wordcloud import WordCloud

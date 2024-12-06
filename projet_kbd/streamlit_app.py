@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-import utils
+import projet_kbd.utils as utils
 from comment_analyzer import CommentAnalyzer
 from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
