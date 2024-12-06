@@ -14,17 +14,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Étape 2 : Installer Python et les dépendances
-      - name: Set up Python
+      - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
-          python-version: 3.x
+          python-version: '3.10'
+      
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry  # Chemin où Poetry stocke ses dépendances
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
 
-      - name: Install dependencies
+      - name: Install Poetry package manager
         run: |
-          python -m pip install --upgrade pip
-          pip install sphinx
-          pip install -r docs/requirements.txt  # Assurez-vous que ce fichier existe
+            curl -sSL https://install.python-poetry.org | python3 -
+            echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Synchronize poetry.lock
+        run: |
+          if [ -f "poetry.lock" ]; then
+            poetry lock --no-update
+          else
+            echo "No poetry.lock file found, skipping lock synchronization"
+          fi
+
+      - name: Install project dependencies
+        run: poetry install
 
       # Étape 3 : Générer les fichiers .rst avec sphinx-apidoc
       - name: Generate .rst files with sphinx-apidoc
