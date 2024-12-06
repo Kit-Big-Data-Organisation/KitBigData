@@ -45,11 +45,11 @@ jobs:
       # Étape 3 : Générer les fichiers .rst avec sphinx-apidoc
       - name: Generate .rst files with sphinx-apidoc
         run: |
-          sphinx-apidoc -o docs/source projet_kbd --force --separate
+          poetry run sphinx-apidoc -o docs/source projet_kbd --force --separate
 
       # Étape 4 : Construire la documentation
       - name: Build documentation
-        run: sphinx-build -b html -v docs/source docs/_build/html
+        run: poetry run sphinx-build -b html -v docs/source docs/_build/html
 
       # Étape 5 : Déployer sur GitHub Pages
       - name: Deploy to GitHub Pages
