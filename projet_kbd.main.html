@@ -54,7 +54,11 @@
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.main module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.main module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.main.create_database_if_not_exists"><code class="docutils literal notranslate"><span class="pre">create_database_if_not_exists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.main.validate_data_files"><code class="docutils literal notranslate"><span class="pre">validate_data_files()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
 </ul>
@@ -67,7 +71,11 @@
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.main module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.main module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.main.create_database_if_not_exists"><code class="docutils literal notranslate"><span class="pre">create_database_if_not_exists()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.main.validate_data_files"><code class="docutils literal notranslate"><span class="pre">validate_data_files()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
@@ -98,8 +106,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="projet-kbd-main-module">
-<h1>projet_kbd.main module<a class="headerlink" href="#projet-kbd-main-module" title="Link to this heading"></a></h1>
+  <section id="module-projet_kbd.main">
+<span id="projet-kbd-main-module"></span><h1>projet_kbd.main module<a class="headerlink" href="#module-projet_kbd.main" title="Link to this heading"></a></h1>
+<p>Main script for profiling and running the Streamlit application.</p>
+<p>This script connects to a SQLite database, ensures all required data files are
+downloaded, and runs the Streamlit app while profiling its performance using
+the <cite>cProfile</cite> module.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.main.create_database_if_not_exists">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.main.</span></span><span class="sig-name descname"><span class="pre">create_database_if_not_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/main.html#create_database_if_not_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.main.create_database_if_not_exists" title="Link to this definition"></a></dt>
+<dd><p>Creates the SQLite database file if it does not already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>db_path</strong> (<em>str</em>) – The path to the SQLite database file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.main.validate_data_files">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.main.</span></span><span class="sig-name descname"><span class="pre">validate_data_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/main.html#validate_data_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.main.validate_data_files" title="Link to this definition"></a></dt>
+<dd><p>Ensures that the required data files exist after the download step.
+Raises an exception if any file is missing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_dir</strong> (<em>str</em>) – The directory where the data files are expected to be</p></li>
+<li><p><strong>located.</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
