@@ -17,7 +17,7 @@ import json
 import os
 from collections import Counter
 import pandas as pd
-import projet_kbd.utils as utils
+import utils
 from projet_kbd.logger_config import logger
 
 

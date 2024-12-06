@@ -1,10 +1,10 @@
 import pandas as pd
 import streamlit as st
-import projet_kbd.utils as utils
-from projet_kbd.comment_analyzer import CommentAnalyzer
-from projet_kbd.data_analyzer import DataAnalyzer
-from projet_kbd.data_loader import Dataloader
-from projet_kbd.data_plotter import DataPlotter
+import utils
+from comment_analyzer import CommentAnalyzer
+from data_analyzer import DataAnalyzer
+from data_loader import Dataloader
+from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
 
 

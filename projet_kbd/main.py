@@ -9,9 +9,9 @@ the `cProfile` module.
 import os
 import cProfile
 import sqlalchemy
-from projet_kbd.data_downloader import download_data
-from projet_kbd.logger_config import logger
-from projet_kbd import streamlit_app
+from data_downloader import download_data
+from logger_config import logger
+import streamlit_app
 
 # Define base directory (KitBigData)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

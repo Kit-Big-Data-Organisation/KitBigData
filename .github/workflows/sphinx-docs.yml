@@ -3,7 +3,7 @@ name: Build and Deploy Sphinx Documentation
 on:
   push:
     branches:
-      - main  # Branche à surveiller pour déclencher l'action
+      - deploy_documentation  # Branche à surveiller pour déclencher l'action
 
 jobs:
   build:
@@ -41,6 +41,9 @@ jobs:
 
       - name: Install project dependencies
         run: poetry install
+      
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=${{ github.workspace }}/projet_kbd" >> $GITHUB_ENV
 
       # Étape 3 : Générer les fichiers .rst avec sphinx-apidoc
       - name: Generate .rst files with sphinx-apidoc
