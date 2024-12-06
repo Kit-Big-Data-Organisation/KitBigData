@@ -5,6 +5,9 @@ on:
     branches:
       - deploy_documentation  # Branche à surveiller pour déclencher l'action
       - main  # Branche à surveiller pour déclencher l'action
+  pull_request:
+    branches:
+      - main                  # Branche cible des pull requests
 
 jobs:
   build:
