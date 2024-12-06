@@ -28,7 +28,7 @@ jobs:
 
       # Étape 3 : Construire la documentation
       - name: Build documentation
-        run: sphinx-build -b html docs/ docs/_build/html
+        run: sphinx-build -b html --separate docs/ docs/_build/html
 
       # Étape 4 : Déployer sur GitHub Pages
       - name: Deploy to GitHub Pages
