@@ -55,10 +55,14 @@
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.utils module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.utils.determine_cuisine"><code class="docutils literal notranslate"><span class="pre">determine_cuisine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.utils.highlight_cells"><code class="docutils literal notranslate"><span class="pre">highlight_cells()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="projet_kbd.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="projet_kbd.html#module-projet_kbd">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
@@ -68,7 +72,11 @@
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.utils module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.utils module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.utils.determine_cuisine"><code class="docutils literal notranslate"><span class="pre">determine_cuisine()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.utils.highlight_cells"><code class="docutils literal notranslate"><span class="pre">highlight_cells()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 </ul>
 
@@ -97,8 +105,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="projet-kbd-utils-module">
-<h1>projet_kbd.utils module<a class="headerlink" href="#projet-kbd-utils-module" title="Link to this heading"></a></h1>
+  <section id="module-projet_kbd.utils">
+<span id="projet-kbd-utils-module"></span><h1>projet_kbd.utils module<a class="headerlink" href="#module-projet_kbd.utils" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.utils.determine_cuisine">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">determine_cuisine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#determine_cuisine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.determine_cuisine" title="Link to this definition"></a></dt>
+<dd><p>Determines the cuisine of a recipe based on tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tags</strong> (<em>list</em><em> of </em><em>str</em>) – The tags associated with a recipe.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The determined cuisine, or ‘other’ if no cuisine matches.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.utils.highlight_cells">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">highlight_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#highlight_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.highlight_cells" title="Link to this definition"></a></dt>
+<dd><p>to highlight specific cells in dataframe figure</p>
+</dd></dl>
+
 </section>
 
 
