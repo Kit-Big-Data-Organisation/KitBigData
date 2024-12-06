@@ -3,7 +3,7 @@ name: Build and Deploy Sphinx Documentation
 on:
   push:
     branches:
-      - deploy_documentation  # Branche qui déclenche le workflow
+      - deploy_documentation  # Branche à surveiller pour déclencher l'action
 
 jobs:
   build:
@@ -14,16 +14,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Étape 2 : Installer Poetry et les dépendances
+      # Étape 2 : Installer Python et les dépendances
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: 3.x
 
-      - name: Install Poetry
+      - name: Install dependencies
         run: |
-          pip install poetry
-          poetry install
+          python -m pip install --upgrade pip
+          pip install sphinx
+          pip install -r docs/requirements.txt  # Assurez-vous que ce fichier existe
 
       # Étape 3 : Générer les fichiers .rst avec sphinx-apidoc
       - name: Generate .rst files with sphinx-apidoc
