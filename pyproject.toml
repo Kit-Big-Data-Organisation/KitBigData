@@ -10,29 +10,47 @@ authors = [
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
+python = ">=3.10,<3.11"
 pandas = "*"
 numpy = "*"
 matplotlib = "*"
 seaborn = "*"
 jupyter = "*"
 streamlit = "*"
+sqlalchemy = "^2.0.36"
+streamlit-option-menu = "^0.4.0"
 plotly = "^5.24.1"
-altair = "4.1.0"
+wordcloud = "^1.9.4"
+scikit-learn = "^1.5.2"
+textblob = "^0.18.0.post0"
+gdown = "^5.2.0"
+sphinx-rtd-theme = "^3.0.2"
 
 [tool.poetry.dev-dependencies]
-black = "*" # For pep8 and style errors 
-flake8 = "*" # For pep8 
-mypy = "*"  # For type checking
-sphinx = "*"  # For generating documentation
-ipykernel = "*"
+black = "*"  # Auto-formatting, compatible with PEP8
+mypy = "*"  # Static type checking
+sphinx = "*"  # Documentation generation
+ipykernel = "*"  # Jupyter kernel support
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+flake8 = "^7.1.1"
+pytest = "^8.3.4"
+flake8-pyproject = "^1.2.3"
+sphinx = "^8.1.3"
 
 [tool.flake8]
-max-line-length = 88  # Même longueur de ligne que Black
-ignore = [
-    "E203",  # Espacement autour des slices (conflit avec Black)
-    "W503",  # Line break before binary operator (conflit avec Black)
-]
+max-line-length = 79
+ignore = ["E203", "E266", "W503"]
+exclude = [".git", "__pycache__", "build", "dist", "./projet_kbd/main.py", "./docs/source/conf.py","./projet_kbd/data_downloader.py"]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+known_third_party = ["pandas", "numpy", "matplotlib", "seaborn", "streamlit"]
 
 [build-system]
 requires = ["poetry-core"]
