@@ -48,7 +48,11 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="projet_kbd.html">projet_kbd package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.comment_analyzer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#comment-analyzer-module">Comment Analyzer Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
@@ -62,7 +66,21 @@
 <li class="toctree-l2"><a class="reference internal" href="projet_kbd.html#module-projet_kbd">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.comment_analyzer module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#comment-analyzer-module">Comment Analyzer Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.comments"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.comments</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.clean_comments"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.clean_comments()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.generate_word_frequencies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies_associated_to_time"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.generate_word_frequencies_associated_to_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.sentiment_analysis()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
@@ -98,8 +116,117 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="projet-kbd-comment-analyzer-module">
-<h1>projet_kbd.comment_analyzer module<a class="headerlink" href="#projet-kbd-comment-analyzer-module" title="Link to this heading"></a></h1>
+  <section id="module-projet_kbd.comment_analyzer">
+<span id="projet-kbd-comment-analyzer-module"></span><h1>projet_kbd.comment_analyzer module<a class="headerlink" href="#module-projet_kbd.comment_analyzer" title="Link to this heading"></a></h1>
+<section id="comment-analyzer-module">
+<h2>Comment Analyzer Module<a class="headerlink" href="#comment-analyzer-module" title="Link to this heading"></a></h2>
+<p>This module provides tools for analyzing user comments, including:
+- Cleaning comments.
+- Performing sentiment analysis.
+- Generating word frequencies and analyzing contextual word usage.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>CommentAnalyzer:</dt><dd><p>Main class for processing and analyzing user comments.</p>
+</dd>
+</dl>
+</section>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="projet_kbd.comment_analyzer.CommentAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">projet_kbd.comment_analyzer.</span></span><span class="sig-name descname"><span class="pre">CommentAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comments_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/comment_analyzer.html#CommentAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.comment_analyzer.CommentAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for analyzing user comments in a DataFrame.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="projet_kbd.comment_analyzer.CommentAnalyzer.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><a class="headerlink" href="#projet_kbd.comment_analyzer.CommentAnalyzer.comments" title="Link to this definition"></a></dt>
+<dd><p>A DataFrame containing user comments with a column named ‘review’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.comment_analyzer.CommentAnalyzer.clean_comments">
+<span class="sig-name descname"><span class="pre">clean_comments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/projet_kbd/comment_analyzer.html#CommentAnalyzer.clean_comments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.comment_analyzer.CommentAnalyzer.clean_comments" title="Link to this definition"></a></dt>
+<dd><p>Clean comments by converting to lowercase, removing punctuation,
+and stripping whitespace.</p>
+<p>The cleaned comments are stored in a new column named ‘cleaned’.</p>
+<p class="rubric">Notes</p>
+<p>This method modifies the <cite>comments</cite> attribute in place.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies">
+<span class="sig-name descname"><span class="pre">generate_word_frequencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/projet_kbd/comment_analyzer.html#CommentAnalyzer.generate_word_frequencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies" title="Link to this definition"></a></dt>
+<dd><p>Compute word frequencies from cleaned comments and save them to a
+database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p></li>
+<li><p><strong>max_features</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of most frequent words to include (default is 100).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary where keys are words and values are their frequencies.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If a table named “word_frequencies” already exists in the database,
+this method will return the existing data instead of recomputing
+frequencies.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies_associated_to_time">
+<span class="sig-name descname"><span class="pre">generate_word_frequencies_associated_to_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/projet_kbd/comment_analyzer.html#CommentAnalyzer.generate_word_frequencies_associated_to_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies_associated_to_time" title="Link to this definition"></a></dt>
+<dd><p>Generate word frequencies in contexts associated with the word ‘time’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p></li>
+<li><p><strong>max_features</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of top contexts to include (default is 10).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary where keys are n-grams (phrases) and values
+are their frequencies.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This method extracts contexts around the word ‘time’ and computes
+word frequencies based on these contexts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis">
+<span class="sig-name descname"><span class="pre">sentiment_analysis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/projet_kbd/comment_analyzer.html#CommentAnalyzer.sentiment_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis" title="Link to this definition"></a></dt>
+<dd><p>Perform sentiment analysis on the cleaned comments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The original DataFrame with an additional ‘polarity’ column
+containing sentiment polarity scores.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The <cite>clean_comments</cite> method should be called before this one to
+ensure that comments are cleaned.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
