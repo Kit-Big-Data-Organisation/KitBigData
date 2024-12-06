@@ -24,4 +24,5 @@ For a more detailed understanding of the methodologies and data structures used 
 ## 🏁 Getting Started
 
 To run the KitBigData application locally, follow the steps in the Installation section of the Sphinx Documentation!
+[Installation](https://kit-big-data-organisation.github.io/KitBigData/installation.html)
 
