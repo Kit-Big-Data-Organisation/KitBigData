@@ -20,8 +20,8 @@ release = '1'
 
 extensions = [
     "sphinx.ext.autodoc",  # Générer la documentation depuis les docstrings
-    "sphinx.ext.napoleon", # Support des docstrings au format Google et NumPy
-    "sphinx.ext.viewcode", # Lien vers le code source
+    "sphinx.ext.napoleon",  # Support des docstrings au format Google et NumPy
+    "sphinx.ext.viewcode",  # Lien vers le code source
 ]
 
 templates_path = ['_templates']
