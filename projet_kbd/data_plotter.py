@@ -183,3 +183,87 @@ class DataPlotter:
             barmode = 'group'
         )    
         return fig
+
+    def plot_inractions_ratings(self, engine):
+        aggregated = self.data_analyzer.analyse_interactions_ratings(engine)
+        fig = px.scatter(
+        aggregated,
+        x='avg_rating',
+        y='num_ratings',
+        color='mean_minutes',
+        title="Average Rating vs Number of Ratings",
+        labels={'avg_rating': 'Average Rating Score', 'num_ratings': 'Number of Ratings', 'mean_minutes': 'Cooking Time (minutes)'},
+        color_continuous_scale='Turbo',
+        size_max=10
+    )
+        fig.update_traces(marker=dict(size=8))
+        return fig 
+    
+    def plot_user_interactions(self, engine):
+        fig = go.Figure()
+        aggregated = self.data_analyzer.analyse_user_intractions(engine)
+        fig.add_trace(go.Scatter(
+            x=aggregated['days_since_submission'],
+            y=aggregated['num_interactions'],
+            mode='markers',
+            name='Number of Interactions',
+            marker=dict(color='skyblue', size=10),
+            xaxis='x1',
+            yaxis='y1'
+        ))
+
+        fig.add_trace(go.Scatter(
+            x=aggregated['days_since_submission'],
+            y=aggregated['avg_rating'],
+            mode='markers',
+            name='Average Rating',
+            marker=dict(color='orange', size=10),
+            xaxis='x2',
+            yaxis='y2'
+        ))
+
+        fig.update_layout(
+            title="Interaction Analysis Over Time",
+            xaxis=dict(title="Days Since Submission", domain=[0, 1], anchor='y1'),
+            xaxis2=dict(title="Days Since Submission", domain=[0, 1], anchor='y2'),
+            yaxis=dict(title="Number of Interactions", anchor='x1'),
+            yaxis2=dict(title="Average Rating", anchor='x2'),
+            grid=dict(rows=2, columns=1, pattern="independent"),
+            height=600  
+        )
+
+        return fig
+    
+    def plot_average_steps_rating(self, engine):
+        grouped = self.data_analyzer.analyse_average_steps_rating(engine)
+        fig = go.Figure()
+
+        # Bar plot for average steps
+        fig.add_trace(go.Bar(
+            x=grouped['year'],
+            y=grouped['avg_steps'],
+            name='Average Steps',
+            marker=dict(color='skyblue'),
+            text=grouped['avg_rating'].round(2),  # Add average rating as text on top of each bar
+            textposition='outside',
+            hoverinfo='x+y+text'
+        ))
+
+        # Layout configuration
+        fig.update_layout(
+            title="Average Steps and Rating per Year",
+            xaxis_title="Year",
+            yaxis_title="Average Number of Steps",
+            yaxis=dict(title="Average Steps"),
+            xaxis=dict(
+                tickmode='array',
+                tickvals=grouped['year'],  # Set x-axis tick values to the years
+                ticktext=grouped['year'].astype(str),  # Display the years as labels
+                title_text='Year'  # Label for the x-axis
+            ),
+            showlegend=False,
+            height=600
+        )
+        return fig
+
+    

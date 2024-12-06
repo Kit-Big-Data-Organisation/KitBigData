@@ -69,7 +69,6 @@ class DataAnalyzer:
         
         grouped_interactions = self.data.groupby('year')['review'].count()
         indices , values = grouped_interactions.index , grouped_interactions.values
-
         return indices ,values
 
     def group_recipes_year(self):
@@ -237,10 +236,7 @@ class DataAnalyzer:
         return cuisines_nutritions
     
     def filter_data_by_tags(self, tags_list):
-        
         mask = self.data['tags'].apply(lambda x: any(tag in x for tag in tags_list))
-        # import pdb
-        # pdb.set_trace()
         total_counts = self.data.groupby('year').size()
         tags_counts = self.data[mask].groupby('year').size()
         summary_df = pd.DataFrame({
@@ -250,3 +246,28 @@ class DataAnalyzer:
         summary_df['percentage'] = ((summary_df['recipes_with_tags'] / summary_df['total_recipes']) * 100).round(0).astype(int)
         return summary_df.reset_index()
     
+    def analyse_interactions_ratings(self, engine):
+        aggregated = self.data.groupby('id').agg(
+        avg_rating=('rating', 'mean'),
+        num_ratings=('rating', 'count'),
+        mean_minutes=('minutes', 'mean')
+        ).reset_index()
+        return aggregated
+
+    def analyse_user_intractions(self, engine):
+        self.data['submitted'] = pd.to_datetime(self.data['submitted'])
+        self.data['date'] = pd.to_datetime(self.data['date'])
+        self.data['days_since_submission'] = (self.data['date'] - self.data['submitted']).dt.days
+        aggregated = self.data.groupby('days_since_submission').agg(
+            num_interactions=('id', 'count'),
+            avg_rating=('rating', 'mean')
+        ).reset_index()
+        return aggregated
+    
+    def analyse_average_steps_rating(self, engine):
+        self.data['year'] = pd.to_datetime(self.data['submitted']).dt.year
+        grouped = self.data.groupby('year').agg(
+            avg_steps=('n_steps', 'mean'),  
+            avg_rating=('rating', 'mean') 
+        ).reset_index()
+        return grouped

@@ -74,13 +74,28 @@ def analyze_cuisine_nutritions(analyzer , _engine):
     plotter = DataPlotter(analyzer)
     return plotter.plot_cuisine_nutritions(_engine)
 
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyze_interactions_ratings(analyzer , _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_inractions_ratings(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyze_user_interactions(analyzer , _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_user_interactions(_engine)
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyse_average_steps_rating(analyzer , _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_average_steps_rating(_engine)
+
 def run(path_file , recipe_file , interaction_file , engine):
         
         st.set_page_config(layout="wide")
 
         analyzer = load_and_analyze_data(path_file,recipe_file, interaction_file, engine)
         with st.sidebar:
-            selected = option_menu("Dashboard", ["Presentation", 'Nutrition Analysis', 'Cuisine Analysis', 'Free Visualisation']
+            selected = option_menu("Dashboard", ["Presentation", 'Nutrition Analysis', 'Cuisine Analysis', 'Free Visualisation', 'Random Nour']
                 , menu_icon="cast")
 
         if selected == 'Presentation':
@@ -95,6 +110,9 @@ def run(path_file , recipe_file , interaction_file , engine):
 
             with col[1]:
                 st.plotly_chart(interaction_fig, use_container_width=True)
+            
+            average_steps_rating = analyse_average_steps_rating(analyzer, engine)
+            st.plotly_chart(average_steps_rating, use_container_width=True)
 
         elif selected == 'Nutrition Analysis':
 
@@ -149,3 +167,14 @@ def run(path_file , recipe_file , interaction_file , engine):
                             if i + j < len(tags_chart):
                                 with cols[j]:
                                     st.plotly_chart(tags_chart[i+j], use_container_width=True)
+
+        elif selected == 'Random Nour':
+            st.write("## Rating of recepies")
+            interaction_ratings = analyze_interactions_ratings(analyzer, engine)
+            st.plotly_chart(interaction_ratings, use_container_width=True)
+
+            st.write("## User Interaction")
+            user_interactions = analyze_user_interactions(analyzer, engine)
+            st.plotly_chart(user_interactions, use_container_width=True)
+
+
