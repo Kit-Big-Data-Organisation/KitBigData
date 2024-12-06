@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - deploy_documentation  # Branche à surveiller pour déclencher l'action
+      - main  # Branche à surveiller pour déclencher l'action
 
 jobs:
   build:
