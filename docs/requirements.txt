@@ -1,4 +1,3 @@
 sphinx>=5.0  # Version minimale de Sphinx
 sphinx-rtd-theme  # Thème "Read the Docs" pour la documentation
 sphinx-autodoc-typehints  # Pour inclure les annotations de type Python dans la doc
-sphinx.ext.napoleon  # Support des styles Google et NumPy pour les docstrings
