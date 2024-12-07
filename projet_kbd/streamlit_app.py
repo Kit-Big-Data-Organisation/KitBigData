@@ -326,11 +326,21 @@ def run(path_file, recipe_file, interaction_file, engine):
         )
 
     elif selected == "Interaction with the reviews":
-        st.title('🔍 Analysis of Word Usage in Comments')
-        word = st.text_input('Entrez un mot pour rechercher dans les commentaires:', '')
-        if word:
-            word_counts = DataAnalyzer.word_count_over_time(analyzer, word)
-            st.line_chart(word_counts.set_index('year'))
+        st.title('🔍 Analysis of Word Co-occurrence in Comments')
+
+        nb = analyzer.data.shape[0]
+        st.write(f"Number of comments: {nb}")
+
+        words_input = st.text_input('Enter words to search for co-occurrence, separated by commas:', '')
+        words = [word.strip() for word in words_input.split(',')] if words_input else []
+        
+        if words:
+            word_counts = DataAnalyzer.ingredient_co_occurrence_over_time(analyzer, words)
+            
+            if not word_counts.empty:
+                st.line_chart(word_counts.set_index('year'))
+            else:
+                st.write("No co-occurrence data found for the specified words.")
 
     elif selected == "Free Visualisation":
         st.write("## Tags Analysis")

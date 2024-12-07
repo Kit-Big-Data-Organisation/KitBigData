@@ -60,8 +60,7 @@ class CommentAnalyzer:
             logger.info("Comments cleaned successfully.")
         else:
             logger.error("Column 'review' not found in the DataFrame.")
-            self.comments["cleaned"] = pd.Series([], dtype=str)  # Create an empty 'cleaned' column if 'review' is missing
-                
+            self.comments["cleaned"] = pd.Series([], dtype=str)  # Create an empty 'cleaned' column if 'review' is missing                
 
     def sentiment_analysis(self) -> pd.DataFrame:
         """
