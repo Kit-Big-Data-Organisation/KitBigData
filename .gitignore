@@ -30,6 +30,7 @@ __pycache__/
 env/
 venv/
 
+
 # Fichiers de log
 *.log
 
@@ -43,6 +44,7 @@ venv/
 .vscode/
 .idea/
 *.iml
+.env
 
 # Dependencies
 *.egg

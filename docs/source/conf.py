@@ -8,7 +8,9 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../projet_kbd'))
+
+# Ajoutez le chemin absolu du projet au PYTHONPATH
+sys.path.insert(0, os.path.abspath('../../'))  # Chemin vers la racine du projet
 
 project = 'Projet Kit Big Data'
 copyright = '2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia'
@@ -19,9 +21,9 @@ release = '1'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "sphinx.ext.autodoc",  # Générer automatiquement la documentation depuis les docstrings
-    "sphinx.ext.napoleon", # Support des docstrings au format Google et NumPy
-    "sphinx.ext.viewcode", # Lien vers le code source
+    "sphinx.ext.autodoc",  # Générer la documentation depuis les docstrings
+    "sphinx.ext.napoleon",  # Support des docstrings au format Google et NumPy
+    "sphinx.ext.viewcode",  # Lien vers le code source
 ]
 
 templates_path = ['_templates']

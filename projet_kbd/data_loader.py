@@ -14,7 +14,7 @@ Dataloader:
 
 import pandas as pd
 import utils
-from projet_kbd.logger_config import logger
+from logger_config import logger
 
 
 class Dataloader:
