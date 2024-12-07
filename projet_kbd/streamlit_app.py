@@ -136,7 +136,8 @@ def run(path_file, recipe_file, interaction_file, engine):
                 "Nutrition Analysis",
                 "Cuisine Analysis",
                 "Sociological Insight",
-                "Free Visualisation",
+                "Interaction with the reviews",
+                "Free Visualisation"
             ],
             menu_icon="cast",
         )
@@ -323,6 +324,13 @@ def run(path_file, recipe_file, interaction_file, engine):
             frustrations with time-consuming recipes.
             """
         )
+
+    elif selected == "Interaction with the reviews":
+        st.title('🔍 Analysis of Word Usage in Comments')
+        word = st.text_input('Entrez un mot pour rechercher dans les commentaires:', '')
+        if word:
+            word_counts = DataAnalyzer.word_count_over_time(analyzer, word)
+            st.line_chart(word_counts.set_index('year'))
 
     elif selected == "Free Visualisation":
         st.write("## Tags Analysis")

@@ -18,6 +18,7 @@ import os
 from collections import Counter
 import pandas as pd
 import utils
+from comment_analyzer import CommentAnalyzer
 from projet_kbd.logger_config import logger
 
 
@@ -761,3 +762,45 @@ class DataAnalyzer:
             )
 
         return category_df
+   
+    def word_count_over_time(self, word):
+        """
+        Count occurrences of a specific word in comments over time.
+
+        Parameters
+        ----------
+        word : str
+            The word to search for in the comments.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with years and the count of the word in that year.
+        """
+        
+        # Assure that comments are cleaned first
+        if 'cleaned' not in self.data.columns:
+            comment_analyzer = CommentAnalyzer(self.data)
+            comment_analyzer.clean_comments()
+        print(self.data.head(1))
+        print("COLUMNS1 =  ", self.data.columns)
+
+        # Ajout d'une fonction de vérification pour isoler les entrées problématiques
+        def count_word(x):
+            try:
+                return x.split().count(word)
+            except AttributeError:
+                # Afficher l'entrée qui a causé l'erreur
+                print(f"Problematic entry (expected str, got {type(x)}): {x}")
+                return 0
+
+        # Appliquer la fonction de comptage en capturant les erreurs
+        self.data['word_count'] = self.data['cleaned'].apply(count_word)
+
+        if 'year' in self.data.columns:
+            filtered_data = self.data[self.data['year'].between(2002, 2010)]
+            word_counts = filtered_data.groupby('year')['word_count'].sum().reset_index()
+            return word_counts
+        else:
+            print("Column 'year' not found.")
+            return pd.DataFrame()  # Return an empty DataFrame if 'year' is missing

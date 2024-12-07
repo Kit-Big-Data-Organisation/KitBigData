@@ -43,21 +43,25 @@ class CommentAnalyzer:
     def clean_comments(self) -> None:
         """
         Clean comments by converting to lowercase, removing punctuation,
-        and stripping whitespace.
+        and stripping whitespace. Ensure all entries are treated as strings.
 
         The cleaned comments are stored in a new column named 'cleaned'.
-
-        Notes
-        -----
-        This method modifies the `comments` attribute in place.
         """
-        self.comments["cleaned"] = (
-            self.comments["review"]
-            .str.lower()
-            .str.replace(r"[^\w\s]", "", regex=True)
-            .str.strip()
-        )
-        logger.info("Comments cleaned successfully.")
+        if "review" in self.comments.columns:
+            self.comments["cleaned"] = self.comments["review"].fillna("").astype(str).apply(
+                lambda x: x.lower().replace(r"[^\w\s]", "").strip()
+            )
+            # Afficher les entrées qui ne sont pas des chaînes après le nettoyage
+            problematic_entries = self.comments[self.comments["cleaned"].apply(lambda x: not isinstance(x, str))]
+            if not problematic_entries.empty:
+                print("Problematic entries:", problematic_entries)
+            else :
+                print("No problematic entries.")
+            logger.info("Comments cleaned successfully.")
+        else:
+            logger.error("Column 'review' not found in the DataFrame.")
+            self.comments["cleaned"] = pd.Series([], dtype=str)  # Create an empty 'cleaned' column if 'review' is missing
+                
 
     def sentiment_analysis(self) -> pd.DataFrame:
         """
