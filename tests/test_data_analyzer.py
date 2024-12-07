@@ -345,9 +345,8 @@ def test_analyse_average_steps_rating(
 ):
     """
     Test the `analyse_average_steps_rating` function.
-
-    This test validates that the method calculates the average steps and average ratings
-    per year based on the provided sample data.
+    This test validates that the method calculates the average
+    steps and average ratingsper year based on the provided sample data.
     """
     # Simulate an empty database table
     mock_read_sql_table.return_value = pd.DataFrame()
@@ -378,9 +377,8 @@ def test_analyse_user_interactions(
 ):
     """
     Test the `analyse_user_intractions` function.
-
-    This test validates that the method calculates interactions and average ratings
-    grouped by days since submission correctly.
+    This test validates that the method calculates interactions
+    and average ratings grouped by days since submission correctly.
     """
     # Simulate database state with empty initial read
     mock_read_sql_table.return_value = pd.DataFrame()
