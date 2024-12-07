@@ -32,6 +32,7 @@ class DataPlotter:
     data_analyzer : object
         An instance of the DataAnalyzer class for accessing analyzed data.
     """
+
     def __init__(self, data_analyzer):
         """
         Initialize the DataPlotter with a DataAnalyzer instance.
@@ -142,7 +143,7 @@ class DataPlotter:
             color_discrete_map=custom_palette,
             title="""
             Proportion of Different Oils by Year, Ordered by Total Proportion
-            """
+            """,
         )
 
         fig.update_layout(
@@ -242,12 +243,12 @@ class DataPlotter:
     def plot_top_ingredients(self, engine):
         """
         Generate a bar chart for the top ingredients used in recipes.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
             SQLAlchemy engine for database interactions.
-            
+
         Returns
         -------
         plotly.graph_objects.Figure
@@ -264,7 +265,7 @@ class DataPlotter:
     def plot_calories_analysis(self, engine):
         """
         Generate a bar chart for the analysis of calories by cuisine.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
@@ -322,7 +323,7 @@ class DataPlotter:
     def plot_cuisine_nutritions(self, engine):
         """
         Generate a bar chart for the nutritional content by cuisine.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
@@ -359,7 +360,7 @@ class DataPlotter:
     def plot_quick_recipes_evolution(self, engine):
         """
         Plot the evolution of the proportion of quick recipes over the years.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
@@ -381,9 +382,9 @@ class DataPlotter:
                     proportions_df,
                     x="Year",
                     y="Proportion",
-                    title='''
+                    title="""
                     Evolution of the Proportion of Quick Recipes Over the Years
-                    ''',
+                    """,
                     labels={"Proportion": "Proportion (%)", "Year": "Year"},
                     markers=True,
                 )
@@ -408,15 +409,15 @@ class DataPlotter:
         ----------
         engine : sqlalchemy.engine.Engine
             SQLAlchemy engine for database interactions.
-            
+
         Returns
         -------
         plotly.graph_objects.Figure
             A Plotly line chart figure.
         """
         logger.info(
-            '''Attempting to plot the evolution of the rate of the interactions
-            for quick recipes.'''
+            """Attempting to plot the evolution of the rate of the interactions
+            for quick recipes."""
         )
         try:
             rate_inter_quick_recipe = (
@@ -431,8 +432,8 @@ class DataPlotter:
                     rate_inter_quick_recipe,
                     x="year",
                     y="Proportion",
-                    title='''Proportion of Interactions for Quick-Tagged
-                    Recipes by Year''',
+                    title="""Proportion of Interactions for Quick-Tagged
+                    Recipes by Year""",
                     labels={"Proportion": "Proportion (%)", "year": "year"},
                     markers=True,
                 )
@@ -454,7 +455,7 @@ class DataPlotter:
     def plot_categories_quick_recipe(self, engine):
         """
         Plot the distribution of categories for quick recipes.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
@@ -567,3 +568,252 @@ class DataPlotter:
         plt.tight_layout()
         logger.info("Word Cloud plot for time generated successfully.")
         return fig
+
+    def plot_interactions_ratings(self, engine):
+        """
+        Plot a scatter plot showing the relationship between average rating and
+        the number of ratings, with cooking time as a color scale.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            A Plotly scatter plot figure.
+        """
+        logger.info("Analyzing interactions and ratings for plotting.")
+        try:
+            # Analyze interactions and ratings
+            aggregated = self.data_analyzer.analyse_interactions_ratings(
+                engine
+            )
+
+            logger.info(
+                "Generating scatter plot for average ratings vs. "
+                "number of ratings."
+            )
+            # Create scatter plot
+            fig = px.scatter(
+                aggregated,
+                x="avg_rating",
+                y="num_ratings",
+                color="mean_minutes",
+                title="Average Rating vs Number of Ratings",
+                labels={
+                    "avg_rating": "Average Rating Score",
+                    "num_ratings": "Number of Ratings",
+                    "mean_minutes": "Cooking Time (minutes)",
+                },
+                color_continuous_scale="Turbo",
+                size_max=10,
+            )
+
+            fig.add_annotation(
+                x=4.185989,
+                y=1613,
+                text=" best banana bread",
+                showarrow=True,
+                arrowhead=2,
+            )
+
+            fig.add_annotation(
+                x=4.541436,
+                y=1448,
+                text="creamy cajun chicken pasta",
+                showarrow=True,
+                arrowhead=2,
+            )
+
+            fig.add_annotation(
+                x=4.329047,
+                y=1322,
+                text="best ever banana cake with cream cheese frosting",
+                showarrow=True,
+                arrowhead=2,
+            )
+
+            fig.add_annotation(
+                x=4.423015,
+                y=1234,
+                text="jo mama s world famous spaghett",
+                showarrow=True,
+                arrowhead=2,
+            )
+
+            fig.update_layout(height=800)  # Set the desired height (in pixels)
+
+            # Update marker size for better visualization
+            fig.update_traces(marker=dict(size=8))
+            logger.info("Scatter plot generated successfully.")
+            return fig
+        except Exception as e:
+            logger.error(f"Failed to generate scatter plot: {e}")
+            return None
+
+    def plot_user_interactions(self, engine):
+        """
+        Plot user interaction data including number of "
+        "interactions and average rating over time.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            A Plotly figure object with user interactions and
+            average ratings plotted.
+        """
+        logger.info(
+            "Starting analysis of user interaction data for visualization."
+        )
+
+        try:
+            # Analyze user interaction data
+            aggregated = self.data_analyzer.analyse_user_intractions(engine)
+            logger.info(
+                "User interaction data analysis completed successfully."
+            )
+
+            # Initialize a Plotly figure
+            logger.info("Creating a new Plotly figure.")
+            fig = go.Figure()
+
+            # Add trace for number of interactions over time
+            logger.info("Adding scatter trace for the number of interactions.")
+            fig.add_trace(
+                go.Scatter(
+                    x=aggregated["days_since_submission"],
+                    y=aggregated["num_interactions"],
+                    mode="markers",
+                    name="Number of Interactions",
+                    marker=dict(color="skyblue", size=2),
+                    xaxis="x1",
+                    yaxis="y1",
+                )
+            )
+
+            # Add trace for average rating over time
+            logger.info("Adding scatter trace for the average rating.")
+            fig.add_trace(
+                go.Scatter(
+                    x=aggregated["days_since_submission"],
+                    y=aggregated["avg_rating"],
+                    mode="markers",
+                    name="Average Rating",
+                    marker=dict(color="orange", size=2),
+                    xaxis="x2",
+                    yaxis="y2",
+                )
+            )
+
+            # Update layout with independent axes and proper labels
+            logger.info("Updating figure layout with multiple axes.")
+            fig.update_layout(
+                title="Interaction Analysis Over Time",
+                xaxis=dict(
+                    title="Days Since Submission", domain=[0, 1], anchor="y1"
+                ),
+                xaxis2=dict(
+                    title="Days Since Submission", domain=[0, 1], anchor="y2"
+                ),
+                yaxis=dict(title="Number of Interactions", anchor="x1"),
+                yaxis2=dict(title="Average Rating", anchor="x2"),
+                grid=dict(rows=2, columns=1, pattern="independent"),
+                height=1600,
+            )
+            logger.info("Figure layout updated successfully.")
+
+            return fig
+
+        except Exception as e:
+            # Log any error during the plotting process
+            logger.error(
+                f"Failed to generate user interaction visualization: {e}"
+            )
+            return None
+
+    def plot_average_steps_rating(self, engine):
+        """
+        Plot the average number of steps and average "
+        "rating over time using a bar plot.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            A Plotly bar figure object representing average"
+            " steps and average ratings.
+        """
+        logger.info(
+            "Starting analysis of average steps and ratings for visualization."
+        )
+
+        try:
+            # Analyze the average steps and average ratings data
+            grouped = self.data_analyzer.analyse_average_steps_rating(engine)
+            logger.info(
+                "Data analysis for steps and ratings completed successfully."
+            )
+
+            # Initialize the Plotly figure
+            logger.info("Creating a new Plotly bar chart figure.")
+            fig = go.Figure()
+
+            # Add bar trace for average steps
+            logger.info(
+                "Adding bar trace for average steps with "
+                "associated average ratings."
+            )
+            fig.add_trace(
+                go.Bar(
+                    x=grouped["year"],
+                    y=grouped["avg_steps"],
+                    name="Average Steps",
+                    marker=dict(color="skyblue"),
+                    text=grouped["avg_rating"].round(
+                        2
+                    ),  # Display average ratings as text on each bar
+                    textposition="outside",
+                    hoverinfo="x+y+text",
+                )
+            )
+
+            # Update the layout of the plot
+            logger.info("Configuring the layout of the bar chart.")
+            fig.update_layout(
+                title="Average Steps and Rating per Year",
+                xaxis_title="Year",
+                yaxis_title="Average Number of Steps",
+                yaxis=dict(title="Average Steps"),
+                xaxis=dict(
+                    tickmode="array",
+                    tickvals=grouped["year"],  # Set the years as tick values
+                    ticktext=grouped["year"].astype(
+                        str
+                    ),  # Set the x-axis labels to the years
+                    title_text="Year",
+                ),
+                showlegend=False,
+                height=600,
+            )
+            logger.info("Layout configuration completed successfully.")
+
+            return fig
+
+        except Exception as e:
+            # Log any errors that occur during the plotting process
+            logger.error(
+                f"Failed to generate average steps and"
+                f"rating visualization: {e}"
+            )
+            return None

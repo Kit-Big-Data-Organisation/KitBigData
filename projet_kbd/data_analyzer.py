@@ -99,36 +99,44 @@ class DataAnalyzer:
         year_oil = {}
         for year in range(2002, 2011):
             oil_types = {
-                'olive oil': 0,
-                'vegetable oil': 0,
-                'canola oil': 0,
-                'sesame oil': 0,
-                'peanut oil': 0,
-                'cooking oil': 0,
-                'salad oil': 0,
-                'oil' : 0,
-                'corn oil' : 0,
-                'extra virgin olive oil' : 0
+                "olive oil": 0,
+                "vegetable oil": 0,
+                "canola oil": 0,
+                "sesame oil": 0,
+                "peanut oil": 0,
+                "cooking oil": 0,
+                "salad oil": 0,
+                "oil": 0,
+                "corn oil": 0,
+                "extra virgin olive oil": 0,
             }
-            
-            df_year = self.data[self.data['year'] == year]
-            number_id = df_year['id'].nunique()
-            
+
+            df_year = self.data[self.data["year"] == year]
+            number_id = df_year["id"].nunique()
+
             for _, row in df_year.iterrows():
-                ingredients_set = set(row['ingredients'])
+                ingredients_set = set(row["ingredients"])
                 for oil_type in oil_types.keys():
                     if oil_type in ingredients_set:
                         oil_types[oil_type] += 1
-            
-            year_oil[year] = {oil: count / number_id for oil, count in oil_types.items()}
+
+            year_oil[year] = {
+                oil: count / number_id for oil, count in oil_types.items()
+            }
 
         for year, oils in year_oil.items():
             for oil in oils:
-                year_oil[year][oil] =  year_oil[year][oil]/sum(oils.values())
+                year_oil[year][oil] = year_oil[year][oil] / sum(oils.values())
 
-        df_oils = pd.DataFrame(year_oil).T.reset_index().rename(columns={'index': 'Year'})
-        df_oils = df_oils.melt(id_vars=['Year'], var_name='Oil Type', value_name='Proportion')
-        df_oils.to_sql(name='oils_dataframe', con=engine, if_exists='replace')
+        df_oils = (
+            pd.DataFrame(year_oil)
+            .T.reset_index()
+            .rename(columns={"index": "Year"})
+        )
+        df_oils = df_oils.melt(
+            id_vars=["Year"], var_name="Oil Type", value_name="Proportion"
+        )
+        df_oils.to_sql(name="oils_dataframe", con=engine, if_exists="replace")
 
         return df_oils
 
@@ -760,4 +768,140 @@ class DataAnalyzer:
                 f"Failed to save category counts to the database: {e}"
             )
 
-        return category_df
+    def analyse_interactions_ratings(self, engine):
+        """
+        Analyze the average rating, number of ratings, and mean preparation
+        time for each recipe.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with aggregated interactions and ratings data.
+        """
+        try:
+            logger.info("Aggregating interaction and rating data.")
+            aggregated = (
+                self.data.groupby("id")
+                .agg(
+                    avg_rating=("rating", "mean"),
+                    num_ratings=("rating", "count"),
+                    mean_minutes=("minutes", "mean"),
+                )
+                .reset_index()
+            )
+
+            logger.info("Data aggregation completed successfully.")
+            return aggregated
+        except Exception as e:
+            logger.error(
+                f"Error while aggregating interactions and ratings: {e}"
+            )
+            return pd.DataFrame()
+
+    def analyse_average_steps_rating(self, engine):
+        """
+        Analyze the average number of steps and average rating per year.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the average number of steps and average
+            rating per year.
+        """
+        try:
+            logger.info(
+                "Converting 'submitted' column to datetime and"
+                "extracting the year."
+            )
+            self.data["year"] = pd.to_datetime(self.data["submitted"]).dt.year
+
+            logger.info(
+                "Grouping data by year to calculate average steps and ratings."
+            )
+            grouped = (
+                self.data.groupby("year")
+                .agg(
+                    avg_steps=("n_steps", "mean"),
+                    avg_rating=("rating", "mean"),
+                )
+                .reset_index()
+            )
+
+            logger.info("Average steps and ratings calculated successfully.")
+            return grouped
+        except KeyError as e:
+            logger.error(f"Missing required columns in the data: {e}")
+        except Exception as e:
+            logger.error(f"An unexpected error occurred: {e}")
+
+        # Return an empty DataFrame in case of an error
+        return pd.DataFrame()
+
+    def analyse_user_intractions(self, engine):
+        """
+        Analyze user interactions over time since the submission of recipes.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the number of interactions and"
+            "average rating grouped by days since submission."
+        """
+        try:
+            logger.info(
+                "Converting 'submitted' and 'date' columns to datetime format."
+            )
+            self.data["submitted"] = pd.to_datetime(self.data["submitted"])
+            self.data["date"] = pd.to_datetime(self.data["date"])
+
+            logger.info(
+                "Calculating the number of days since submission for "
+                "each interaction."
+            )
+            self.data["days_since_submission"] = (
+                self.data["date"] - self.data["submitted"]
+            ).dt.days
+
+            logger.info(
+                "Filtering data to include only rows where "
+                "'days_since_submission' > 0."
+            )
+            filtered_data = self.data[self.data["days_since_submission"] > 0]
+
+            logger.info(
+                "Grouping data by 'days_since_submission' to calculate"
+                "interactions and average ratings."
+            )
+            aggregated = (
+                filtered_data.groupby("days_since_submission")
+                .agg(
+                    num_interactions=("id", "count"),  # Number of interactions
+                    avg_rating=("rating", "mean"),  # Average rating
+                )
+                .reset_index()
+            )
+
+            logger.info("User interactions analysis completed successfully.")
+            return aggregated
+        except KeyError as e:
+            logger.error(f"Missing required columns in the data: {e}")
+        except Exception as e:
+            logger.error(f"An unexpected error occurred: {e}")
+
+        # Return an empty DataFrame in case of an error
+        return pd.DataFrame()

@@ -17,6 +17,26 @@ def sample_data():
         {
             "id": [1, 2, 3, 4, 5, 6, 7],
             "year": [2005, 2005, 2007, 2007, 2009, 2010, 2010],
+            "submitted": [
+                "2020-01-10",
+                "2020-03-15",
+                "2021-05-20",
+                "2021-07-30",
+                "2022-09-10",
+                "2022-12-01",
+                "2023-01-15",
+            ],
+            "date": [
+                "2020-01-15",
+                "2020-03-20",
+                "2021-05-25",
+                "2021-08-01",
+                "2022-09-15",
+                "2023-01-10",
+                "2023-01-20",
+            ],
+            "rating": [4.0, 5.0, 3.0, 4.5, 5.0, 2.0, 3.5],
+            "minutes": [30, 45, 15, 60, 20, 50, 25],
             "tags": [
                 "['30-minutes-or-less', 'main-dish']",
                 "['4-hours-or-less', 'soups-stews']",
@@ -26,6 +46,7 @@ def sample_data():
                 "['4-hours-or-less', 'side-dishes']",
                 "['30-minutes-or-less', 'snacks']",
             ],
+            "n_steps": [1000, 1200, 800, 1000, 1500, 900, 1100],
             "interactions": ["abc", "abc", "abc", "abc", "abc", 100, 200],
         }
     )
@@ -278,3 +299,107 @@ def test_get_categories_quick_recipe(
 
     # Assert the output matches the expected DataFrame
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+def test_analyse_interactions_ratings(
+    mock_to_sql, mock_read_sql_table, sample_data, mock_engine
+):
+    """
+    Test the `analyse_interactions_ratings` function.
+
+    This test validates that the method aggregates interaction and rating data
+    correctly and returns the expected results in a DataFrame.
+    It also verifies expected behavior using mocked database operations.
+    """
+
+    # Simulate an empty database table, ensuring no pre-existing state issues
+    mock_read_sql_table.return_value = pd.DataFrame()
+
+    # Create a DataAnalyzer instance
+    analyzer = data_analyzer.DataAnalyzer(sample_data)
+
+
+    # Call the function
+    result = analyzer.analyse_interactions_ratings(mock_engine)
+
+    # Expected values based on provided sample data logic
+    expected = pd.DataFrame(
+        {
+            "id": [1, 2, 3, 4, 5, 6, 7],
+            "avg_rating": [4.0, 5.0, 3.0, 4.5, 5.0, 2.0, 3.5],
+            "num_ratings": [1, 1, 1, 1, 1, 1, 1],
+            "mean_minutes": [30.0, 45.0, 15.0, 60.0, 20.0, 50.0, 25.0],
+        }
+    )
+
+    # Compare the actual DataFrame against the expected values
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+def test_analyse_average_steps_rating(
+    mock_to_sql, mock_read_sql_table, sample_data, mock_engine
+):
+    """
+    Test the `analyse_average_steps_rating` function.
+
+    This test validates that the method calculates the average steps and average ratings
+    per year based on the provided sample data.
+    """
+    # Simulate an empty database table
+    mock_read_sql_table.return_value = pd.DataFrame()
+
+    # Create the DataAnalyzer instance
+    analyzer = data_analyzer.DataAnalyzer(sample_data)
+
+    # Call the method
+    result = analyzer.analyse_average_steps_rating(mock_engine)
+
+    # Expected data based on the sample data
+    expected = pd.DataFrame(
+        {
+            "year": [2020, 2021, 2022, 2023],
+            "avg_steps": [1100.0, 900.0, 1500.0, 1100.0],
+            "avg_rating": [4.5, 4.25, 5.0, 3.5],
+        }
+    )
+
+    # Compare the actual DataFrame to expected values
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+def test_analyse_user_interactions(
+    mock_to_sql, mock_read_sql_table, sample_data, mock_engine
+):
+    """
+    Test the `analyse_user_intractions` function.
+
+    This test validates that the method calculates interactions and average ratings
+    grouped by days since submission correctly.
+    """
+    # Simulate database state with empty initial read
+    mock_read_sql_table.return_value = pd.DataFrame()
+
+    # Create the DataAnalyzer instance with the sample data
+    analyzer = data_analyzer.DataAnalyzer(sample_data)
+
+    # Call the method
+    result = analyzer.analyse_user_intractions(mock_engine)
+
+    # Expected result calculation
+    expected = pd.DataFrame(
+        {
+            "days_since_submission": [1, 5, 4, 2, 5, 9, 5],
+            "num_interactions": [1, 2, 1, 1, 1, 1, 1],
+            "avg_rating": [4.0, 3.5, 4.5, 4.5, 5.0, 2.0, 3.5],
+        }
+    )
+
+    # Assert that the DataFrame matches expected results
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+    
