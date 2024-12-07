@@ -760,40 +760,95 @@ class DataAnalyzer:
                 f"Failed to save category counts to the database: {e}"
             )
 
-    
-    def filter_data_by_tags(self, tags_list):
-        mask = self.data['tags'].apply(lambda x: any(tag in x for tag in tags_list))
-        total_counts = self.data.groupby('year').size()
-        tags_counts = self.data[mask].groupby('year').size()
-        summary_df = pd.DataFrame({
-        'total_recipes': total_counts,
-        'recipes_with_tags': tags_counts
-        }).fillna(0).astype({'total_recipes': 'int', 'recipes_with_tags': 'int'})
-        summary_df['percentage'] = ((summary_df['recipes_with_tags'] / summary_df['total_recipes']) * 100).round(0).astype(int)
-        return summary_df.reset_index()
+    def analyse_interactions_ratings(self, engine):
+        """
+        Analyze the average rating, number of ratings, and mean preparation
+        time for each recipe.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with aggregated interactions and ratings data.
+        """
+        try:
+            logger.info("Aggregating interaction and rating data.")
+            aggregated = self.data.groupby('id').agg(
+                avg_rating=('rating', 'mean'),
+                num_ratings=('rating', 'count'),
+                mean_minutes=('minutes', 'mean')
+            ).reset_index()
+
+            logger.info("Data aggregation completed successfully.")
+            return aggregated
+        except Exception as e:
+            logger.error(f"Error while aggregating interactions and ratings: {e}")
+            return pd.DataFrame()
+
     
     def analyse_interactions_ratings(self, engine):
-        aggregated = self.data.groupby('id').agg(
-        avg_rating=('rating', 'mean'),
-        num_ratings=('rating', 'count'),
-        mean_minutes=('minutes', 'mean')
-        ).reset_index()
-        return aggregated
+        """
+        Analyze the average rating, number of ratings, and mean preparation
+        time for each recipe.
 
-    def analyse_user_intractions(self, engine):
-        self.data['submitted'] = pd.to_datetime(self.data['submitted'])
-        self.data['date'] = pd.to_datetime(self.data['date'])
-        self.data['days_since_submission'] = (self.data['date'] - self.data['submitted']).dt.days
-        aggregated = self.data.groupby('days_since_submission').agg(
-            num_interactions=('id', 'count'),
-            avg_rating=('rating', 'mean')
-        ).reset_index()
-        return aggregated
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with aggregated interactions and ratings data.
+        """
+        try:
+            logger.info("Aggregating interaction and rating data.")
+            aggregated = self.data.groupby('id').agg(
+                avg_rating=('rating', 'mean'),
+                num_ratings=('rating', 'count'),
+                mean_minutes=('minutes', 'mean')
+            ).reset_index()
+
+            logger.info("Data aggregation completed successfully.")
+            return aggregated
+        except Exception as e:
+            logger.error(f"Error while aggregating interactions and ratings: {e}")
+            return pd.DataFrame()
     
     def analyse_average_steps_rating(self, engine):
-        self.data['year'] = pd.to_datetime(self.data['submitted']).dt.year
-        grouped = self.data.groupby('year').agg(
-            avg_steps=('n_steps', 'mean'),  
-            avg_rating=('rating', 'mean') 
-        ).reset_index()
-        return grouped
+        """
+        Analyze the average number of steps and average rating per year.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with the average number of steps and average rating per year.
+        """
+        try:
+            logger.info("Converting 'submitted' column to datetime and extracting the year.")
+            self.data['year'] = pd.to_datetime(self.data['submitted']).dt.year
+
+            logger.info("Grouping data by year to calculate average steps and ratings.")
+            grouped = self.data.groupby('year').agg(
+                avg_steps=('n_steps', 'mean'),
+                avg_rating=('rating', 'mean')
+            ).reset_index()
+
+            logger.info("Average steps and ratings calculated successfully.")
+            return grouped
+        except KeyError as e:
+            logger.error(f"Missing required columns in the data: {e}")
+        except Exception as e:
+            logger.error(f"An unexpected error occurred: {e}")
+        
+        # Return an empty DataFrame in case of an error
+        return pd.DataFrame()

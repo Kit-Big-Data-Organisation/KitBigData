@@ -380,87 +380,266 @@ class DataPlotter:
         )    
         return fig
 
-    def plot_inractions_ratings(self, engine):
-        aggregated = self.data_analyzer.analyse_interactions_ratings(engine)
-        fig = px.scatter(
-        aggregated,
-        x='avg_rating',
-        y='num_ratings',
-        color='mean_minutes',
-        title="Average Rating vs Number of Ratings",
-        labels={'avg_rating': 'Average Rating Score', 'num_ratings': 'Number of Ratings', 'mean_minutes': 'Cooking Time (minutes)'},
-        color_continuous_scale='Turbo',
-        size_max=10
-    )
-        fig.update_traces(marker=dict(size=8))
-        return fig 
+    # def plot_inractions_ratings(self, engine):
+    #     aggregated = self.data_analyzer.analyse_interactions_ratings(engine)
+    #     fig = px.scatter(
+    #     aggregated,
+    #     x='avg_rating',
+    #     y='num_ratings',
+    #     color='mean_minutes',
+    #     title="Average Rating vs Number of Ratings",
+    #     labels={'avg_rating': 'Average Rating Score', 'num_ratings': 'Number of Ratings', 'mean_minutes': 'Cooking Time (minutes)'},
+    #     color_continuous_scale='Turbo',
+    #     size_max=10
+    # )
+    #     fig.update_traces(marker=dict(size=8))
+    #     return fig 
+
+    def plot_interactions_ratings(self, engine):
+        """
+        Plot a scatter plot showing the relationship between average rating and 
+        the number of ratings, with cooking time as a color scale.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            A Plotly scatter plot figure.
+        """
+        logger.info("Analyzing interactions and ratings for plotting.")
+        try:
+            # Analyze interactions and ratings
+            aggregated = self.data_analyzer.analyse_interactions_ratings(engine)
+
+            logger.info("Generating scatter plot for average ratings vs. number of ratings.")
+            # Create scatter plot
+            fig = px.scatter(
+                aggregated,
+                x='avg_rating',
+                y='num_ratings',
+                color='mean_minutes',
+                title="Average Rating vs Number of Ratings",
+                labels={
+                    'avg_rating': 'Average Rating Score',
+                    'num_ratings': 'Number of Ratings',
+                    'mean_minutes': 'Cooking Time (minutes)'
+                },
+                color_continuous_scale='Turbo',
+                size_max=10
+            )
+
+            # Update marker size for better visualization
+            fig.update_traces(marker=dict(size=8))
+            logger.info("Scatter plot generated successfully.")
+            return fig
+        except Exception as e:
+            logger.error(f"Failed to generate scatter plot: {e}")
+            return None
+
+
     
+    # def plot_user_interactions(self, engine):
+    #     fig = go.Figure()
+    #     aggregated = self.data_analyzer.analyse_user_intractions(engine)
+    #     fig.add_trace(go.Scatter(
+    #         x=aggregated['days_since_submission'],
+    #         y=aggregated['num_interactions'],
+    #         mode='markers',
+    #         name='Number of Interactions',
+    #         marker=dict(color='skyblue', size=10),
+    #         xaxis='x1',
+    #         yaxis='y1'
+    #     ))
+
+    #     fig.add_trace(go.Scatter(
+    #         x=aggregated['days_since_submission'],
+    #         y=aggregated['avg_rating'],
+    #         mode='markers',
+    #         name='Average Rating',
+    #         marker=dict(color='orange', size=10),
+    #         xaxis='x2',
+    #         yaxis='y2'
+    #     ))
+
+    #     fig.update_layout(
+    #         title="Interaction Analysis Over Time",
+    #         xaxis=dict(title="Days Since Submission", domain=[0, 1], anchor='y1'),
+    #         xaxis2=dict(title="Days Since Submission", domain=[0, 1], anchor='y2'),
+    #         yaxis=dict(title="Number of Interactions", anchor='x1'),
+    #         yaxis2=dict(title="Average Rating", anchor='x2'),
+    #         grid=dict(rows=2, columns=1, pattern="independent"),
+    #         height=600  
+    #     )
+
+    #     return fig
+
     def plot_user_interactions(self, engine):
-        fig = go.Figure()
-        aggregated = self.data_analyzer.analyse_user_intractions(engine)
-        fig.add_trace(go.Scatter(
-            x=aggregated['days_since_submission'],
-            y=aggregated['num_interactions'],
-            mode='markers',
-            name='Number of Interactions',
-            marker=dict(color='skyblue', size=10),
-            xaxis='x1',
-            yaxis='y1'
-        ))
+        """
+        Plot user interaction data including number of interactions and average rating over time.
 
-        fig.add_trace(go.Scatter(
-            x=aggregated['days_since_submission'],
-            y=aggregated['avg_rating'],
-            mode='markers',
-            name='Average Rating',
-            marker=dict(color='orange', size=10),
-            xaxis='x2',
-            yaxis='y2'
-        ))
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
 
-        fig.update_layout(
-            title="Interaction Analysis Over Time",
-            xaxis=dict(title="Days Since Submission", domain=[0, 1], anchor='y1'),
-            xaxis2=dict(title="Days Since Submission", domain=[0, 1], anchor='y2'),
-            yaxis=dict(title="Number of Interactions", anchor='x1'),
-            yaxis2=dict(title="Average Rating", anchor='x2'),
-            grid=dict(rows=2, columns=1, pattern="independent"),
-            height=600  
-        )
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            A Plotly figure object with user interactions and average ratings plotted.
+        """
+        logger.info("Starting analysis of user interaction data for visualization.")
 
-        return fig
+        try:
+            # Analyze user interaction data
+            aggregated = self.data_analyzer.analyse_user_intractions(engine)
+            logger.info("User interaction data analysis completed successfully.")
+
+            # Initialize a Plotly figure
+            logger.info("Creating a new Plotly figure.")
+            fig = go.Figure()
+
+            # Add trace for number of interactions over time
+            logger.info("Adding scatter trace for the number of interactions.")
+            fig.add_trace(go.Scatter(
+                x=aggregated['days_since_submission'],
+                y=aggregated['num_interactions'],
+                mode='markers',
+                name='Number of Interactions',
+                marker=dict(color='skyblue', size=10),
+                xaxis='x1',
+                yaxis='y1'
+            ))
+
+            # Add trace for average rating over time
+            logger.info("Adding scatter trace for the average rating.")
+            fig.add_trace(go.Scatter(
+                x=aggregated['days_since_submission'],
+                y=aggregated['avg_rating'],
+                mode='markers',
+                name='Average Rating',
+                marker=dict(color='orange', size=10),
+                xaxis='x2',
+                yaxis='y2'
+            ))
+
+            # Update layout with independent axes and proper labels
+            logger.info("Updating figure layout with multiple axes.")
+            fig.update_layout(
+                title="Interaction Analysis Over Time",
+                xaxis=dict(title="Days Since Submission", domain=[0, 1], anchor='y1'),
+                xaxis2=dict(title="Days Since Submission", domain=[0, 1], anchor='y2'),
+                yaxis=dict(title="Number of Interactions", anchor='x1'),
+                yaxis2=dict(title="Average Rating", anchor='x2'),
+                grid=dict(rows=2, columns=1, pattern="independent"),
+                height=600  
+            )
+            logger.info("Figure layout updated successfully.")
+
+            return fig
+
+        except Exception as e:
+            # Log any error during the plotting process
+            logger.error(f"Failed to generate user interaction visualization: {e}")
+            return None
+
     
+    # def plot_average_steps_rating(self, engine):
+    #     grouped = self.data_analyzer.analyse_average_steps_rating(engine)
+    #     fig = go.Figure()
+
+    #     # Bar plot for average steps
+    #     fig.add_trace(go.Bar(
+    #         x=grouped['year'],
+    #         y=grouped['avg_steps'],
+    #         name='Average Steps',
+    #         marker=dict(color='skyblue'),
+    #         text=grouped['avg_rating'].round(2),  # Add average rating as text on top of each bar
+    #         textposition='outside',
+    #         hoverinfo='x+y+text'
+    #     ))
+
+    #     # Layout configuration
+    #     fig.update_layout(
+    #         title="Average Steps and Rating per Year",
+    #         xaxis_title="Year",
+    #         yaxis_title="Average Number of Steps",
+    #         yaxis=dict(title="Average Steps"),
+    #         xaxis=dict(
+    #             tickmode='array',
+    #             tickvals=grouped['year'],  # Set x-axis tick values to the years
+    #             ticktext=grouped['year'].astype(str),  # Display the years as labels
+    #             title_text='Year'  # Label for the x-axis
+    #         ),
+    #         showlegend=False,
+    #         height=600
+    #     )
+    #     return fig
     def plot_average_steps_rating(self, engine):
-        grouped = self.data_analyzer.analyse_average_steps_rating(engine)
-        fig = go.Figure()
+        """
+        Plot the average number of steps and average rating over time using a bar plot.
 
-        # Bar plot for average steps
-        fig.add_trace(go.Bar(
-            x=grouped['year'],
-            y=grouped['avg_steps'],
-            name='Average Steps',
-            marker=dict(color='skyblue'),
-            text=grouped['avg_rating'].round(2),  # Add average rating as text on top of each bar
-            textposition='outside',
-            hoverinfo='x+y+text'
-        ))
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
 
-        # Layout configuration
-        fig.update_layout(
-            title="Average Steps and Rating per Year",
-            xaxis_title="Year",
-            yaxis_title="Average Number of Steps",
-            yaxis=dict(title="Average Steps"),
-            xaxis=dict(
-                tickmode='array',
-                tickvals=grouped['year'],  # Set x-axis tick values to the years
-                ticktext=grouped['year'].astype(str),  # Display the years as labels
-                title_text='Year'  # Label for the x-axis
-            ),
-            showlegend=False,
-            height=600
-        )
-        return fig
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            A Plotly bar figure object representing average steps and average ratings.
+        """
+        logger.info("Starting analysis of average steps and ratings for visualization.")
+
+        try:
+            # Analyze the average steps and average ratings data
+            grouped = self.data_analyzer.analyse_average_steps_rating(engine)
+            logger.info("Data analysis for steps and ratings completed successfully.")
+
+            # Initialize the Plotly figure
+            logger.info("Creating a new Plotly bar chart figure.")
+            fig = go.Figure()
+
+            # Add bar trace for average steps
+            logger.info("Adding bar trace for average steps with associated average ratings.")
+            fig.add_trace(go.Bar(
+                x=grouped['year'],
+                y=grouped['avg_steps'],
+                name='Average Steps',
+                marker=dict(color='skyblue'),
+                text=grouped['avg_rating'].round(2),  # Display average ratings as text on each bar
+                textposition='outside',
+                hoverinfo='x+y+text'
+            ))
+
+            # Update the layout of the plot
+            logger.info("Configuring the layout of the bar chart.")
+            fig.update_layout(
+                title="Average Steps and Rating per Year",
+                xaxis_title="Year",
+                yaxis_title="Average Number of Steps",
+                yaxis=dict(title="Average Steps"),
+                xaxis=dict(
+                    tickmode='array',
+                    tickvals=grouped['year'],  # Set the years as tick values
+                    ticktext=grouped['year'].astype(str),  # Set the x-axis labels to the years
+                    title_text='Year'
+                ),
+                showlegend=False,
+                height=600
+            )
+            logger.info("Layout configuration completed successfully.")
+
+            return fig
+
+        except Exception as e:
+            # Log any errors that occur during the plotting process
+            logger.error(f"Failed to generate average steps and rating visualization: {e}")
+            return None
+
     
 
     def plot_quick_recipes_evolution(self, engine):
