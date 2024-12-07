@@ -240,7 +240,7 @@
             <span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s2">&quot;Merge successful. Adding &#39;year&#39; column to the mergeddata.&quot;</span>
-                <span class="p">)</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">add_year</span><span class="p">(</span><span class="n">merged_recipe_inter</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">merged_recipe_inter</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to merge data: one or both datasets are None.&quot;</span><span class="p">)</span>
@@ -266,13 +266,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding nutritional columns to the data.&quot;</span><span class="p">)</span>
         <span class="n">NutriList</span> <span class="o">=</span> <span class="p">[</span>
-           <span class="s2">&quot;cal&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;totalFat&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;sugar&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;sodium&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;protein&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;satFat&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;carbs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cal&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;totalFat&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sugar&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sodium&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;protein&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;satFat&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;carbs&quot;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="n">nutrition_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;nutrition&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">eval</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">NutriList</span>
