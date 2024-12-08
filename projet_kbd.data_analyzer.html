@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="projet_kbd.data_downloader module" href="projet_kbd.data_downloader.html" />
-    <link rel="prev" title="projet_kbd.comment_analyzer module" href="projet_kbd.comment_analyzer.html" /> 
+    <link rel="prev" title="projet_kbd.config module" href="projet_kbd.config.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,6 +50,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.config.html">projet_kbd.config module</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.data_analyzer module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#data-analyzer-module">Data Analyzer Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer</span></code></a></li>
@@ -107,8 +108,6 @@
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 </ul>
 
@@ -207,33 +206,17 @@ results in the database.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings">
 <span class="sig-name descname"><span class="pre">analyse_interactions_ratings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_interactions_ratings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings" title="Link to this definition"></a></dt>
-<dd><p>Loads and analyzes recipe interaction data from a database or files if
-not available in the database.</p>
-<p>This function first tries to load the recipe interaction data from a
-database using a provided SQL engine. If data exists, it returns a
-DataAnalyzer object initialized with this data. If no data is found, it
-processes data from specified files, cleans it from outliers, and saves
-the cleaned data back to the database. The function caches its results
-to avoid redundant data processing.</p>
+<dd><p>Analyze the average rating, number of ratings, and mean preparation
+time for each recipe.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path_file</strong> (<em>str</em>) – The file path where the data files are located.</p></li>
-<li><p><strong>recipe_file</strong> (<em>str</em>) – The filename for the recipe data.</p></li>
-<li><p><strong>interaction_file</strong> (<em>str</em>) – The filename for the interaction data.</p></li>
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An instance of the DataAnalyzer class initialized with the loaded
-and processed data.</p>
+<dd class="field-even"><p>A DataFrame with aggregated interactions and ratings data.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer">DataAnalyzer</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>Exception</strong> – If the data fails to load from the database or files, an error
-    message is printed.</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -589,7 +572,7 @@ year.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="projet_kbd.comment_analyzer.html" class="btn btn-neutral float-left" title="projet_kbd.comment_analyzer module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="projet_kbd.config.html" class="btn btn-neutral float-left" title="projet_kbd.config module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="projet_kbd.data_downloader.html" class="btn btn-neutral float-right" title="projet_kbd.data_downloader module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -49,6 +49,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.config.html">projet_kbd.config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
@@ -83,8 +84,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 </ul>
 
         </div>
@@ -114,98 +113,38 @@
              
   <section id="module-projet_kbd.utils">
 <span id="projet-kbd-utils-module"></span><h1>projet_kbd.utils module<a class="headerlink" href="#module-projet_kbd.utils" title="Link to this heading"></a></h1>
-<p>This module provides utility functions for various tasks including database
-operations, data highlighting, and text rendering.
-Functions:</p>
-<blockquote>
-<div><p>determine_cuisine(tags):
-highlight_cells(val):</p>
-<blockquote>
-<div><p>Highlights specific cells in a dataframe figure based on the value.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>create_top_tags_database(DB_PATH, set_number_tags):</dt><dd><p>Creates and populates a database table with top tags data.</p>
-</dd>
-<dt>render_justified_text(content):</dt><dd><p>Renders text content with justified alignment in a Streamlit app.</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl class="simple">
-<dt>Constants:</dt><dd><dl class="simple">
-<dt>relevant_cuisines (list of str):</dt><dd><p>A list of relevant cuisines.</p>
-</dd>
-<dt>custom_palette (dict):</dt><dd><p>A dictionary mapping oil types to their respective color codes.</p>
-</dd>
-</dl>
-</dd>
-</dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="projet_kbd.utils.create_top_tags_database">
 <span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">create_top_tags_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">DB_PATH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_number_tags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#create_top_tags_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.create_top_tags_database" title="Link to this definition"></a></dt>
-<dd><p>Creates and populates a database table with top tags data.</p>
-<section id="parameters">
-<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>DB_PATH<span class="classifier">str</span></dt><dd><p>The path to the SQLite database file.</p>
-</dd>
-<dt>set_number_tags<span class="classifier">dict</span></dt><dd><p>A dictionary containing top tags data for each set number and year.</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="projet_kbd.utils.determine_cuisine">
 <span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">determine_cuisine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#determine_cuisine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.determine_cuisine" title="Link to this definition"></a></dt>
 <dd><p>Determines the cuisine of a recipe based on tags.</p>
-<section id="id1">
-<h2>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>tags<span class="classifier">list of str</span></dt><dd><p>A list of tags associated with the recipe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tags</strong> (<em>list</em><em> of </em><em>str</em>) – The tags associated with a recipe.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The determined cuisine, or ‘other’ if no cuisine matches.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
-</section>
-<section id="returns">
-<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>str</dt><dd><p>The determined cuisine of the recipe.</p>
-</dd>
-</dl>
-</section>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="projet_kbd.utils.highlight_cells">
 <span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">highlight_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#highlight_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.highlight_cells" title="Link to this definition"></a></dt>
-<dd><p>Highlights specific cells in a dataframe figure based on the value.</p>
-<section id="id2">
-<h2>Parameters:<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>val<span class="classifier">str</span></dt><dd><p>The value of the cell.</p>
-</dd>
-</dl>
-</section>
-<section id="id3">
-<h2>Returns:<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>str</dt><dd><p>The CSS style string for highlighting the cell.</p>
-</dd>
-</dl>
-</section>
+<dd><p>to highlight specific cells in dataframe figure</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="projet_kbd.utils.render_justified_text">
 <span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">render_justified_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#render_justified_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.render_justified_text" title="Link to this definition"></a></dt>
-<dd><p>Renders text content with justified alignment in a Streamlit app.</p>
-<section id="id4">
-<h2>Parameters:<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>content<span class="classifier">str</span></dt><dd><p>The text content to be rendered.</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
+<dd></dd></dl>
 
 </section>
 

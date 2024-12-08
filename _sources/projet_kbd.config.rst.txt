@@ -1,0 +1,7 @@
+projet\_kbd.config module
+=========================
+
+.. automodule:: projet_kbd.config
+   :members:
+   :undoc-members:
+   :show-inheritance:

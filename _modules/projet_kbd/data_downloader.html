@@ -53,8 +53,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.utils.html">projet_kbd.utils module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 </ul>
 
         </div>
@@ -112,22 +110,26 @@
 <a class="viewcode-back" href="../../projet_kbd.data_downloader.html#projet_kbd.data_downloader.download_data">[docs]</a>
 <span class="k">def</span> <span class="nf">download_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Download a file from a Google Drive link to a specified directory if it</span>
-<span class="sd">    does not already exist.</span>
+<span class="sd">    Downloads a data file from a Google Drive link if it is not already</span>
+<span class="sd">    present in the specified directory.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">    ----------</span>
-<span class="sd">    file_name : str</span>
-<span class="sd">        The name of the file to download.</span>
-<span class="sd">    url : str</span>
-<span class="sd">        The Google Drive link to the file.</span>
-<span class="sd">    data_dir : str</span>
-<span class="sd">        The directory to save the downloaded file.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        file_name (str): The name of the file to download.</span>
+<span class="sd">        url (str): The Google Drive URL from which to download the file.</span>
+<span class="sd">        data_dir (str): The directory where the data file should be saved.</span>
+
+<span class="sd">    Logs:</span>
+<span class="sd">        - Logs a message when the file already exists.</span>
+<span class="sd">        - Logs a message when the file is being downloaded.</span>
+<span class="sd">        - Logs any errors encountered during the download process.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">    -------</span>
-<span class="sd">    Exception</span>
-<span class="sd">        If the download fails.</span>
+<span class="sd">        Exception: If the file cannot be downloaded for any reason.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; download_data(&quot;RAW_recipes.csv&quot;, &quot;https://drive.google.com/uc?id=example&quot;, &quot;/path/to/data&quot;)</span>
+<span class="sd">        RAW_recipes.csv already exists. Skipping download.</span>
+<span class="sd">        Downloading RAW_recipes.csv...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Ensure the data directory exists</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

@@ -50,6 +50,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.config.html">projet_kbd.config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.data_downloader module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#projet_kbd.data_downloader.DATA_FILES"><code class="docutils literal notranslate"><span class="pre">DATA_FILES</span></code></a></li>
@@ -76,13 +77,6 @@
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.data_downloader module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.data_downloader.DATA_FILES"><code class="docutils literal notranslate"><span class="pre">DATA_FILES</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.data_downloader.links"><code class="docutils literal notranslate"><span class="pre">links</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.data_downloader.download_data"><code class="docutils literal notranslate"><span class="pre">download_data()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.data_downloader module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#projet_kbd.data_downloader.DATA_FILES"><code class="docutils literal notranslate"><span class="pre">DATA_FILES</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#projet_kbd.data_downloader.links"><code class="docutils literal notranslate"><span class="pre">links</span></code></a></li>
@@ -158,26 +152,36 @@ directory.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="projet_kbd.data_downloader.download_data">
 <span class="sig-prename descclassname"><span class="pre">projet_kbd.data_downloader.</span></span><span class="sig-name descname"><span class="pre">download_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_downloader.html#download_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_downloader.download_data" title="Link to this definition"></a></dt>
-<dd><p>Download a file from a Google Drive link to a specified directory if it
-does not already exist.</p>
-<section id="parameters">
-<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>file_name<span class="classifier">str</span></dt><dd><p>The name of the file to download.</p>
-</dd>
-<dt>url<span class="classifier">str</span></dt><dd><p>The Google Drive link to the file.</p>
-</dd>
-<dt>data_dir<span class="classifier">str</span></dt><dd><p>The directory to save the downloaded file.</p>
-</dd>
-</dl>
-</section>
-<section id="raises">
-<h2>Raises:<a class="headerlink" href="#raises" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>Exception</dt><dd><p>If the download fails.</p>
+<dd><p>Downloads a data file from a Google Drive link if it is not already
+present in the specified directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – The name of the file to download.</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – The Google Drive URL from which to download the file.</p></li>
+<li><p><strong>data_dir</strong> (<em>str</em>) – The directory where the data file should be saved.</p></li>
+</ul>
 </dd>
 </dl>
-</section>
+<dl class="simple">
+<dt>Logs:</dt><dd><ul class="simple">
+<li><p>Logs a message when the file already exists.</p></li>
+<li><p>Logs a message when the file is being downloaded.</p></li>
+<li><p>Logs any errors encountered during the download process.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – If the file cannot be downloaded for any reason.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">download_data</span><span class="p">(</span><span class="s2">&quot;RAW_recipes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;https://drive.google.com/uc?id=example&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/data&quot;</span><span class="p">)</span>
+<span class="go">RAW_recipes.csv already exists. Skipping download.</span>
+<span class="go">Downloading RAW_recipes.csv...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
