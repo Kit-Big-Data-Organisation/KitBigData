@@ -22,6 +22,7 @@ from logger_config import logger
 from plotly.subplots import make_subplots
 from wordcloud import WordCloud
 import sqlite3
+from scipy.stats import linregress
 
 
 class DataPlotter:
@@ -718,6 +719,14 @@ class DataPlotter:
         try:
             # Analyze user interaction data
             aggregated = self.data_analyzer.analyse_user_intractions(engine)
+
+            logger.info("Calculating trendline for average rating.")
+            slope, intercept, _, _, _ = linregress(
+                aggregated["days_since_submission"], aggregated["avg_rating"]
+            )
+            trendline_y = (
+                slope * aggregated["days_since_submission"] + intercept
+            )
             logger.info(
                 "User interaction data analysis completed successfully."
             )
@@ -754,6 +763,20 @@ class DataPlotter:
                 )
             )
 
+            logger.info("Adding trendline to the plot.")
+
+            fig.add_trace(
+                go.Scatter(
+                    x=aggregated["days_since_submission"],
+                    y=trendline_y,
+                    mode="lines",
+                    name="Trendline (Decline)",
+                    line=dict(color="red", width=3),
+                    xaxis="x2",
+                    yaxis="y2",
+                )
+            )
+
             # Update layout with independent axes and proper labels
             logger.info("Updating figure layout with multiple axes.")
             fig.update_layout(
@@ -779,6 +802,7 @@ class DataPlotter:
                 f"Failed to generate user interaction visualization: {e}"
             )
             return None
+
 
     def plot_average_steps_rating(self, engine):
         """

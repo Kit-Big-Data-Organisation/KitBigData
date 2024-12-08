@@ -8,6 +8,36 @@ Based on the graphs above, we observe that both the number of recipes and the nu
     <li><strong>After 2010</strong>: There is a noticeable decline in both metrics. To ensure a meaningful analysis, we will focus on the period between <strong>2002</strong> and <strong>2010</strong>, where the data is most abundant and representative of user engagement.</li>
 </ul>
 """
+
+average_steps_rating = """
+The graph below shows the evolution of the average number of steps per year, with associated ratings of the recepies over the years :
+<ul>
+    <li><strong> The complexity of the recepies is increasing over the years.</li>
+    <li><strong>The ratings given to the recepies are decreasing over the years.</li>
+</ul>
+"""
+
+interaction_ratings = """
+The graph below shows the relationship between the average rating scores, the number of ratings and the cooking time :
+<ul>
+    <li><strong> Recipes with high ratings (between 4 and 5) tend to have the highest number of ratings. Recipes with low ratings (below 3) generally have very few ratings.</li>
+    <li><strong>Longer cooking times are scattered across recipes with lower popularity.</li>
+    <li><strong>Recipes with shorter cooking times dominate the cluster of highly rated and highly reviewed recipes, indicating that users prefer quicker recipes.</li>
+</ul>
+"""
+
+user_interactions = """
+The two graphs below explore the relationship between time since submission, average rating, and number of interactions with recipes.
+<ul>
+<li><strong> In the first graph, a pattern is visible, with periodic peaks in the number of interactions, some recipes become relevant again during specific times of the year, such as holidays or seasonal celebrations.</li>
+<li><strong> From the second graph we can see that the average ratings tend to decline slightly as time progresses, indicating that recipes are generally rated lower as they age.</li>
+</ul>
+"""
+
+free_visualisation_text = """
+This page offers free visualization tools to display the top 10, top 20, top 30, and so forth, tags for each year.<br>
+It allows users to identify the most frequently used tags and explore trends in interests over the years.
+"""
 cuisine_presentation = """
 In this page, we conducted a cuisine analysis to explore the cuisines present in our dataset, their evolution on the website over the years, and to analyze their nutritional values, calorie content, average preparation times, and the top ingredients used in each cuisine.
 """
