@@ -293,7 +293,7 @@ class DataPlotter:
         """
         logger.info("Generating bar chart for top ingredients.")
         df_top_ingredients = self.data_analyzer.top_commun_ingredients(engine)
-        df_top_ingredients.drop(columns = {'index'} , inplace = True)
+        df_top_ingredients.drop(columns={'index'}, inplace=True)
         logger.info("Top ingredients generated.")
         return df_top_ingredients[1:]
 
@@ -550,7 +550,6 @@ class DataPlotter:
 
     # Analyse des commentaires
 
-
     def plot_wordcloud(self , engine):
         """
         Plot a Word Cloud based on word frequencies.
@@ -598,7 +597,8 @@ class DataPlotter:
         comment_analyzer = self.comment_analyzer
         comment_analyzer.clean_comments()
         word_frequencies_time = (
-            comment_analyzer.generate_word_frequencies_associated_to_time(engine)
+            comment_analyzer
+            .generate_word_frequencies_associated_to_time(engine)
         )
         logger.info("Generating Word Cloud plot for time.")
         wordcloud = WordCloud(
