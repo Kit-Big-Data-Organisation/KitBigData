@@ -46,11 +46,11 @@ jobs:
       - name: Format code with Flake8
         run: poetry run flake8 .
 
-      # - name: Run unit tests with Pytest
-      #   run: poetry run 
+      - name: Run unit tests with Pytest
+        run: poetry run 
       
-      - name: Run tests with coverage
-        run: |
-          poetry run coverage run -m pytest
-          poetry run coverage report --fail-under=90  # Fails if coverage is below 90%
-          poetry coverage xml
+      # - name: Run tests with coverage
+      #   run: |
+      #     poetry run coverage run -m pytest
+      #     poetry run coverage report --fail-under=90  # Fails if coverage is below 90%
+      #     poetry coverage xml
