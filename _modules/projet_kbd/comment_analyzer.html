@@ -407,78 +407,10 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to save word frequencies to database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">word_frequencies</span></div>
-
-
-<div class="viewcode-block" id="CommentAnalyzer.sentiment_analysis_over_time">
-<a class="viewcode-back" href="../../projet_kbd.comment_analyzer.html#projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis_over_time">[docs]</a>
-    <span class="k">def</span> <span class="nf">sentiment_analysis_over_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the average sentiment polarity of comments over specified</span>
-<span class="sd">        time periods.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        period : str, optional</span>
-<span class="sd">            The time period to group by (&#39;Y&#39; for year, &#39;M&#39; for month, etc.),</span>
-<span class="sd">            default is &#39;Y&#39;.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        pd.DataFrame</span>
-<span class="sd">            A DataFrame with time period and average sentiment polarity.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        Assumes the DataFrame has a &#39;date&#39; column in a recognizable datetime</span>
-<span class="sd">        format.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check if the table is in the database</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">stored_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;sentiment_by_period&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">stored_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sentiment analysis over time found in database.&quot;</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">stored_data</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Table not found or error loading data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="s1">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Date column missing from DataFrame.&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="c1"># Ensure &#39;date&#39; is in datetime format</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
-
-        <span class="c1"># Perform sentiment analysis if not already done</span>
-        <span class="k">if</span> <span class="s1">&#39;polarity&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sentiment_analysis</span><span class="p">()</span>
-
-        <span class="c1"># Group by the specified period and calculate the average polarity</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s1">&#39;period&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="n">period</span><span class="p">)</span>
-        <span class="n">sentiment_by_period</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;period&#39;</span><span class="p">)[</span><span class="s1">&#39;polarity&#39;</span><span class="p">]</span>
-            <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-            <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-        <span class="p">)</span>
-
-        <span class="n">sentiment_by_period</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="s1">&#39;Average Sentiment&#39;</span><span class="p">]</span>
-
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sentiment analysis over time completed.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Save the results to the database</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">sentiment_by_period</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;sentiment_by_period&quot;</span><span class="p">,</span>
-                <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
-                <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
-                <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sentiment analysis over time saved successfully.&quot;</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to save sentiment analysis over time: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">sentiment_by_period</span></div>
 </div>
 
+
+    
 </pre></div>
 
            </div>

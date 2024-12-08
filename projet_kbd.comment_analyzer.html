@@ -80,7 +80,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies_associated_to_time"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.generate_word_frequencies_associated_to_time()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.re"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.re</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.sentiment_analysis()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis_over_time"><code class="docutils literal notranslate"><span class="pre">CommentAnalyzer.sentiment_analysis_over_time()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -232,28 +231,6 @@ containing sentiment polarity scores.</p>
 <p class="rubric">Notes</p>
 <p>The <cite>clean_comments</cite> method should be called before this one to
 ensure that comments are cleaned.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis_over_time">
-<span class="sig-name descname"><span class="pre">sentiment_analysis_over_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Y'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/comment_analyzer.html#CommentAnalyzer.sentiment_analysis_over_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis_over_time" title="Link to this definition"></a></dt>
-<dd><p>Calculate the average sentiment polarity of comments over specified
-time periods.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>period</strong> (<em>str</em><em>, </em><em>optional</em>) – The time period to group by (‘Y’ for year, ‘M’ for month, etc.),
-default is ‘Y’.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A DataFrame with time period and average sentiment polarity.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>Assumes the DataFrame has a ‘date’ column in a recognizable datetime
-format.</p>
 </dd></dl>
 
 </dd></dl>
