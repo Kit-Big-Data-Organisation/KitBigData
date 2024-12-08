@@ -1,5 +1,5 @@
+import sqlite3
 import streamlit as st
-
 relevant_cuisines = [
     "asian",
     "mexican",
@@ -78,6 +78,32 @@ def highlight_cells(val):
         return "background-color: lightpink"
     else:
         return ""
+    
+def create_top_tags_database(DB_PATH , set_number_tags):
+
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS top_tags (
+            set_number INTEGER,
+            year INTEGER,
+            label TEXT,
+            size REAL
+        )
+        """)
+
+        for set_number, top_tags_years in set_number_tags.items():
+            for year, data in top_tags_years.items():
+                labels, sizes = data
+                for label, size in zip(labels, sizes):
+                    cursor.execute("""
+                    INSERT INTO top_tags (set_number, year, label, size)
+                    VALUES (?, ?, ?, ?)
+                    """, (set_number, year, label, size))
+
+        conn.commit()
+        conn.close()
 
 # Helper function to render justified content
 def render_justified_text(content):
