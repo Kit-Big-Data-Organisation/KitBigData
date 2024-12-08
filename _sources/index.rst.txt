@@ -17,6 +17,8 @@ Welcome to Projet KBD Documentation!
    projet_kbd.streamlit_app
    projet_kbd.utils
    projet_kbd.data_downloader
+   projet_kbd.analysis_text
+   projet_kbd.data_downloader
 
 
 

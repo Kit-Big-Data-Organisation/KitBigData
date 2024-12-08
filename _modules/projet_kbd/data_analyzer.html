@@ -53,6 +53,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.utils.html">projet_kbd.utils module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 </ul>
 
         </div>
@@ -100,7 +102,6 @@
 <span class="kn">import</span> <span class="nn">utils</span>
 <span class="kn">from</span> <span class="nn">comment_analyzer</span> <span class="kn">import</span> <span class="n">CommentAnalyzer</span>
 <span class="kn">from</span> <span class="nn">logger_config</span> <span class="kn">import</span> <span class="n">logger</span>
-<span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">DB_PATH</span>
 
 
 <div class="viewcode-block" id="DataAnalyzer">
@@ -204,11 +205,6 @@
             <span class="n">df_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">]</span>
             <span class="n">number_id</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 
-            <span class="c1"># Skip if no unique IDs are found for the year</span>
-            <span class="k">if</span> <span class="n">number_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">oil</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
-                <span class="k">continue</span>
-                    
             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df_year</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
                 <span class="n">ingredients_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">oil_type</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -224,10 +220,9 @@
             <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">oils</span> <span class="ow">in</span> <span class="n">year_oil</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-            <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Avoid division by zero in normalization</span>
-                <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oils</span><span class="p">:</span>
-                    <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">oils</span><span class="p">[</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="n">total</span>
+            <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oils</span><span class="p">:</span>
+                <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
         <span class="n">df_oils</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">year_oil</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="s1">&#39;Year&#39;</span><span class="p">}</span>
@@ -910,7 +905,7 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Failed to save category counts to the database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-        
+
         <span class="k">return</span> <span class="n">category_df</span></div>
 
 
@@ -918,18 +913,38 @@
 <a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings">[docs]</a>
     <span class="k">def</span> <span class="nf">analyse_interactions_ratings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Analyze the average rating, number of ratings, and mean preparation</span>
-<span class="sd">        time for each recipe.</span>
+<span class="sd">        Loads and analyzes recipe interaction data from a database or files if</span>
+<span class="sd">        not available in the database.</span>
+
+<span class="sd">        This function first tries to load the recipe interaction data from a</span>
+<span class="sd">        database using a provided SQL engine. If data exists, it returns a</span>
+<span class="sd">        DataAnalyzer object initialized with this data. If no data is found, it</span>
+<span class="sd">        processes data from specified files, cleans it from outliers, and saves</span>
+<span class="sd">        the cleaned data back to the database. The function caches its results</span>
+<span class="sd">        to avoid redundant data processing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        path_file : str</span>
+<span class="sd">            The file path where the data files are located.</span>
+<span class="sd">        recipe_file : str</span>
+<span class="sd">            The filename for the recipe data.</span>
+<span class="sd">        interaction_file : str</span>
+<span class="sd">            The filename for the interaction data.</span>
 <span class="sd">        engine : sqlalchemy.engine.Engine</span>
 <span class="sd">            SQLAlchemy engine for database interactions.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        pd.DataFrame</span>
-<span class="sd">            A DataFrame with aggregated interactions and ratings data.</span>
+<span class="sd">        DataAnalyzer</span>
+<span class="sd">            An instance of the DataAnalyzer class initialized with the loaded</span>
+<span class="sd">            and processed data.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        Exception</span>
+<span class="sd">            If the data fails to load from the database or files, an error</span>
+<span class="sd">            message is printed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Aggregating interaction and rating data.&quot;</span><span class="p">)</span>

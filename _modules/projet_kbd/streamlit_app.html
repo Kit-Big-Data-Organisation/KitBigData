@@ -53,6 +53,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.utils.html">projet_kbd.utils module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 </ul>
 
         </div>
@@ -80,7 +82,38 @@
            <div itemprop="articleBody">
              
   <h1>Source code for projet_kbd.streamlit_app</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module integrates functionalities to analyze and visualize culinary</span>
+<span class="sd">trends using pandas, streamlit, and plotly.</span>
+
+<span class="sd">Features:</span>
+<span class="sd">- Data loading and preprocessing with custom utilities.</span>
+<span class="sd">- Advanced analysis via the DataAnalyzer class, ensuring quality insights.</span>
+<span class="sd">- Interactive visualizations with Plotly, managed by DataPlotter, to explore</span>
+<span class="sd">  trends in recipes and interactions.</span>
+<span class="sd">- Streamlit&#39;s caching integration enhances performance by minimizing data</span>
+<span class="sd">  reloads and reprocessing.</span>
+<span class="sd">- The streamlit_option_menu allows navigable dashboard creation for various</span>
+<span class="sd">  analytical views.</span>
+<span class="sd">- CommentAnalyzer extracts sentiments and key terms from user reviews.</span>
+
+<span class="sd">The structure supports expansion and integration of more data sources and</span>
+<span class="sd">analytical techniques, aiming to provide a comprehensive sociological tool</span>
+<span class="sd">for exploring eating habits and culinary preferences.</span>
+
+<span class="sd">Dependencies:</span>
+<span class="sd">- pandas: For data manipulation.</span>
+<span class="sd">- streamlit: For the interactive web application.</span>
+<span class="sd">- plotly.express: For interactive and dynamic visual charts.</span>
+<span class="sd">- SQLAlchemy: For database interactions.</span>
+<span class="sd">- Custom modules like utils, analysis_text, and logger_config enhance</span>
+<span class="sd">  functionality and user experience.</span>
+
+<span class="sd">Intended for a web application environment, this script provides an interactive</span>
+<span class="sd">dashboard for exploring culinary data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
 <span class="kn">import</span> <span class="nn">utils</span>
 <span class="kn">import</span> <span class="nn">analysis_text</span>
@@ -91,13 +124,47 @@
 <span class="kn">from</span> <span class="nn">data_plotter</span> <span class="kn">import</span> <span class="n">DataPlotter</span>
 <span class="kn">from</span> <span class="nn">logger_config</span> <span class="kn">import</span> <span class="n">logger</span>
 <span class="kn">from</span> <span class="nn">streamlit_option_menu</span> <span class="kn">import</span> <span class="n">option_menu</span>
-<span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">DB_PATH</span>
+<span class="kn">from</span> <span class="nn">main</span> <span class="kn">import</span> <span class="n">DB_PATH</span>
 
 
 <div class="viewcode-block" id="load_and_analyze_data">
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.load_and_analyze_data">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
 <span class="k">def</span> <span class="nf">load_and_analyze_data</span><span class="p">(</span><span class="n">path_file</span><span class="p">,</span> <span class="n">recipe_file</span><span class="p">,</span> <span class="n">interaction_file</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads and analyzes recipe interaction data from a database or files if</span>
+<span class="sd">    not available in the database.</span>
+
+<span class="sd">    This function first tries to load the recipe interaction data from a</span>
+<span class="sd">    database using a provided SQL engine. If data exists, it returns a</span>
+<span class="sd">    DataAnalyzer object initialized with this data. If no data is found, it</span>
+<span class="sd">    processes data from specified files, cleans it from outliers, and saves</span>
+<span class="sd">    the cleaned data back to the database. The function caches its results</span>
+<span class="sd">    to avoid redundant data processing.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_file : str</span>
+<span class="sd">        The file path where the data files are located.</span>
+<span class="sd">    recipe_file : str</span>
+<span class="sd">        The filename for the recipe data.</span>
+<span class="sd">    interaction_file : str</span>
+<span class="sd">        The filename for the interaction data.</span>
+<span class="sd">    engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class initialized with the loaded</span>
+<span class="sd">        and processed data.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    Exception</span>
+<span class="sd">        If the data fails to load from the database or files, an error</span>
+<span class="sd">        message is printed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;recipe_interaction&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">_engine</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
@@ -123,6 +190,23 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_plots">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_plots</span><span class="p">(</span><span class="n">analyzer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figures for the number of recipes and</span>
+<span class="sd">    interactions per year.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        plotly.graph_objs.Figure</span>
+<span class="sd">            A plotly figure showing the number of recipes per year.</span>
+<span class="sd">            plotly.graph_objs.Figure</span>
+<span class="sd">            A plotly figure showing the number of interactions per year.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="n">recipe_fig</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_nb_recipes_per_year</span><span class="p">()</span>
     <span class="n">interaction_fig</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_nb_interactions_per_year</span><span class="p">()</span>
@@ -134,6 +218,22 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_charts">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">set_number</span><span class="p">,</span> <span class="n">_engine</span><span class="p">,</span> <span class="n">_DB_PATH</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figures for the tags distribution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">    set_number : int</span>
+<span class="sd">        The set of top 10 tags to display (0 for 1-10, 1 for 11-20, etc.).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        A list of plotly figures showing the distribution of tags.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_pie_chart_tags</span><span class="p">(</span><span class="n">set_number</span><span class="p">,</span> <span class="n">_engine</span><span class="p">,</span> <span class="n">_DB_PATH</span><span class="p">)</span></div>
 
@@ -143,6 +243,20 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_oils_stacked_histograms">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_oils_stacked_histograms</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the oil analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the oil analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_oil_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -152,6 +266,20 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_cuisine_charts">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_cuisine_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the cuisine analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the cuisine analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisines_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -161,6 +289,20 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_cuisine_evolution_charts">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_cuisine_evolution_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the cuisine evolution analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the cuisine evolution analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisines_evolution</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -170,6 +312,20 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_top_ingredients_table">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_top_ingredients_table</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the top ingredients table.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        A DataFrame showing the top ingredients.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_top_ingredients</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -179,6 +335,20 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_cuisine_calories">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">analyze_cuisine_calories</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the calories by cuisine and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the calories by cuisine analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_calories_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -188,6 +358,20 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_cuisine_time">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">analyze_cuisine_time</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the time by cuisine and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the time by cuisine analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisine_time_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -197,6 +381,20 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_cuisine_nutritions">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">analyze_cuisine_nutritions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the nutritional content by cuisine and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the nutritional content by cuisine analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisine_nutritions</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -206,6 +404,20 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_proportion_quick_recipe_charts">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_proportion_quick_recipe_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the proportion of quick recipes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the proportion of quick recipes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_quick_recipes_evolution</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -215,6 +427,21 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_rate_interactions_quick_recipe_charts">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_rate_interactions_quick_recipe_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the rate of interactions for</span>
+<span class="sd">    quick recipes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the rate of interactions for quick recipes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_rate_interactions_quick_recipe</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -224,6 +451,21 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_categories_quick_recipe_chart">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_categories_quick_recipe_chart</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the distribution of quick recipe</span>
+<span class="sd">    categories.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the distribution of quick recipe categories.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_categories_quick_recipe</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -233,6 +475,25 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_wordcloud_plot">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
 <span class="k">def</span> <span class="nf">create_wordcloud_plot</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the wordcloud plot for the comments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _Comment_analyzer : CommentAnalyzer</span>
+<span class="sd">        An instance of the CommentAnalyzer class containing the cleaned</span>
+<span class="sd">        comments.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.figure.Figure</span>
+<span class="sd">        A matplotlib figure showing the wordcloud plot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span> <span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_wordcloud</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -242,6 +503,26 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_time_wordcloud_plot">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
 <span class="k">def</span> <span class="nf">create_time_wordcloud_plot</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the wordcloud plot for the comments containing the</span>
+<span class="sd">    word &quot;time&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _Comment_analyzer : CommentAnalyzer</span>
+<span class="sd">        An instance of the CommentAnalyzer class containing the cleaned</span>
+<span class="sd">        comments.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.figure.Figure</span>
+<span class="sd">        A matplotlib figure showing the wordcloud plot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span> <span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_time_wordcloud</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -251,6 +532,22 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_plot_rating_evolution">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_plot_rating_evolution</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the rating evolution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the rating evolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_rating_evolution</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -260,6 +557,22 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_plot_sentiment_evolution">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">create_plot_sentiment_evolution</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the sentiment evolution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the sentiment evolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_sentiment_over_time</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -269,6 +582,22 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_interactions_ratings">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">analyze_interactions_ratings</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the interactions ratings and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the interactions ratings analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_interactions_ratings</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -278,6 +607,22 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_user_interactions">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">analyze_user_interactions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the user interactions and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the user interactions analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_user_interactions</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -287,6 +632,22 @@
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyse_average_steps_rating">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">analyse_average_steps_rating</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the average steps rating and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the average steps rating analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_average_steps_rating</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -295,6 +656,20 @@
 <div class="viewcode-block" id="run">
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.run">[docs]</a>
 <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">path_file</span><span class="p">,</span> <span class="n">recipe_file</span><span class="p">,</span> <span class="n">interaction_file</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main function to run the Streamlit application.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_file : str</span>
+<span class="sd">        The file path where the data files are located.</span>
+<span class="sd">    recipe_file : str</span>
+<span class="sd">        The filename for the recipe data.</span>
+<span class="sd">    interaction_file : str</span>
+<span class="sd">        The filename for the interaction data.</span>
+<span class="sd">    engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">st</span><span class="o">.</span><span class="n">set_page_config</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;wide&quot;</span><span class="p">)</span>
 
@@ -438,6 +813,7 @@
         <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Nutritional content by Cuisine in PDV&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_nutritions</span><span class="p">)</span>
         <span class="n">cuisine_nutritions</span> <span class="o">=</span> <span class="n">analyze_cuisine_nutritions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_nutritions</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_nutritions</span><span class="p">)</span>
