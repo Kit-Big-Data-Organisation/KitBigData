@@ -783,11 +783,11 @@ class DataAnalyzer:
         Loads and analyzes recipe interaction data from a database or files if
         not available in the database.
 
-        This function first tries to load the recipe interaction data from a 
-        database using a provided SQL engine. If data exists, it returns a 
-        DataAnalyzer object initialized with this data. If no data is found, it 
-        processes data from specified files, cleans it from outliers, and saves 
-        the cleaned data back to the database. The function caches its results 
+        This function first tries to load the recipe interaction data from a
+        database using a provided SQL engine. If data exists, it returns a
+        DataAnalyzer object initialized with this data. If no data is found, it
+        processes data from specified files, cleans it from outliers, and saves
+        the cleaned data back to the database. The function caches its results
         to avoid redundant data processing.
 
         Parameters
@@ -804,13 +804,13 @@ class DataAnalyzer:
         Returns
         -------
         DataAnalyzer
-            An instance of the DataAnalyzer class initialized with the loaded 
+            An instance of the DataAnalyzer class initialized with the loaded
             and processed data.
 
         Raises
         ------
         Exception
-            If the data fails to load from the database or files, an error 
+            If the data fails to load from the database or files, an error
             message is printed.
         """
         try:
