@@ -15,8 +15,5 @@ fi
 echo "Installing project dependencies..."
 poetry install
 
-echo "Activating the Poetry virtual environment..."
-poetry shell
-
 echo "Running the project..."
-streamlit run main.py
+poetry run streamlit run main.py
