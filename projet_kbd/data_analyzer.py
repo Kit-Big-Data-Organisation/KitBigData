@@ -13,14 +13,12 @@ DataAnalyzer:
 """
 
 import ast
-import json
-import os
 from collections import Counter
 import pandas as pd
 import utils
 from comment_analyzer import CommentAnalyzer
 from logger_config import logger
-from main import DB_PATH
+
 
 class DataAnalyzer:
     """
@@ -86,7 +84,6 @@ class DataAnalyzer:
             A DataFrame with oil type proportions for each year.
         """
 
-
         try:
             data = pd.read_sql_table('oils_dataframe', con=engine)
             if not data.empty:
@@ -96,7 +93,6 @@ class DataAnalyzer:
             print(f"Failed to load data from database: {e}")
 
         self.data.drop_duplicates(subset=['id'], inplace=True)
-        
         self.data['ingredients'] = self.data['ingredients'].apply(eval)
 
         year_oil = {}
@@ -225,7 +221,8 @@ class DataAnalyzer:
 
     def get_top_tag_per_year(self , engine , DB_PATH):
         """
-        Extract the top tags for each year in the dataset and store them in the top tag database.
+        Extract the top tags for each year in the dataset and store them in
+        the top tag database.
 
         Returns
         -------
@@ -237,10 +234,10 @@ class DataAnalyzer:
             data = pd.read_sql_table("top_tags", con=engine)
             if not data.empty:
                 logger.info("Table Top tags found in the database.")
-                return 
+                return
         except Exception as e:
             logger.warning(f"Failed to load data from the database: {e}")
-        
+
         set_number_tags = {}
         for set_number in range(0, 10):
             top_tags_years = {}
@@ -257,8 +254,6 @@ class DataAnalyzer:
             set_number_tags[set_number] = top_tags_years
         logger.info("Creating table top tags ...")
         utils.create_top_tags_database(DB_PATH , set_number_tags)
-    
-   
 
     def analyze_cuisines(self, engine):
         """
@@ -348,7 +343,11 @@ class DataAnalyzer:
             * 100
         )
         cuisine_df.to_sql(
-            name="cuisine_evolution_dataframe", con=engine, if_exists="replace",index=True, index_label='Year'
+            name="cuisine_evolution_dataframe",
+            con=engine,
+            if_exists="replace",
+            index=True,
+            index_label='Year'
         )
 
         return cuisine_df
