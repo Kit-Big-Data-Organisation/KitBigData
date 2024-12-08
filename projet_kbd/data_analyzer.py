@@ -111,25 +111,34 @@ class DataAnalyzer:
                 'corn oil' : 0,
                 'extra virgin olive oil' : 0
             }
-            
+
             df_year = self.data[self.data['year'] == year]
             number_id = df_year['id'].nunique()
-            
+
             for _, row in df_year.iterrows():
                 ingredients_set = set(row['ingredients'])
                 for oil_type in oil_types.keys():
                     if oil_type in ingredients_set:
                         oil_types[oil_type] += 1
-            
-            year_oil[year] = {oil: count / number_id for oil, count in oil_types.items()}
+
+            year_oil[year] = {
+                oil: count / number_id for oil, count in oil_types.items()
+            }
 
         for year, oils in year_oil.items():
             for oil in oils:
-                year_oil[year][oil] =  year_oil[year][oil]/sum(oils.values())
+                year_oil[year][oil] = year_oil[year][oil] / sum(oils.values())
 
-        df_oils = pd.DataFrame(year_oil).T.reset_index().rename(columns={'index': 'Year'})
-        df_oils = df_oils.melt(id_vars=['Year'], var_name='Oil Type', value_name='Proportion')
-        df_oils.to_sql(name='oils_dataframe', con=engine, if_exists='replace')
+        df_oils = pd.DataFrame(year_oil).T.reset_index().rename(
+            columns={'index': 'Year'}
+        )
+        df_oils = df_oils.melt(
+            id_vars=['Year'],
+            var_name='Oil Type',
+            value_name='Proportion')
+        df_oils.to_sql(name='oils_dataframe',
+                       con=engine,
+                       if_exists='replace')
 
         return df_oils
 
@@ -762,7 +771,7 @@ class DataAnalyzer:
             )
 
         return category_df
-   
+
     def word_count_over_time(self, word):
         """
         Count occurrences of a specific word in comments over time.
@@ -777,7 +786,7 @@ class DataAnalyzer:
         pd.DataFrame
             A DataFrame with years and the count of the word in that year.
         """
-        
+
         # Assure that comments are cleaned first
         if 'cleaned' not in self.data.columns:
             comment_analyzer = CommentAnalyzer(self.data)
@@ -785,7 +794,8 @@ class DataAnalyzer:
         print(self.data.head(1))
         print("COLUMNS1 =  ", self.data.columns)
 
-        # Ajout d'une fonction de vérification pour isoler les entrées problématiques
+        # Ajout d'une fonction de vérification pour isoler les entrées
+        # problématiques
         def count_word(x):
             try:
                 return x.split().count(word)
@@ -799,16 +809,22 @@ class DataAnalyzer:
 
         if 'year' in self.data.columns:
             filtered_data = self.data[self.data['year'].between(2002, 2010)]
-            word_counts = filtered_data.groupby('year')['word_count'].sum().reset_index()
+            word_counts = (
+                filtered_data
+                .groupby('year')['word_count']
+                .sum()
+                .reset_index()
+            )
             return word_counts
         else:
             print("Column 'year' not found.")
-            return pd.DataFrame()  # Return an empty DataFrame if 'year' is missing
-    
+            return pd.DataFrame()
+
     def word_co_occurrence_over_time(self, words):
         """
-        Count co-occurrences of specific words in comments over time and calculate
-        the percentage of comments that contain all the specified words each year.
+        Count co-occurrences of specific words in comments over time
+        and calculate the percentage of comments that contain all the
+        specified words each year.
 
         Parameters
         ----------
@@ -818,7 +834,8 @@ class DataAnalyzer:
         Returns
         -------
         pd.DataFrame
-            A DataFrame with years and the percentage of co-occurrences per year.
+            A DataFrame with years and the percentage of co-occurrences per
+            year.
         """
         print(self.data['ingredients'].iloc[0])
         # Assure that comments are cleaned first
@@ -827,13 +844,17 @@ class DataAnalyzer:
             comment_analyzer.clean_comments()
         print(self.data.head(1))
         print("COLUMNS1 =  ", self.data.columns)
-        
+
         # Function to count co-occurrences
         def count_co_occurrences(comment):
             return all(word in comment for word in words)
 
         # Apply the counting function
-        self.data['co_occurrence'] = self.data['cleaned'].apply(count_co_occurrences)
+        self.data['co_occurrence'] = (
+            self
+            .data['cleaned']
+            .apply(count_co_occurrences)
+        )
 
         if 'year' in self.data.columns:
             # Calculate the total comments per year
@@ -841,19 +862,28 @@ class DataAnalyzer:
             # Filter the data between specific years if needed
             filtered_data = self.data[self.data['year'].between(2002, 2010)]
             # Calculate the number of co-occurrences per year
-            co_occurrences_per_year = filtered_data.groupby('year')['co_occurrence'].sum()
+            co_occurrences_per_year = (
+                filtered_data
+                .groupby('year')['co_occurrence']
+                .sum()
+            )
             # Calculate the percentage of co-occurrences
-            result = (co_occurrences_per_year / total_comments_per_year.loc[co_occurrences_per_year.index] * 100).reset_index()
+            result = (
+                co_occurrences_per_year
+                / total_comments_per_year.loc[co_occurrences_per_year.index]
+                * 100
+            ).reset_index()
             result.columns = ['year', 'Co-occurrence Percentage']
             return result
         else:
             print("Column 'year' not found.")
-            return pd.DataFrame()  # Return an empty DataFrame if 'year' is missing
-        
+            return pd.DataFrame()
+
     def ingredient_co_occurrence_over_time(self, words):
         """
-        Count co-occurrences of specific words in ingredients over time and calculate
-        the percentage of entries that contain all the specified words each year.
+        Count co-occurrences of specific words in ingredients over time
+        and calculate the percentage of entries that contain all the
+        specified words each year.
 
         Parameters
         ----------
@@ -863,18 +893,24 @@ class DataAnalyzer:
         Returns
         -------
         pd.DataFrame
-            A DataFrame with years and the percentage of co-occurrences per year.
+            A DataFrame with years and the percentage of co-occurrences per
+            year.
         """
         # Ensure words are in lowercase to match ingredient lists
         words = [word.lower() for word in words]
 
         # Function to count co-occurrences in ingredients
         def count_co_occurrences(ingredients_list):
-            # Ensure all words in the search list are present in the ingredient list
+            # Ensure all words in the search list are present in the
+            # ingredient list
             return all(word in ingredients_list for word in words)
 
         # Apply the counting function
-        self.data['co_occurrence'] = self.data['ingredients'].apply(count_co_occurrences)
+        self.data['co_occurrence'] = (
+            self
+            .data['ingredients']
+            .apply(count_co_occurrences)
+        )
 
         if 'year' in self.data.columns:
             # Calculate the total entries per year
@@ -882,12 +918,20 @@ class DataAnalyzer:
             # Filter the data between specific years if needed
             filtered_data = self.data[self.data['year'].between(2002, 2010)]
             # Calculate the number of co-occurrences per year
-            co_occurrences_per_year = filtered_data.groupby('year')['co_occurrence'].sum()
+            co_occurrences_per_year = (
+                filtered_data
+                .groupby('year')['co_occurrence']
+                .sum()
+            )
             # Calculate the percentage of co-occurrences
-            result = (co_occurrences_per_year / total_entries_per_year.loc[co_occurrences_per_year.index] * 100).reset_index()
+            result = (
+                co_occurrences_per_year
+                / total_entries_per_year
+                .loc[co_occurrences_per_year.index]
+                * 100
+            ).reset_index()
             result.columns = ['year', 'Co-occurrence Percentage']
             return result
         else:
             print("Column 'year' not found.")
-            return pd.DataFrame()  # Return an empty DataFrame if 'year' is missing
-
+            return pd.DataFrame()
