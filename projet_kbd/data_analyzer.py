@@ -85,16 +85,12 @@ class DataAnalyzer:
 
         try:
             data = pd.read_sql_table("oils_dataframe", con=engine)
-            data = pd.read_sql_table("oils_dataframe", con=engine)
             if not data.empty:
-                print("data found")
                 print("data found")
                 return data
         except Exception as e:
             print(f"Failed to load data from database: {e}")
 
-        self.data.drop_duplicates(subset=["id"], inplace=True)
-        self.data["ingredients"] = self.data["ingredients"].apply(eval)
         self.data.drop_duplicates(subset=["id"], inplace=True)
         self.data["ingredients"] = self.data["ingredients"].apply(eval)
 
