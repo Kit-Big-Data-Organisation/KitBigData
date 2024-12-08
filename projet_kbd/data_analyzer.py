@@ -118,7 +118,7 @@ class DataAnalyzer:
             if number_id == 0:
                 year_oil[year] = {oil: 0 for oil in oil_types.keys()}
                 continue
-                    
+
             for _, row in df_year.iterrows():
                 ingredients_set = set(row["ingredients"])
                 for oil_type in oil_types.keys():
@@ -1044,63 +1044,6 @@ class DataAnalyzer:
             result = (
                 co_occurrences_per_year
                 / total_comments_per_year.loc[co_occurrences_per_year.index]
-                * 100
-            ).reset_index()
-            result.columns = ['year', 'Co-occurrence Percentage']
-            return result
-        else:
-            print("Column 'year' not found.")
-            return pd.DataFrame()
-
-    def ingredient_co_occurrence_over_time(self, words):
-        """
-        Count co-occurrences of specific words in ingredients over time
-        and calculate the percentage of entries that contain all the
-        specified words each year.
-
-        Parameters
-        ----------
-        words : list of str
-            The words to search for co-occurrences in ingredients.
-
-        Returns
-        -------
-        pd.DataFrame
-            A DataFrame with years and the percentage of co-occurrences per
-            year.
-        """
-        # Ensure words are in lowercase to match ingredient lists
-        words = [word.lower() for word in words]
-
-        # Function to count co-occurrences in ingredients
-        def count_co_occurrences(ingredients_list):
-            # Ensure all words in the search list are present in the
-            # ingredient list
-            return all(word in ingredients_list for word in words)
-
-        # Apply the counting function
-        self.data['co_occurrence'] = (
-            self
-            .data['ingredients']
-            .apply(count_co_occurrences)
-        )
-
-        if 'year' in self.data.columns:
-            # Calculate the total entries per year
-            total_entries_per_year = self.data.groupby('year').size()
-            # Filter the data between specific years if needed
-            filtered_data = self.data[self.data['year'].between(2002, 2010)]
-            # Calculate the number of co-occurrences per year
-            co_occurrences_per_year = (
-                filtered_data
-                .groupby('year')['co_occurrence']
-                .sum()
-            )
-            # Calculate the percentage of co-occurrences
-            result = (
-                co_occurrences_per_year
-                / total_entries_per_year
-                .loc[co_occurrences_per_year.index]
                 * 100
             ).reset_index()
             result.columns = ['year', 'Co-occurrence Percentage']
