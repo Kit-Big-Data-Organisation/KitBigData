@@ -77,7 +77,6 @@ def sample_data_oils():
     )
 
 
-
 @pytest.fixture
 def sample_data_word_count_over_time():
     """Provides sample data including necessary columns and mock comments."""
