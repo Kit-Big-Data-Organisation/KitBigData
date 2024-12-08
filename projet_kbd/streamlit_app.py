@@ -5,6 +5,7 @@ from comment_analyzer import CommentAnalyzer
 from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
 from data_plotter import DataPlotter
+from logger_config import logger
 from streamlit_option_menu import option_menu
 
 
@@ -119,6 +120,17 @@ def create_time_wordcloud_plot(_analyzer, _engine):
         comment_analyzer.generate_word_frequencies_associated_to_time(_engine)
     )
     return DataPlotter.plot_time_wordcloud(word_frequencies_time)
+
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_plot_rating_evolution(_analyzer, _engine):
+    plotter = DataPlotter(_analyzer)
+    return plotter.plot_rating_evolution(_engine)
+
+
+def create_plot_sentiment_evolution(_analyzer, _engine):
+    plotter = DataPlotter(_analyzer)
+    return plotter.plot_sentiment_over_time(_engine)
 
 
 def run(path_file, recipe_file, interaction_file, engine):
@@ -326,8 +338,44 @@ def run(path_file, recipe_file, interaction_file, engine):
         )
 
     elif selected == "Interaction with the reviews":
-        st.title('🔍 Analysis of Word Co-occurrence in Comments')
+        st.title('📈 Rate Evolution and Sentiment Analysis Over Time')
 
+        logger.info("Rate evolution...")
+        rate_evolution = create_plot_rating_evolution(analyzer, engine)
+        st.plotly_chart(rate_evolution, use_container_width=True)
+        st.write(
+            """
+            The graph "Evolution of Comment Ratings Over the Years" shows that
+            from 2002 to 2010, the average ratings of comments remained
+            remarkably stable, hovering close to 4.5 out of a maximum of 5.
+            This indicates a consistent level of high-quality comments and
+            user satisfaction over the years, suggesting effective content
+            moderation and stable user expectations. Such stability is crucial
+            for maintaining user engagement and satisfaction on the platform.
+            """
+        )
+        logger.info("Sentiment analysis...")
+        sentiment_evolution = create_plot_sentiment_evolution(analyzer, engine)
+        st.plotly_chart(sentiment_evolution, use_container_width=True)
+        st.write(
+            """
+            The chart shows a consistent trend of positive sentiment in user
+            comments from **2002 to 2010**, with average sentiment polarity
+            remaining above **zero** and hovering between **0.3 and 0.33**.
+
+            This indicates:
+            - Overall stable and moderately positive feedback, reflecting
+              **reliability** in the platform or content.
+            - Minimal fluctuations, suggesting **steady user satisfaction**
+              and a lack of major emotional shifts during this period.
+            """
+        )
+
+        st.write(
+            "**🔍 You can search here words in comments, and see their evolution "
+            "over time. For example, search for 'good, bad, delicious' to see "
+            "how often they are mentioned.**"
+        )
         nb = analyzer.data.shape[0]
         st.write(f"Number of comments: {nb}")
 

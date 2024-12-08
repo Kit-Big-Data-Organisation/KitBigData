@@ -935,3 +935,154 @@ class DataAnalyzer:
         else:
             print("Column 'year' not found.")
             return pd.DataFrame()
+
+    def calculate_rating_evolution(self, engine) -> pd.DataFrame:
+        """
+        Calculate the evolution of comment ratings over the years, focusing on
+        the years 2002 to 2010.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with two columns: 'year' and 'average_rating',
+            showing the mean rating for each year within the specified range.
+
+        Notes
+        -----
+        This function assumes that there is a 'date' column in the DataFrame
+        containing the dates of the comments in 'YYYY-MM-DD' format, and a
+        'rating' column containing the ratings.
+        """
+        try:
+            data = pd.read_sql_table("rating_evolution", con=engine)
+            if not data.empty:
+                logger.info(
+                    "Data found in the database. Filtering for years 2002 to "
+                    "2010."
+                )
+                filtered_data = data[
+                    (data['year'] >= 2002) & (data['year'] <= 2010)
+                ]
+                if not filtered_data.empty:
+                    return filtered_data
+                else:
+                    logger.info(
+                        "No data found in the specified year range",
+                        "proceeding, with calculation."
+                    )
+        except Exception as e:
+            logger.error(f"Failed to load data from database: {e}")
+
+        # Convert the 'date' column to datetime if not already done
+        if self.data['date'].dtype != 'datetime64[ns]':
+            self.data['date'] = pd.to_datetime(
+                self.data['date'], format='%Y-%m-%d'
+            )
+
+        # Extract the year from the 'date' column
+        self.data['year'] = self.data['date'].dt.year
+
+        # Filter data for years 2002 to 2010
+        filtered_data = self.data[
+            (self.data['year'] >= 2002) & (self.data['year'] <= 2010)
+        ]
+
+        # Calculate the average rating for each year in the range
+        rating_evolution = (
+            filtered_data
+            .groupby('year')['rating']
+            .mean()
+            .reset_index()
+        )
+        rating_evolution.columns = ['year', 'average_rating']
+
+        logger.info(
+            "Rating evolution calculation for specified years completed."
+        )
+
+        # Save the data to the database
+        try:
+            logger.info("Saving rating evolution to the database.")
+            rating_evolution.to_sql(
+                name="rating_evolution",
+                con=engine,
+                if_exists="replace",
+                index=False,
+            )
+            logger.info("Data successfully saved to the database.")
+        except Exception as e:
+            logger.error(
+                f"Failed to save data to the database: {e}"
+            )
+
+        return rating_evolution
+
+    def sentiment_analysis_over_time(self, engine):
+        """
+        Calculate the average sentiment polarity of comments, grouped by year (2002-2010).
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            Database engine used for the connection.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with years (2002-2010) and average sentiment polarity.
+        """
+        try:
+            stored_data = pd.read_sql_table("sentiment_by_year", con=engine)
+            if not stored_data.empty:
+                logger.info("Sentiment analysis over time found in database.")
+                # Filter the data for the years 2002 to 2010
+                stored_data = stored_data[
+                    (stored_data['Year'] >= 2002) & (stored_data['Year'] <= 2010)
+                ]
+                return stored_data
+        except Exception as e:
+            logger.warning(f"Table not found or error loading data: {e}")
+
+        if 'date' not in self.data.columns:
+            logger.error("Date column missing from DataFrame.")
+            return None
+
+        # Ensure 'date' is in datetime format
+        self.data['date'] = pd.to_datetime(self.data['date'])
+        # Extract the year from the 'date' column and store it in a new 'year' column
+        self.data['year'] = self.data['date'].dt.year
+
+        # Perform sentiment analysis if not already done
+        if 'polarity' not in self.data.columns:
+            comment_analyzer = CommentAnalyzer(self.data)
+            comment_analyzer.clean_comments()
+            comment_analyzer.sentiment_analysis()
+
+        # Group by the 'year' column and calculate the average polarity
+        sentiment_by_year = (
+            self.data.groupby('year')['polarity']
+            .mean()
+            .reset_index()
+        )
+        sentiment_by_year.columns = ['Year', 'Average Sentiment']
+
+        # Filter for the years 2002 to 2010
+        sentiment_by_year = sentiment_by_year[
+            (sentiment_by_year['Year'] >= 2002) & (sentiment_by_year['Year'] <= 2010)
+        ]
+
+        logger.info("Sentiment analysis over time (2002-2010) completed.")
+
+        # Save the results to the database
+        try:
+            sentiment_by_year.to_sql(
+                name="sentiment_by_year",
+                con=engine,
+                if_exists="replace",
+                index=False,
+            )
+            logger.info("Sentiment analysis over time saved successfully.")
+        except Exception as e:
+            logger.error(f"Failed to save sentiment analysis over time: {e}")
+
+        return sentiment_by_year
