@@ -73,3 +73,39 @@ eating_habit_presentation = """
     In this page, we explore eating habits in behaviors by analyzing nutritional data and ingredient usage in recipes.<br>
     Our analysis began with a focus on individual nutrients such as sugar, protein, and carbohydrates. While no clear patterns emerged initially, a deeper investigation into ingredient usage revealed a shift toward <strong>healthier lifestyle trends</strong>, particularly through the analysis of oil preferences.
 """
+quick_recipes_analysis = """
+<p>The graphs illustrate a steady rise in both the <strong>proportion of quick recipes</strong> 🍳 and the <strong>engagement with these recipes</strong> 💬 between 2002 and 2010.</p>
+<p>This reflects a societal shift toward <strong>convenience</strong> and <strong>time efficiency</strong> 🕒 in cooking, driven by:</p>
+<ul>
+    <li><strong>Busier schedules:</strong> As lifestyles became more fast-paced, less time was available for traditional cooking.</li>
+    <li><strong>Dual-income households:</strong> With more families having both partners working, the demand for quick meal solutions increased.</li>
+    <li><strong>Work-life balance:</strong> The emphasis on balancing professional and personal lives encouraged time-saving habits in the kitchen.</li>
+</ul>
+<p>As a result, cooking evolved from being a <strong>traditional, time-intensive activity</strong> to a <strong>functional necessity</strong> ⚡, catering to individuals seeking fast and practical meal preparation.</p>
+"""
+main_dishes_analysis = """
+<p>Building on our previous analysis, this graph further supports the observation that the rise in quick recipes primarily targets <strong>main dishes</strong>, which are traditionally more time-intensive to prepare compared to categories like snacks or soups.</p>
+<p>The dominance of main dishes among quick recipes highlights how this shift toward <strong>convenience and time efficiency</strong> 🕒 is not limited to inherently fast-to-make foods, but extends to the cornerstone of a meal: the <strong>main course</strong>.</p>
+<p>This reinforces the idea that individuals are seeking practical solutions to maintain <strong>structured and complete meals</strong>, even with busier schedules and dual-income households. By focusing on simplifying main dish preparation, this trend reflects a societal adaptation to modern lifestyles, validating our analysis of cooking evolving into a <strong>functional yet fulfilling necessity</strong> ⚡.</p>
+"""
+efficiency_focus_analysis = """
+<p>Frequent terms like <strong>"easy"</strong> and <strong>"quick"</strong> highlight a focus on <strong>efficiency</strong> in cooking, reinforcing the trend toward simpler meals.</p>
+"""
+time_efficiency_analysis = """
+<p>This word cloud emphasizes how "time" in user comments often refers to cooking efficiency. Phrases like <strong>"cut cooking time"</strong> show a desire for quicker meals, while <strong>"long time ago"</strong> reflects frustrations with time-consuming recipes.</p>
+"""
+comment_ratings_analysis = """
+<p>The graph "Evolution of Comment Ratings Over the Years" shows that from 2002 to 2010, the average ratings of comments remained remarkably stable, hovering close to 4.5 out of a maximum of 5. This indicates a consistent level of high-quality comments and user satisfaction over the years, suggesting effective content moderation and stable user expectations. Such stability is crucial for maintaining user engagement and satisfaction on the platform.</p>
+"""
+sentiment_trend_analysis = """
+<p>The chart shows a consistent trend of positive sentiment in user comments from <strong>2002 to 2010</strong>, with average sentiment polarity remaining above <strong>zero</strong> and hovering between <strong>0.3 and 0.33</strong>.</p>
+<p>This indicates:</p>
+<ul>
+    <li>Overall stable and moderately positive feedback, reflecting <strong>reliability</strong> in the platform or content.</li>
+    <li>Minimal fluctuations, suggesting <strong>steady user satisfaction</strong> and a lack of major emotional shifts during this period.</li>
+</ul>
+"""
+word_frequency_analysis = """
+<p><strong>🔍 Explore the frequency of words in comments and observe their evolution over time.</strong> Enter words like <em>'good,'</em> <em>'bad,'</em> <em>'delicious,'</em> or <em>'tasty'</em> to discover how often these terms are mentioned and compare their usage trends over the years. This analysis can help identify patterns of positivity and negativity in user comments, complementing insights from sentiment analysis.</p>
+"""
+
