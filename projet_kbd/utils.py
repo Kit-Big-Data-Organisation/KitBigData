@@ -121,14 +121,16 @@ def create_top_tags_database(DB_PATH , set_number_tags):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS top_tags (
-        set_number INTEGER,
-        year INTEGER,
-        label TEXT,
-        size REAL
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS top_tags (
+            set_number INTEGER,
+            year INTEGER,
+            label TEXT,
+            size REAL
+        )
+        """
     )
-    """)
 
     for set_number, top_tags_years in set_number_tags.items():
         for year, data in top_tags_years.items():

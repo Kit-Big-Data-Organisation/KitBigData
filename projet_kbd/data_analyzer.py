@@ -85,12 +85,16 @@ class DataAnalyzer:
 
         try:
             data = pd.read_sql_table("oils_dataframe", con=engine)
+            data = pd.read_sql_table("oils_dataframe", con=engine)
             if not data.empty:
+                print("data found")
                 print("data found")
                 return data
         except Exception as e:
             print(f"Failed to load data from database: {e}")
 
+        self.data.drop_duplicates(subset=["id"], inplace=True)
+        self.data["ingredients"] = self.data["ingredients"].apply(eval)
         self.data.drop_duplicates(subset=["id"], inplace=True)
         self.data["ingredients"] = self.data["ingredients"].apply(eval)
 
@@ -109,9 +113,9 @@ class DataAnalyzer:
                 "corn oil": 0,
                 "extra virgin olive oil": 0,
             }
-            
-            df_year = self.data[self.data['year'] == year]
-            number_id = df_year['id'].nunique()
+
+            df_year = self.data[self.data["year"] == year]
+            number_id = df_year["id"].nunique()
 
             # Skip if no unique IDs are found for the year
             if number_id == 0:
