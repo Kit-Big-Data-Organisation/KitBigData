@@ -779,19 +779,39 @@ class DataAnalyzer:
         return category_df
 
     def analyse_interactions_ratings(self, engine):
-        """
-        Analyze the average rating, number of ratings, and mean preparation
-        time for each recipe.
+       """
+        Loads and analyzes recipe interaction data from a database or files if 
+        not available in the database.
+        
+        This function first tries to load the recipe interaction data from a 
+        database using a provided SQL engine. If data exists, it returns a 
+        DataAnalyzer object initialized with this data. If no data is found, it 
+        processes data from specified files, cleans it from outliers, and saves 
+        the cleaned data back to the database. The function caches its results 
+        to avoid redundant data processing.
 
         Parameters
         ----------
+        path_file : str
+            The file path where the data files are located.
+        recipe_file : str
+            The filename for the recipe data.
+        interaction_file : str
+            The filename for the interaction data.
         engine : sqlalchemy.engine.Engine
             SQLAlchemy engine for database interactions.
 
         Returns
         -------
-        pd.DataFrame
-            A DataFrame with aggregated interactions and ratings data.
+        DataAnalyzer
+            An instance of the DataAnalyzer class initialized with the loaded 
+            and processed data.
+        
+        Raises
+        ------
+        Exception
+            If the data fails to load from the database or files, an error 
+            message is printed.
         """
         try:
             logger.info("Aggregating interaction and rating data.")

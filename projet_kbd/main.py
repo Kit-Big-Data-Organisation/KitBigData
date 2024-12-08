@@ -42,10 +42,12 @@ engine = sqlalchemy.create_engine(f"sqlite:///{DB_PATH}")
 
 def create_database_if_not_exists(db_path):
     """
-    Creates the SQLite database file if it does not already exist.
+    Creates an empty SQLite database if it does not already exist.
 
-    Args:
-        db_path (str): The path to the SQLite database file.
+    Parameters:
+    ----------
+    db_path : str
+        The path to the SQLite database file.
     """
     if not os.path.exists(db_path):
         # Ensure the directory exists
@@ -62,11 +64,16 @@ def create_database_if_not_exists(db_path):
 def validate_data_files(data_dir):
     """
     Ensures that the required data files exist after the download step.
-    Raises an exception if any file is missing.
 
-    Args:
-        data_dir (str): The directory where the data files are expected to be
-        located.
+    Parameters:
+    ----------
+    data_dir : str
+        The directory where the data files are stored.
+
+    Raises:
+    -------
+    FileNotFoundError
+        If any of the required files are missing.
     """
     required_files = [RECIPES_FILE, INTERACTIONS_FILE]
     for file_name in required_files:
@@ -77,6 +84,9 @@ def validate_data_files(data_dir):
 
 
 if __name__ == "__main__":
+    """
+    Main entry point of the script.
+    """
     try:
         # Ensure the database and data files are downloaded and validated
         for file_name, (url, dir) in DATA_FILES.items():
