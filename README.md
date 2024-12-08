@@ -6,10 +6,10 @@ Welcome to the KitBigData project! This Streamlit application provides an in-dep
 
 KitBigData leverages extensive recipe data to deliver meaningful insights that enhance our understanding of food trends and preferences. Through interactive visualizations and data-driven analysis, this application helps users explore:
 
-- **🍽️ Insights over the website**
-- **🍲 Culinary Trends**
-- **🍎 Nutritional Insights**
-- **🌍 Sociological Aspects**
+- **Insights into the Website: How people interact with it 🧐.**
+- **Eating Habits: The trends that people follow over the years 🍴.**
+- **Cuisine Analysis: Which cuisines interest people the most and the specifics of each cuisine 🥗.**
+- **Sociological Aspects: Understanding how cultural and societal trends influence cooking habits and recipe popularity 🌍.**
 
 ## 🚀 Streamlit Application
 
