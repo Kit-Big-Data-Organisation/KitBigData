@@ -17,8 +17,8 @@ import json
 import os
 from collections import Counter
 import pandas as pd
-import projet_kbd.utils
-from projet_kbd.logger_config import logger
+import utils
+from logger_config import logger
 
 
 class DataAnalyzer:
