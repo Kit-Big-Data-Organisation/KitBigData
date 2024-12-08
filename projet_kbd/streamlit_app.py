@@ -40,7 +40,7 @@ from data_loader import Dataloader
 from data_plotter import DataPlotter
 from logger_config import logger
 from streamlit_option_menu import option_menu
-from main import DB_PATH
+from config import DB_PATH
 
 
 @st.cache_data

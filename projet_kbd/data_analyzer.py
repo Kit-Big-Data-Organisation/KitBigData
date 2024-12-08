@@ -18,7 +18,7 @@ import pandas as pd
 import utils
 from comment_analyzer import CommentAnalyzer
 from logger_config import logger
-
+from config import DB_PATH
 
 class DataAnalyzer:
     """
@@ -110,10 +110,15 @@ class DataAnalyzer:
                 "corn oil": 0,
                 "extra virgin olive oil": 0,
             }
+            
+            df_year = self.data[self.data['year'] == year]
+            number_id = df_year['id'].nunique()
 
-            df_year = self.data[self.data["year"] == year]
-            number_id = df_year["id"].nunique()
-
+            # Skip if no unique IDs are found for the year
+            if number_id == 0:
+                year_oil[year] = {oil: 0 for oil in oil_types.keys()}
+                continue
+                    
             for _, row in df_year.iterrows():
                 ingredients_set = set(row["ingredients"])
                 for oil_type in oil_types.keys():
@@ -129,9 +134,10 @@ class DataAnalyzer:
             }
 
         for year, oils in year_oil.items():
-            for oil in oils:
-                year_oil[year][oil] = year_oil[year][oil] / sum(oils.values())
-                year_oil[year][oil] = year_oil[year][oil] / sum(oils.values())
+            total = sum(oils.values())
+            if total > 0:  # Avoid division by zero in normalization
+                for oil in oils:
+                    year_oil[year][oil] = oils[oil] / total
 
         df_oils = (
             pd.DataFrame(year_oil)

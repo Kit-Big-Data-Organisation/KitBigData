@@ -1,7 +1,11 @@
 from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
-from projet_kbd.data_analyzer import DataAnalyzer
+import sqlalchemy
+from collections import Counter
+
+
+from projet_kbd import data_analyzer
 
 
 @pytest.fixture
@@ -49,6 +53,517 @@ def sample_data():
             "interactions": ["abc", "abc", "abc", "abc", "abc", 100, 200],
         }
     )
+
+def sample_data_oils():
+    return pd.DataFrame(
+        {
+            'id': [1, 2, 3, 4],
+            'year': [2002, 2002, 2003, 2003],
+            'ingredients': ["['olive oil', 'salt']", 
+                            "['vegetable oil', 'pepper']", 
+                            "['olive oil', 'garlic']", 
+                            "['extra virgin olive oil', 'pepper']"]
+
+        })
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+def test_analyze_oils_data_found_in_database(mock_read_sql_table):
+        # Simulate data being found in the database
+        mock_existing_data = pd.DataFrame({
+            'Year': [2002, 2003],
+            'Oil Type': ['olive oil', 'vegetable oil'],
+            'Proportion': [0.7, 0.3]
+        })
+        mock_read_sql_table.return_value = mock_existing_data
+
+        # Initialize the analyzer
+        analyzer = data_analyzer.DataAnalyzer(data=sample_data_oils())
+
+        # Call the method
+        result = analyzer.analyze_oils(mock_engine)
+
+        # Verify it returned the database data
+        pd.testing.assert_frame_equal(result, mock_existing_data)
+        mock_read_sql_table.assert_called_once_with('oils_dataframe', con=mock_engine)
+
+        # Stop the mock
+        patch.stopall()
+
+def test_normalize_proportions():
+    # Simulate internal normalization logic
+    year_oil = {
+        2002: {'olive oil': 3, 'vegetable oil': 1},
+        2003: {'olive oil': 2, 'extra virgin olive oil': 2}
+    }
+
+    # Normalize proportions without modifying the dictionary while iterating
+    normalized_year_oil = {}
+    for year, oils in year_oil.items():
+        total = sum(oils.values())
+        normalized_year_oil[year] = {oil: count / total for oil, count in oils.items()}
+
+    expected_normalized = {
+        2002: {'olive oil': 0.75, 'vegetable oil': 0.25},
+        2003: {'olive oil': 0.5, 'extra virgin olive oil': 0.5}
+    }
+
+    assert normalized_year_oil == expected_normalized
+
+
+def test_group_interactions_year():
+    """Test the group_interactions_year method."""
+    # Sample dataset
+    sample_data = pd.DataFrame({
+        "id": [1, 2, 3, 4, 5],
+        "year": [2002, 2002, 2003, 2003, 2003],
+        "review": ["Review1", "Review2", "Review3", "Review4", "Review5"]
+    })
+
+    # Initialize the analyzer with sample data
+
+    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+
+    # Call the method
+    indices, values = analyzer.group_interactions_year()
+
+    # Expected output
+    expected_indices = pd.Index([2002, 2003])  # Years with reviews
+    expected_values = [2, 3]  # Review counts per year
+
+    # Validate the output
+    assert all(indices == expected_indices)
+    assert all(values == expected_values)
+
+def test_group_recipes_year():
+    """Test the group_recipes_year method."""
+    # Sample dataset
+    sample_data = pd.DataFrame({
+        "id": [1, 2, 3, 1, 4, 5],  # Recipe IDs
+        "year": [2002, 2002, 2003, 2003, 2003, 2004]  # Years
+    })
+
+    # Initialize the analyzer with sample data
+    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+
+    # Call the method
+    indices, values = analyzer.group_recipes_year()
+
+    # Expected output
+    expected_indices = pd.Index([2002, 2003, 2004])  # Unique years
+    expected_values = [2, 3, 1]  # Unique recipe counts per year
+
+    # Validate the output
+    assert all(indices == expected_indices)
+    assert all(values == expected_values)
+
+
+def test_get_tags():
+    """Test the get_tags method."""
+    # Sample dataset
+    sample_data = pd.DataFrame({
+        "id": [1, 2, 3, 4],
+        "year": [2002, 2002, 2003, 2003],
+        "tags": [
+            "['quick', 'easy', 'main course']",
+            "['quick', 'healthy', 'snack']",
+            "['dessert', 'sweet']",
+            "['healthy', 'snack', 'sweet']"
+        ]
+    })
+
+    # Initialize the analyzer with sample data
+    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+
+    # Call the method for the year 2002
+    result = analyzer.get_tags(2002)
+
+    # Expected output
+    expected_tags = Counter({
+        "quick": 2,
+        "easy": 1,
+        "main course": 1,
+        "healthy": 1,
+        "snack": 1
+    })
+
+    # Validate the result
+    assert result == expected_tags
+
+
+def test_get_top_tags():
+    """Test the get_top_tags method."""
+    # Sample dataset
+    sample_data = pd.DataFrame({
+        "id": [1, 2, 3, 4],
+        "year": [2002, 2002, 2003, 2003],
+        "tags": [
+            "['quick', 'easy', 'main course']",
+            "['quick', 'healthy', 'snack']",
+            "['dessert', 'sweet']",
+            "['healthy', 'snack', 'sweet']"
+        ]
+    })
+
+    # Initialize the analyzer with sample data
+    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+
+    # Call the method for the year 2002
+    result = analyzer.get_top_tags(2002)
+
+    # Expected output
+    expected_top_tags = {
+        2002: [
+            ("quick", 2),
+            ("easy", 1),
+            ("main course", 1),
+            ("healthy", 1),
+            ("snack", 1)
+        ]
+    }
+
+    # Validate the result
+    assert result == expected_top_tags
+
+
+@patch("projet_kbd.data_analyzer.utils.create_top_tags_database")
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.DataAnalyzer.get_top_tags")
+def test_get_top_tag_per_year(mock_get_top_tags, mock_read_sql_table, mock_create_db):
+    """Test the get_top_tag_per_year method."""
+    # Simulate database table already existing
+    mock_read_sql_table.return_value = pd.DataFrame({
+        "set_number": [0, 0, 0],
+        "year": [2002, 2003, 2004],
+        "label": ["quick", "easy", "snack"],
+        "size": [20, 15, 10]
+    })
+
+    # Initialize the analyzer
+    analyzer = data_analyzer.DataAnalyzer(data=pd.DataFrame())
+
+    # Call the method with mock engine and database path
+    engine = MagicMock()
+    db_path = "test_path"
+    result = analyzer.get_top_tag_per_year(engine, db_path)
+
+    # Verify it doesn't recreate the table if data already exists
+    mock_read_sql_table.assert_called_once_with("top_tags", con=engine)
+    mock_create_db.assert_not_called()
+    assert result is None
+
+    # Simulate no data found in the database
+    mock_read_sql_table.side_effect = Exception("No table found")
+    mock_get_top_tags.side_effect = lambda year: {year: Counter({"tag1": 10, "tag2": 5, "tag3": 3}).most_common(10)}
+
+    # Call the method again
+    analyzer.get_top_tag_per_year(engine, db_path)
+
+    # Verify table creation
+    mock_create_db.assert_called_once()
+
+
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+def test_analyze_cuisines(mock_to_sql, mock_read_sql_table):
+    """Test the analyze_cuisines method."""
+    # Simulate data already in the database
+    mock_read_sql_table.return_value = pd.DataFrame({
+        "Cuisine": ["Italian", "American"],
+        "Proportion": [0.3, 0.7]
+    })
+
+    # Initialize analyzer with sample data
+    sample_data = pd.DataFrame({
+        "id": [1, 2, 3, 4, 5, 6],
+        "cuisine": ["Italian", "American", "Mexican", "Mexican", "others", "Greek"]
+    })
+    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+
+
+    # Call the method with mock engine
+    engine = MagicMock()
+    result = analyzer.analyze_cuisines(engine)
+
+    # Verify it returns the existing data if found in the database
+    mock_read_sql_table.assert_called_once_with("cuisine_data", con=engine)
+    pd.testing.assert_frame_equal(result, mock_read_sql_table.return_value)
+    mock_to_sql.assert_not_called()
+
+    # Simulate no data in the database
+    mock_read_sql_table.side_effect = Exception("No table found")
+    analyzer.data = sample_data  # Assign the test dataset again
+
+    # Call the method to process and save data
+    result = analyzer.analyze_cuisines(engine)
+
+    # Expected processed data
+    expected_result = pd.DataFrame({
+        "Cuisine": ["Italian", "American", "Mexican", "Greek", "others"],
+        "Proportion": [
+            1 / 6,  # Italian
+            1 / 6,  # American
+            2 / 6,  # Mexican
+            1 / 6,  # Greek
+            1 / 6   # Others aggregated
+        ]
+    })
+
+    # Verify the proportions are calculated correctly
+    pd.testing.assert_frame_equal(result.sort_values(by="Cuisine").reset_index(drop=True),
+                                   expected_result.sort_values(by="Cuisine").reset_index(drop=True))
+
+    # Ensure the result is saved to the database
+    mock_to_sql.assert_called_once_with(name="cuisine_data", con=engine, if_exists="replace")
+
+
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+@patch("projet_kbd.data_analyzer.utils.relevant_cuisines", ["Italian", "American", "Mexican", "Greek"])
+def test_top_commun_ingredients(mock_to_sql, mock_read_sql_table):
+    """Test the top_commun_ingredients method."""
+    # Simulate data already in the database
+    mock_read_sql_table.return_value = pd.DataFrame({
+        "cuisine": ["Italian", "American"],
+        "Top ingredient 1": ["tomato", "bread"],
+        "Top ingredient 2": ["cheese", "butter"],
+        "Top ingredient 3": ["basil", "sugar"],
+        "Top ingredient 4": ["olive oil", "milk"],
+        "Top ingredient 5": ["garlic", "flour"]
+    })
+
+    # Initialize the analyzer with sample data
+    sample_data = pd.DataFrame({
+        "id": [1, 2, 3, 4, 5, 6],
+        "cuisine": ["Italian", "American", "Mexican", "Greek", "Mexican", "Italian"],
+        "ingredients": [
+            "['tomato', 'cheese', 'basil', 'olive oil', 'garlic']",
+            "['bread', 'butter', 'sugar', 'milk', 'flour']",
+            "['tortilla', 'beans', 'chili powder', 'corn', 'cheese']",
+            "['olive oil', 'feta', 'oregano', 'lemon', 'cucumber']",
+            "['tortilla', 'chili powder', 'avocado', 'cheese', 'tomato']",
+            "['tomato', 'cheese', 'garlic', 'basil', 'olive oil']"
+        ]
+    })
+    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+
+
+    # Mock engine
+    engine = MagicMock()
+
+    # Test case 1: Data already exists in the database
+    result = analyzer.top_commun_ingredients(engine)
+
+    # Verify it returns the existing data
+    mock_read_sql_table.assert_called_once_with("cuisine_top_ingredients", con=engine)
+    pd.testing.assert_frame_equal(result, mock_read_sql_table.return_value)
+    mock_to_sql.assert_not_called()
+
+    # Test case 2: Data missing in the database
+    mock_read_sql_table.side_effect = Exception("No table found")
+
+    # Call the method to process the data
+    result = analyzer.top_commun_ingredients(engine)
+
+    # Expected processed DataFrame
+    expected_result = pd.DataFrame({
+        "cuisine": ["American", "Greek", "Italian", "Mexican"],
+        "Top ingredient 1": ["bread", "olive oil", "tomato", "tortilla"],
+        "Top ingredient 2": ["butter", "feta", "cheese", "chili powder"],
+        "Top ingredient 3": ["sugar", "oregano", "basil", "cheese"],
+        "Top ingredient 4": ["milk", "lemon", "olive oil", "beans"],
+        "Top ingredient 5": ["flour", "cucumber", "garlic", "corn"]
+    })
+
+
+    # Ensure consistent dtype for the 'cuisine' column
+    # Ensure consistent dtype for textual columns in both DataFrames
+    # Ensure consistent dtype for textual columns
+    text_columns = ["cuisine", "Top ingredient 1", "Top ingredient 2", "Top ingredient 3", "Top ingredient 4", "Top ingredient 5"]
+    for col in text_columns:
+        result[col] = result[col].astype("string")
+        expected_result[col] = expected_result[col].astype("string")
+
+    # Validate the result structure and content
+    pd.testing.assert_frame_equal(
+        result.sort_values("cuisine").reset_index(drop=True),
+        expected_result.sort_values("cuisine").reset_index(drop=True)
+    )
+
+
+    # Ensure the result is saved to the database
+    mock_to_sql.assert_called_once_with(
+        name="cuisine_top_ingredients",
+        con=engine,
+        if_exists="replace"
+    )
+
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+@patch("projet_kbd.data_analyzer.utils.relevant_cuisines", ["Italian", "American", "Mexican", "Greek"])
+def test_cuisine_evolution(mock_to_sql, mock_read_sql_table):
+    """Test the cuisine_evolution method."""
+
+    # Simulate data already in the database
+    mock_read_sql_table.return_value = pd.DataFrame({
+        "Year": [2002, 2003],
+        "American": [50.0, 40.0],
+        "Greek": [5.0, 5.0],
+        "Italian": [30.0, 35.0],
+        "Greek" : [15.0, 20.0]
+    }).set_index("Year")
+
+    # Initialize the analyzer with sample data
+    sample_data = pd.DataFrame({
+        "id": [1, 2, 3, 4, 5, 6],
+        "cuisine": ["Italian", "American", "Mexican", "Greek", "Mexican", "Italian"],
+        "year": [2002, 2002, 2003, 2003, 2003, 2003]
+    })
+    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+
+    # Mock SQLAlchemy engine
+    engine = MagicMock()
+
+    # Test case 1: Data already exists in the database
+    result = analyzer.cuisine_evolution(engine)
+
+    # Validate it returns the existing database data
+    mock_read_sql_table.assert_called_once_with("cuisine_evolution_dataframe", con=engine)
+    pd.testing.assert_frame_equal(result, mock_read_sql_table.return_value)
+    mock_to_sql.assert_not_called()
+
+    # Test case 2: Data not found in the database
+    mock_read_sql_table.side_effect = Exception("No table found")
+
+    # Call the method to process the data
+    result = analyzer.cuisine_evolution(engine)
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.expand_frame_repr', False)
+
+    print("Result DataFrame:")
+    print(result)
+    # Expected processed DataFrame
+    expected_result = pd.DataFrame({
+        "Cuisine": ["American", "Greek", "Italian", "Mexican"],
+        2002: [50.0, 0.0, 50.0, 0.0],
+        2003: [0.0, 25.0, 25.0, 50.0],
+        2004: [0.0, 0.0, 0.0, 0.0],
+        2005: [0.0, 0.0, 0.0, 0.0],
+        2006: [0.0, 0.0, 0.0, 0.0],
+        2007: [0.0, 0.0, 0.0, 0.0],
+        2008: [0.0, 0.0, 0.0, 0.0],
+        2009: [0.0, 0.0, 0.0, 0.0],
+        2010: [0.0, 0.0, 0.0, 0.0]
+        }).set_index("Cuisine").T
+    
+    expected_result = expected_result.reset_index().rename(columns={"index": "Year"}).set_index("Year")
+    expected_result.columns.name = "Cuisine"
+   
+    # Updated validation
+    pd.testing.assert_frame_equal(
+        result,
+        expected_result
+    )    
+
+    # Ensure the result is saved to the database
+    mock_to_sql.assert_called_once_with(
+        name="cuisine_evolution_dataframe",
+        con=engine,
+        if_exists="replace",
+        index=True,
+        index_label="Year"
+    )
+
+
+
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+@patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
+@patch("projet_kbd.data_analyzer.utils.relevant_cuisines", ["Italian", "American", "Mexican", "Greek"])
+def test_analyse_cuisine_nutritions(mock_to_sql, mock_read_sql_table):
+    """Test the analyse_cuisine_nutritions method."""
+
+    # Simulate data already in the database
+    mock_read_sql_table.return_value = pd.DataFrame({
+        "cuisine": ["Italian", "American"],
+        "sugar": [5.0, 4.5],
+        "protein": [10.0, 8.5],
+        "carbs": [40.0, 35.0],
+        "totalFat": [20.0, 18.0],
+        "satFat": [8.0, 6.0],
+        "sodium": [500.0, 450.0],
+        "cal": [300.0, 280.0],
+        "minutes": [30.0, 25.0]
+    })
+
+    # Initialize the analyzer with sample data
+    sample_data = pd.DataFrame({
+        "id": [1, 2, 3, 4],
+        "cuisine": ["Italian", "American", "Mexican", "Greek"],
+        "sugar": [5.0, 4.5, 6.0, 3.0],
+        "protein": [10.0, 8.5, 12.0, 9.0],
+        "carbs": [40.0, 35.0, 50.0, 30.0],
+        "totalFat": [20.0, 18.0, 25.0, 15.0],
+        "satFat": [8.0, 6.0, 10.0, 4.0],
+        "sodium": [500.0, 450.0, 600.0, 400.0],
+        "cal": [300.0, 280.0, 350.0, 250.0],
+        "minutes": [30.0, 25.0, 40.0, 20.0]
+    })
+    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+
+    # Mock engine
+    engine = MagicMock()
+
+    # Test case 1: Data already exists in the database
+    result = analyzer.analyse_cuisine_nutritions(engine)
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.expand_frame_repr', False)
+
+
+    # Test case 2: Data missing in the database
+    mock_read_sql_table.side_effect = Exception("No table found")
+
+    # Call the method to process the data
+    result = analyzer.analyse_cuisine_nutritions(engine)
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.expand_frame_repr', False)
+
+    print("Result DataFrame:")
+    print(result)
+        
+    
+    # Expected processed DataFrame
+        # Expected processed DataFrame
+    expected_result = pd.DataFrame({
+        "sugar": [4.5, 3.0, 5.0, 6.0],
+        "protein": [8.5, 9.0, 10.0, 12.0],
+        "carbs": [35.0, 30.0, 40.0, 50.0],
+        "totalFat": [18.0, 15.0, 20.0, 25.0],
+        "satFat": [6.0, 4.0, 8.0, 10.0],
+        "sodium": [450.0, 400.0, 500.0, 600.0],
+        "cal": [280.0, 250.0, 300.0, 350.0],
+        "minutes": [25.0, 20.0, 30.0, 40.0],
+    }, index=["American", "Greek", "Italian", "Mexican"])
+
+    expected_result.index.name = "cuisine"
+
+    # Validate the result structure and content
+    pd.testing.assert_frame_equal(
+        result.sort_index(),
+        expected_result.sort_index()
+    )
+
+    # Ensure the result is saved to the database
+    mock_to_sql.assert_called_once_with(
+        name="cuisines_nutritions",
+        con=engine,
+        if_exists="replace"
+    )
+    
+
+
+
 
 
 @patch("projet_kbd.data_analyzer.pd.read_sql_table")
