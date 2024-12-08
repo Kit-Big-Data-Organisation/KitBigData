@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
-from projet_kbd import comment_analyzer
+from projet_kbd.comment_analyzer import CommentAnalyzer
 
 
 @pytest.fixture
@@ -35,7 +35,7 @@ def test_clean_comments(sample_comments):
     Test the `clean_comments` function to ensure proper cleaning of comments.
     """
     # Create an instance of CommentAnalyzer
-    analyzer = comment_analyzer.CommentAnalyzer(sample_comments)
+    analyzer = CommentAnalyzer(sample_comments)
 
     # Call the function
     analyzer.clean_comments()
@@ -60,7 +60,7 @@ def test_sentiment_analysis(sample_comments):
     calculated correctly.
     """
     # Create an instance of CommentAnalyzer
-    analyzer = comment_analyzer.CommentAnalyzer(sample_comments)
+    analyzer = CommentAnalyzer(sample_comments)
 
     # Add a cleaned column for analysis
     analyzer.clean_comments()

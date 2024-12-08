@@ -24,54 +24,40 @@ import os
 import gdown
 from logger_config import logger
 
-DATA_FILES = {
-    "RAW_recipes.csv": "https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w",
-    "RAW_interactions.csv": "https://drive.google.com/uc?id=1ikGYx3h741P2JIkFwIclhciiIGeBWpTL",
-}
-
-
-def download_data(data_dir):
+def download_data(file_name, url, data_dir):
     """
-    Downloads data files from Google Drive links if they are not already
+    Downloads a data file from a Google Drive link if it is not already
     present in the specified directory.
 
-    This function iterates over the `DATA_FILES` dictionary, checking if each
-    file exists in the specified `data_dir`. If a file does not exist, it
-    downloads the file from the corresponding Google Drive link using the
-    `gdown` library and logs the process using the configured logger.
-
     Args:
-        data_dir (str): The directory where the data files should be saved.
+        file_name (str): The name of the file to download.
+        url (str): The Google Drive URL from which to download the file.
+        data_dir (str): The directory where the data file should be saved.
 
     Logs:
-        - Logs a message when a file already exists.
-        - Logs a message when a file is being downloaded.
+        - Logs a message when the file already exists.
+        - Logs a message when the file is being downloaded.
         - Logs any errors encountered during the download process.
 
     Raises:
         Exception: If the file cannot be downloaded for any reason.
 
     Example:
-        >>> download_data("/path/to/data")
+        >>> download_data("RAW_recipes.csv", "https://drive.google.com/uc?id=example", "/path/to/data")
         RAW_recipes.csv already exists. Skipping download.
-        Downloading RAW_interactions.csv...
+        Downloading RAW_recipes.csv...
     """
     # Ensure the data directory exists
     os.makedirs(data_dir, exist_ok=True)
 
-    for file_name, url in DATA_FILES.items():
-        file_path = os.path.join(data_dir, file_name)
-        if not os.path.exists(file_path):
-            logger.info(f"Downloading {file_name} to {file_path}...")
-            try:
-                gdown.download(url, file_path, quiet=False)
-                logger.info(
-                    f"{file_name} downloaded successfully to {file_path}."
-                )
-            except Exception as e:
-                logger.error(f"Failed to download {file_name}: {e}")
-                raise
-        else:
-            logger.info(
-                f"{file_name} already exists in {file_path}.Skipping download."
-            )
+    file_path = os.path.join(data_dir, file_name)
+    if not os.path.exists(file_path):
+        logger.info(f"Downloading {file_name} to {file_path}...")
+        try:
+            gdown.download(url, file_path, quiet=False)
+            logger.info(f"{file_name} downloaded successfully to {file_path}.")
+        except Exception as e:
+            logger.error(f"Failed to download {file_name}: {e}")
+            raise
+    else:
+        logger.info(f"{file_name} already exists in {file_path}. Skipping download.")

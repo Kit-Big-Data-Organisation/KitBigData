@@ -55,3 +55,5 @@ pip-wheel-metadata/
 
 # Exclure les fichiers de base de données temporaires
 *.db
+.env
+.coverage

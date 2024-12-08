@@ -2,10 +2,12 @@ import pandas as pd
 import streamlit as st
 import utils
 import analysis_text
+import plotly.express as px
 from comment_analyzer import CommentAnalyzer
 from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
 from data_plotter import DataPlotter
+from logger_config import logger
 from streamlit_option_menu import option_menu
 from main import DB_PATH
 
@@ -41,7 +43,7 @@ def create_plots(analyzer):
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def create_charts(analyzer, set_number , _engine,_DB_PATH):
+def create_charts(analyzer, set_number, _engine, _DB_PATH):
     plotter = DataPlotter(analyzer)
     return plotter.plot_pie_chart_tags(set_number, _engine, _DB_PATH)
 
@@ -113,9 +115,21 @@ def create_wordcloud_plot(_analyzer, _Comment_analyzer, _engine):
 
 
 @st.cache_data
-def create_time_wordcloud_plot(_analyzer, _Comment_analyzer ,_engine):
+def create_time_wordcloud_plot(_analyzer, _Comment_analyzer, _engine):
     plotter = DataPlotter(_analyzer , _Comment_analyzer)
     return plotter.plot_time_wordcloud(_engine)
+
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_plot_rating_evolution(_analyzer, _engine):
+    plotter = DataPlotter(_analyzer)
+    return plotter.plot_rating_evolution(_engine)
+
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_plot_sentiment_evolution(_analyzer, _engine):
+    plotter = DataPlotter(_analyzer)
+    return plotter.plot_sentiment_over_time(_engine)
 
 
 def run(path_file, recipe_file, interaction_file, engine):
@@ -127,7 +141,6 @@ def run(path_file, recipe_file, interaction_file, engine):
     )
     comment_analyzer = CommentAnalyzer(analyzer.data[["review"]].dropna())
 
-
     with st.sidebar:
         selected = option_menu(
             "Dashboard",
@@ -136,11 +149,11 @@ def run(path_file, recipe_file, interaction_file, engine):
                 "Eating habits",
                 "Cuisine Analysis",
                 "Sociological Insight",
-                "Free Visualisation",
+                "Interaction with the reviews",
+                "Free Visualisation"
             ],
             menu_icon="cast",
         )
-
 
     st.markdown("""
             <style>
@@ -150,16 +163,13 @@ def run(path_file, recipe_file, interaction_file, engine):
                 }
             </style>
             """, unsafe_allow_html=True)
-    
     if selected == "Presentation":
 
-            
         st.write("## Presentation")
 
         # Texte indiquant la période d'analyse
 
         utils.render_justified_text(analysis_text.presentation)
-
 
         # Création des colonnes et affichage des graphiques
         col = st.columns([0.5, 0.5])
@@ -187,16 +197,15 @@ def run(path_file, recipe_file, interaction_file, engine):
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
         utils.render_justified_text(analysis_text.cuisine_presentation)
-   
+
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
         st.markdown("#### Distribution of Cuisine Types")
         cuisine_analysis = create_cuisine_charts(analyzer, engine)
         st.plotly_chart(cuisine_analysis, use_container_width=True)
-        
+
         utils.render_justified_text(analysis_text.cuisine_distribtuion)
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
-
 
         st.markdown("#### Cuisine Evolution over the years")
         cuisine_evolution = create_cuisine_evolution_charts(
@@ -214,13 +223,11 @@ def run(path_file, recipe_file, interaction_file, engine):
         utils.render_justified_text(analysis_text.cuisine_calories)
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
-
         st.markdown("#### Cuisine time analysis")
         cuisine_time = analyze_cuisine_time(analyzer, engine)
         st.plotly_chart(cuisine_time, use_container_width=False)
         utils.render_justified_text(analysis_text.cuisine_time_analysis)
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
-
 
         st.markdown("#### Nutritional content by Cuisine in PDV")
         utils.render_justified_text(analysis_text.cuisine_nutritions)
@@ -229,7 +236,6 @@ def run(path_file, recipe_file, interaction_file, engine):
         utils.render_justified_text(analysis_text.cuisine_nutritions)
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
-        
         st.markdown("#### Top ingredients")
         top_ingredients_cuisine = create_top_ingredients_table(
             analyzer, engine
@@ -239,8 +245,6 @@ def run(path_file, recipe_file, interaction_file, engine):
         )
         st.dataframe(styled_df, hide_index=True, use_container_width=True)
         utils.render_justified_text(analysis_text.cuisine_top_ingredients)
-        
-
 
     elif selected == "Sociological Insight":
 
@@ -274,27 +278,7 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         # Ajout de l'analyse sociologique
 
-        st.write(
-            """
-            The graphs illustrate a steady rise in both the **proportion
-            of quick recipes** 🍳 and the **engagement with these recipes**
-            💬 between 2002 and 2010.
-
-            This reflects a societal shift toward **convenience** and
-            **time efficiency** 🕒 in cooking, driven by:
-            - **Busier schedules**: As lifestyles became more fast-paced, less
-              time was available for traditional cooking.
-            - **Dual-income households**: With more families having both
-            partners working, the demand for quick meal solutions increased.
-            - **Work-life balance**: The emphasis on balancing professional and
-              personal lives encouraged time-saving habits in the kitchen.
-
-            As a result, cooking evolved from being a **traditional,
-            time-intensive activity** to a **functional necessity** ⚡,
-            catering to individuals seeking fast and practical meal
-            preparation.
-            """
-        )
+        utils.render_justified_text(analysis_text.quick_recipes_analysis)
 
         # Analuse Quick recipe categories
         categories_quick_recipe_fig = create_categories_quick_recipe_chart(
@@ -305,52 +289,88 @@ def run(path_file, recipe_file, interaction_file, engine):
             use_container_width=True,
             caption="Distribution of Quick Recipe Categories (2002-2010)",
         )
-        st.write(
-            """
-            Building on our previous analysis, this graph further supports the
-            observation that the rise in quick recipes primarily targets **main
-            dishes**, which are traditionally more time-intensive to prepare
-            compared to categories like snacks or soups.
-
-            The dominance of main dishes among quick recipes highlights how
-            this shift toward **convenience and time efficiency** 🕒 is not
-            limited to inherently fast-to-make foods, but extends to the
-            cornerstone of a meal: the **main course**.
-
-            This reinforces the idea that individuals are seeking practical
-            solutions to maintain **structured and complete meals**, even with
-            busier schedules and dual-income households. By focusing on
-            simplifying main dish preparation, this trend reflects a societal
-            adaptation to modern lifestyles, validating our analysis of cooking
-            evolving into a **functional yet fulfilling necessity** ⚡.
-            """
-        )
+        utils.render_justified_text(analysis_text.main_dishes_analysis)
 
         # Analyse des commentaires (Word Cloud général)
         st.write("### Word Cloud: Frequent Terms in Comments 📝")
-        wordcloud_fig = create_wordcloud_plot(analyzer, comment_analyzer , engine)
-        st.pyplot(wordcloud_fig)
-        st.write(
-            """
-            Frequent terms like **"easy"** and **"quick"** highlight a focus on
-            **efficiency** in cooking, reinforcing the trend toward simpler
-            meals.
-            """
+        wordcloud_fig = create_wordcloud_plot(
+            analyzer,
+            comment_analyzer,
+            engine
         )
+        st.pyplot(wordcloud_fig)
+        utils.render_justified_text(analysis_text.efficiency_focus_analysis)
 
         # Analyse des termes associés à "time"
         st.write("### Word Cloud: Context Around 'Time' ⏱️")
-        time_wordcloud_fig = create_time_wordcloud_plot(analyzer,comment_analyzer, engine)
-        st.pyplot(time_wordcloud_fig)
-        st.write(
-            """
-            This word cloud emphasizes how "time" in user comments often refers
-            to cooking efficiency. Phrases like **"cut cooking time"** show a
-            desire for quicker meals, while **"long time ago"** reflects
-            frustrations with time-consuming recipes.
-            """
+        time_wordcloud_fig = create_time_wordcloud_plot(
+            analyzer,
+            comment_analyzer,
+            engine
         )
+        st.pyplot(time_wordcloud_fig)
+        utils.render_justified_text(analysis_text.time_efficiency_analysis)
 
+    elif selected == "Interaction with the reviews":
+        st.title('📈 Rate Evolution and Sentiment Analysis Over Time')
+
+        logger.info("Rate evolution...")
+        rate_evolution = create_plot_rating_evolution(analyzer, engine)
+        st.plotly_chart(rate_evolution, use_container_width=True)
+        utils.render_justified_text(analysis_text.comment_ratings_analysis)
+
+        logger.info("Sentiment analysis...")
+        sentiment_evolution = create_plot_sentiment_evolution(analyzer, engine)
+        st.plotly_chart(sentiment_evolution, use_container_width=True)
+        utils.render_justified_text(analysis_text.sentiment_trend_analysis)
+
+        utils.render_justified_text(analysis_text.word_frequency_analysis)
+
+        words_input = st.text_input(
+            'Enter words to search for co-occurrence, separated by commas:',
+            ''
+        )
+        words = [
+            word.strip() for word in words_input.split(',')
+        ] if words_input else []
+
+        if words:
+            word_counts = (
+                DataAnalyzer
+                .word_co_occurrence_over_time(analyzer, words)
+            )
+
+            if not word_counts.empty:
+                fig = px.line(
+                    word_counts,
+                    x='year',
+                    y='Co-occurrence Percentage',
+                    title=(
+                        'Proportion of Comments Containing the '
+                        'Specified Words Over Time'
+                    ),
+                    labels={
+                        'year': 'Year',
+                        'Co-occurrence Percentage': (
+                            'Percentage of Comments (%)'
+                        )
+                    }
+                )
+                fig.update_layout(
+                    xaxis=dict(
+                        tickmode='linear',
+                        tickformat='d'  # Afficher les années sans virgules
+                    ),
+                    yaxis=dict(range=[0, 100]),
+                    yaxis_title='Percentage of Comments (%)',
+                    xaxis_title='Year',
+                    legend_title='Words'
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.write(
+                    "No co-occurrence data found for the specified words."
+                )
     elif selected == "Free Visualisation":
         st.write("## Tags Analysis")
         col = st.columns([0.8, 0.2])
@@ -362,7 +382,7 @@ def run(path_file, recipe_file, interaction_file, engine):
                 9,
                 0,
             )
-            tags_chart = create_charts(analyzer, set_number ,engine,  DB_PATH)
+            tags_chart = create_charts(analyzer, set_number, engine, DB_PATH)
             with st.container():
                 for i in range(0, 8, 2):
                     cols = st.columns(2)

@@ -23,6 +23,7 @@ from plotly.subplots import make_subplots
 from wordcloud import WordCloud
 import sqlite3
 
+
 class DataPlotter:
     """
     A class for creating visualizations based on recipe data analysis.
@@ -32,15 +33,16 @@ class DataPlotter:
     data_analyzer : object
         An instance of the DataAnalyzer class for accessing analyzed data.
     """
-    def __init__(self, data_analyzer , comment_analyzer = None):
+    def __init__(self, data_analyzer , comment_analyzer=None):
         """
-        Initialize the DataPlotter with a DataAnalyzer instance.
+        Initialize the DataPlotter object.
 
         Parameters
         ----------
         data_analyzer : object
-            An instance of the DataAnalyzer class.
+            An instance of the DataAnalyzer class for accessing analyzed data.
         """
+
         self.data_analyzer = data_analyzer
         self.comment_analyzer = comment_analyzer
 
@@ -85,7 +87,7 @@ class DataPlotter:
         logger.info("Plot for recipes per year generated successfully.")
         return fig
 
-    def plot_pie_chart_tags(self, set_number ,engine ,db_path):
+    def plot_pie_chart_tags(self, set_number, engine, db_path):
         """
         Generate pie charts for the top tags per year from the database.
 
@@ -110,13 +112,14 @@ class DataPlotter:
 
         # Check if the table exists
         cursor.execute(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='top_tags';"
+            "SELECT name FROM sqlite_master WHERE type='table' "
+            "AND name='top_tags';"
         )
         table_exists = cursor.fetchone() is not None
         if not table_exists:
             logger.info("Creating 'top_tags' table...")
             self.data_analyzer.get_top_tag_per_year(engine, db_path)
-      
+
         # Query data for the specified set_number
         query = """
         SELECT year, label, size
@@ -265,7 +268,6 @@ class DataPlotter:
 
         fig.update_layout(
             height=800,
-            #width=2000,
             showlegend=False,
         )
         fig.update_xaxes(title_text="Year")
@@ -276,12 +278,12 @@ class DataPlotter:
     def plot_top_ingredients(self, engine):
         """
         Generate a bar chart for the top ingredients used in recipes.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
             SQLAlchemy engine for database interactions.
-            
+
         Returns
         -------
         plotly.graph_objects.Figure
@@ -290,14 +292,14 @@ class DataPlotter:
         """
         logger.info("Generating bar chart for top ingredients.")
         df_top_ingredients = self.data_analyzer.top_commun_ingredients(engine)
-        df_top_ingredients.drop(columns = {'index'} , inplace = True)
+        df_top_ingredients.drop(columns={'index'}, inplace=True)
         logger.info("Top ingredients generated.")
         return df_top_ingredients[1:]
 
     def plot_calories_analysis(self, engine):
         """
         Generate a bar chart for the analysis of calories by cuisine.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
@@ -353,7 +355,7 @@ class DataPlotter:
     def plot_cuisine_nutritions(self, engine):
         """
         Generate a bar chart for the nutritional content by cuisine.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
@@ -393,7 +395,7 @@ class DataPlotter:
     def plot_quick_recipes_evolution(self, engine):
         """
         Plot the evolution of the proportion of quick recipes over the years.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
@@ -442,7 +444,7 @@ class DataPlotter:
         ----------
         engine : sqlalchemy.engine.Engine
             SQLAlchemy engine for database interactions.
-            
+
         Returns
         -------
         plotly.graph_objects.Figure
@@ -488,7 +490,7 @@ class DataPlotter:
     def plot_categories_quick_recipe(self, engine):
         """
         Plot the distribution of categories for quick recipes.
-        
+
         Parameters
         ----------
         engine : sqlalchemy.engine.Engine
@@ -547,7 +549,6 @@ class DataPlotter:
 
     # Analyse des commentaires
 
-
     def plot_wordcloud(self , engine):
         """
         Plot a Word Cloud based on word frequencies.
@@ -595,7 +596,8 @@ class DataPlotter:
         comment_analyzer = self.comment_analyzer
         comment_analyzer.clean_comments()
         word_frequencies_time = (
-            comment_analyzer.generate_word_frequencies_associated_to_time(engine)
+            comment_analyzer
+            .generate_word_frequencies_associated_to_time(engine)
         )
         logger.info("Generating Word Cloud plot for time.")
         wordcloud = WordCloud(
@@ -608,3 +610,139 @@ class DataPlotter:
         plt.tight_layout()
         logger.info("Word Cloud plot for time generated successfully.")
         return fig
+
+    def plot_rating_evolution(self, engine):
+        """
+        Plot the evolution of comment ratings over the years using a Plotly
+        line graph.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            SQLAlchemy engine for database interactions.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            A Plotly line chart figure.
+        """
+        # Calculate the rating evolution if not already done
+        rating_evolution_df = self.data_analyzer.calculate_rating_evolution(
+            engine
+        )
+
+        # Check if the DataFrame is not empty and proceed with plotting
+        if not rating_evolution_df.empty:
+            logger.info("Data retrieved successfully, plotting.")
+            fig = px.line(
+                rating_evolution_df,
+                x="year",
+                y="average_rating",
+                title='Evolution of Comment Ratings Over the Years',
+                labels={"average_rating": "Average Rating", "year": "Year"},
+                markers=True,
+            )
+            fig.update_layout(
+                xaxis_title="Year",
+                yaxis_title="Average Rating",
+                yaxis=dict(range=[4, 5]),
+                showlegend=False
+            )
+            fig.update_traces(line=dict(color="blue"))
+            return fig
+        else:
+            logger.warning("No data available to plot.")
+            return None
+
+    def plot_sentiment_over_time(self, engine):
+        """
+        Visualize the average sentiment polarity of comments over the years.
+
+        Parameters
+        ----------
+        engine : sqlalchemy.engine.Engine
+            Database engine used for the connection.
+
+        Returns
+        -------
+        plotly.graph_objects.Figure
+            A Plotly figure object displaying the sentiment over time.
+        """
+        logger.info("Attempting to plot sentiment analysis over time.")
+
+        try:
+            # Retrieve sentiment data
+            sentiment_over_time_df = (
+                self
+                .data_analyzer
+                .sentiment_analysis_over_time(engine)
+            )
+            # Check if the DataFrame is not empty
+            if sentiment_over_time_df is not None and \
+               not sentiment_over_time_df.empty:
+                # Ensure the column names are correct
+                if 'Year' not in sentiment_over_time_df.columns or \
+                   'Average Sentiment' not in sentiment_over_time_df.columns:
+                    logger.error(
+                        "Required columns are missing in the DataFrame."
+                    )
+                    return None
+
+                # Plotting the sentiment analysis over time
+                fig = px.line(
+                    sentiment_over_time_df,
+                    x='Year',
+                    y='Average Sentiment',
+                    title='Evolution of Average Sentiment Over Time',
+                    labels={
+                        "Year": "Year",
+                        "Average Sentiment": "Average Sentiment Polarity"
+                    },
+                    markers=True
+                )
+                fig.update_layout(
+                    xaxis_title="Year",
+                    yaxis_title="Average Sentiment Polarity",
+                    yaxis=dict(range=[-1, 1]),
+                    xaxis=dict(tickmode='linear'),
+                    showlegend=False
+                )
+
+                # Add a horizontal line at y=0 to indicate neutral sentiment
+                fig.add_shape(
+                    type="line",
+                    x0=sentiment_over_time_df['Year'].min(),
+                    x1=sentiment_over_time_df['Year'].max(),
+                    y0=0,
+                    y1=0,
+                    line=dict(color="red", dash="dash"),
+                )
+
+                # Add annotations to indicate positive and negative sentiment
+                fig.add_annotation(
+                    x=sentiment_over_time_df['Year'].mean(),
+                    y=0.5,
+                    text="Positive Sentiment",
+                    showarrow=False,
+                    font=dict(size=12, color="green"),
+                )
+                fig.add_annotation(
+                    x=sentiment_over_time_df['Year'].mean(),
+                    y=-0.5,
+                    text="Negative Sentiment",
+                    showarrow=False,
+                    font=dict(size=12, color="red"),
+                )
+
+                logger.info(
+                    "Sentiment analysis over time plot generated successfully."
+                )
+                return fig
+            else:
+                logger.warning("No data available to plot.")
+                return None
+        except Exception as e:
+            logger.error(
+                f"An error occurred while plotting sentiment analysis: {e}"
+            )
+            return None
