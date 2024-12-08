@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import utils
+import plotly.express as px
 from comment_analyzer import CommentAnalyzer
 from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
@@ -372,12 +373,14 @@ def run(path_file, recipe_file, interaction_file, engine):
         )
 
         st.write(
-            "**🔍 You can search here words in comments, and see their"
-            "evolution over time. For example, search for 'good, bad,"
-            "delicious' to see  how often they are mentioned.**"
+            "**🔍 Explore the frequency of words in comments and observe their "
+            "evolution over time.** Enter words like *'good,'* *'bad,'* "
+            "*'delicious,'* or *'tasty'* to discover how often these terms are"
+            " mentioned and compare their usage trends over the years."
+            "This analysis can help identify patterns of positivity and"
+            " negativity in user comments, complementing insights from "
+            "sentiment analysis."
         )
-        nb = analyzer.data.shape[0]
-        st.write(f"Number of comments: {nb}")
 
         words_input = st.text_input(
             'Enter words to search for co-occurrence, separated by commas:',
@@ -390,16 +393,33 @@ def run(path_file, recipe_file, interaction_file, engine):
         if words:
             word_counts = (
                 DataAnalyzer
-                .ingredient_co_occurrence_over_time(analyzer, words)
+                .word_co_occurrence_over_time(analyzer, words)
             )
 
             if not word_counts.empty:
-                st.line_chart(word_counts.set_index('year'))
-            else:
-                st.write(
-                    "No co-occurrence data found for the specified words."
+                fig = px.line(
+                    word_counts,
+                    x='year',
+                    y='Co-occurrence Percentage',
+                    title='Proportion of Comments Containing the Specified Words Over Time',
+                    labels={
+                        'year': 'Year',
+                        'Co-occurrence Percentage': 'Percentage of Comments (%)'
+                    }
                 )
-
+                fig.update_layout(
+                    xaxis=dict(
+                        tickmode='linear',
+                        tickformat='d'  # Afficher les années sans virgules
+                    ),
+                    yaxis=dict(range=[0, 100]),
+                    yaxis_title='Percentage of Comments (%)',
+                    xaxis_title='Year',
+                    legend_title='Words'
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.write("No co-occurrence data found for the specified words.")
     elif selected == "Free Visualisation":
         st.write("## Tags Analysis")
         col = st.columns([0.8, 0.2])
