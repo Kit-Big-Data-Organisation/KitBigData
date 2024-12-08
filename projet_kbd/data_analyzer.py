@@ -779,10 +779,10 @@ class DataAnalyzer:
         return category_df
 
     def analyse_interactions_ratings(self, engine):
-       """
-        Loads and analyzes recipe interaction data from a database or files if 
+        """
+        Loads and analyzes recipe interaction data from a database or files if
         not available in the database.
-        
+
         This function first tries to load the recipe interaction data from a 
         database using a provided SQL engine. If data exists, it returns a 
         DataAnalyzer object initialized with this data. If no data is found, it 
@@ -806,7 +806,7 @@ class DataAnalyzer:
         DataAnalyzer
             An instance of the DataAnalyzer class initialized with the loaded 
             and processed data.
-        
+
         Raises
         ------
         Exception
