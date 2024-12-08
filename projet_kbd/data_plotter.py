@@ -21,7 +21,7 @@ import utils
 from logger_config import logger
 from plotly.subplots import make_subplots
 from wordcloud import WordCloud
-
+import sqlite3
 
 class DataPlotter:
     """
@@ -32,7 +32,7 @@ class DataPlotter:
     data_analyzer : object
         An instance of the DataAnalyzer class for accessing analyzed data.
     """
-    def __init__(self, data_analyzer):
+    def __init__(self, data_analyzer , comment_analyzer = None):
         """
         Initialize the DataPlotter with a DataAnalyzer instance.
 
@@ -42,6 +42,7 @@ class DataPlotter:
             An instance of the DataAnalyzer class.
         """
         self.data_analyzer = data_analyzer
+        self.comment_analyzer = comment_analyzer
 
     def plot_nb_interactions_per_year(self):
         """
@@ -84,12 +85,14 @@ class DataPlotter:
         logger.info("Plot for recipes per year generated successfully.")
         return fig
 
-    def plot_pie_chart_tags(self, set_number):
+    def plot_pie_chart_tags(self, set_number ,db_path):
         """
-        Generate pie charts for the top tags per year.
+        Generate pie charts for the top tags per year from the database.
 
         Parameters
         ----------
+        db_path : str
+            Path to the SQLite database.
         set_number : int
             The tag set number to plot.
 
@@ -100,17 +103,52 @@ class DataPlotter:
         """
         logger.info(f"Generating pie charts for tag set {set_number}.")
         figs = []
-        top_tags_years = self.data_analyzer.get_top_tag_per_year()
-        for year in range(2001, 2023):
-            if str(year) in top_tags_years[str(set_number)]:
-                labels, values = top_tags_years[str(set_number)][str(year)]
-                fig = px.pie(
-                    values=values,
-                    names=labels,
-                    title=f"Top 10 tags for Year {year}",
-                    labels={"names": "Tags", "values": "Count"},
-                )
-                figs.append(fig)
+
+        # Connect to the SQLite database
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        # Check if the table exists
+        cursor.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='top_tags';"
+        )
+        table_exists = cursor.fetchone() is not None
+        if not table_exists:
+            logger.info("Creating 'top_tags' table...")
+            self.data_analyzer.get_top_tag_per_year(db_path)
+      
+        # Query data for the specified set_number
+        query = """
+        SELECT year, label, size
+        FROM top_tags
+        WHERE set_number = ?
+        """
+        cursor.execute(query, (set_number,))
+        rows = cursor.fetchall()
+
+        # Close the connection
+        conn.close()
+
+        # Organize data by year
+        data_by_year = {}
+        for year, label, size in rows:
+            if year not in data_by_year:
+                data_by_year[year] = {"labels": [], "sizes": []}
+            data_by_year[year]["labels"].append(label)
+            data_by_year[year]["sizes"].append(size)
+
+        # Generate pie charts for each year
+        for year, data in data_by_year.items():
+            labels = data["labels"]
+            sizes = data["sizes"]
+            fig = px.pie(
+                values=sizes,
+                names=labels,
+                title=f"Top tags for Year {year}",
+                labels={"names": "Tags", "values": "Count"},
+            )
+            figs.append(fig)
+
         logger.info(f"Pie charts for tag set {set_number} generated.")
         return figs
 
@@ -139,10 +177,7 @@ class DataPlotter:
             x="Year",
             y="Proportion",
             color="Oil Type",
-            color_discrete_map=custom_palette,
-            title="""
-            Proportion of Different Oils by Year, Ordered by Total Proportion
-            """
+            color_discrete_map=custom_palette
         )
 
         fig.update_layout(
@@ -205,12 +240,12 @@ class DataPlotter:
                 for cuisine in df_cuisine_evolution.columns
                 if cuisine != "Year"
             ],
-            vertical_spacing=0.12,
-            horizontal_spacing=0.1,
+            vertical_spacing=0.18,
+            horizontal_spacing=0.08,
         )
 
         idx = 1
-
+        
         for cuisine in df_cuisine_evolution.columns:
 
             if cuisine != "Year":
@@ -219,7 +254,7 @@ class DataPlotter:
                 col = (idx - 1) % num_cols + 1
 
                 trace = go.Scatter(
-                    x=df_cuisine_evolution["Year"],
+                    x=df_cuisine_evolution['Year'],
                     y=df_cuisine_evolution[cuisine],
                     mode="lines",
                     name=cuisine,
@@ -230,12 +265,11 @@ class DataPlotter:
 
         fig.update_layout(
             height=800,
-            width=800,
+            #width=2000,
             showlegend=False,
-            title_text="Cuisine Proportions Over Time",
         )
         fig.update_xaxes(title_text="Year")
-        fig.update_yaxes(title_text="Proportion")
+        fig.update_yaxes(title_text="Proportion (%)")
         logger.info("Line chart for cuisine evolution generated.")
         return fig
 
@@ -256,10 +290,9 @@ class DataPlotter:
         """
         logger.info("Generating bar chart for top ingredients.")
         df_top_ingredients = self.data_analyzer.top_commun_ingredients(engine)
-        print("top ingredients")
-        print(df_top_ingredients)
+        df_top_ingredients.drop(columns = {'index'} , inplace = True)
         logger.info("Top ingredients generated.")
-        return df_top_ingredients
+        return df_top_ingredients[1:]
 
     def plot_calories_analysis(self, engine):
         """
@@ -284,7 +317,6 @@ class DataPlotter:
             y=df_calories["cuisine"],
             orientation="h",
             color=df_calories["cuisine"],
-            title="Calories Mean by Cuisine",
             labels={"cal": "Calories Mean", "cuisine": "Cuisine"},
         )
         logger.info("Bar chart for calories analysis generated.")
@@ -313,7 +345,6 @@ class DataPlotter:
             x=df_times["cuisine"],
             y="minutes",
             color=df_times["cuisine"],
-            title="Mean time of recipes by Cuisine in minutes",
             labels={"minutes": "Mean minutes", "cuisine": "Cuisine"},
         )
         logger.info("Bar chart for cuisine time analysis generated.")
@@ -341,15 +372,18 @@ class DataPlotter:
             if column not in ["minutes", "cal"]
         ]
         df_nutritions = df_nutritions[nutritions]
-        final_long = df_nutritions.reset_index().melt(
+        final_long = df_nutritions.reset_index(drop=True).melt(
             id_vars="cuisine", var_name="nutrient", value_name="value"
         )
+        print('final long')
+        print(final_long)
+        print(final_long.columns)
+
         fig = px.bar(
             final_long,
             x="cuisine",
             y="value",
             color="nutrient",
-            title="Nutritional content by Cuisine in PDV",
             labels={"value": "PDV(%)", "nutrient": "Nutrient Type"},
             barmode="group",
         )
@@ -513,8 +547,8 @@ class DataPlotter:
 
     # Analyse des commentaires
 
-    @staticmethod
-    def plot_wordcloud(word_frequencies, title="Word Cloud"):
+
+    def plot_wordcloud(self , engine):
         """
         Plot a Word Cloud based on word frequencies.
 
@@ -530,6 +564,9 @@ class DataPlotter:
         matplotlib.figure.Figure
             A Matplotlib figure object.
         """
+        comment_analyzer = self.comment_analyzer
+        comment_analyzer.clean_comments()
+        word_frequencies = comment_analyzer.generate_word_frequencies(engine)
         logger.info("Generating Word Cloud plot.")
         wordcloud = WordCloud(
             width=800, height=400, background_color="white"
@@ -541,8 +578,7 @@ class DataPlotter:
         logger.info("Word Cloud plot generated successfully.")
         return fig
 
-    @staticmethod
-    def plot_time_wordcloud(word_frequencies_time):
+    def plot_time_wordcloud(self , engine):
         """
         Plot a Word Cloud based on word frequencies.
 
@@ -556,6 +592,11 @@ class DataPlotter:
         matplotlib.figure.Figure
             A Matplotlib figure object.
         """
+        comment_analyzer = self.comment_analyzer
+        comment_analyzer.clean_comments()
+        word_frequencies_time = (
+            comment_analyzer.generate_word_frequencies_associated_to_time(engine)
+        )
         logger.info("Generating Word Cloud plot for time.")
         wordcloud = WordCloud(
             width=800, height=400, background_color="white"
