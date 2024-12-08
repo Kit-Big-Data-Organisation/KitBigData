@@ -576,49 +576,27 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         st.plotly_chart(interaction_fig, use_container_width=True)
 
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        utils.render_justified_text(analysis_text.average_steps_rating)
+
         st.plotly_chart(average_steps_rating, use_container_width=True)
 
-        st.write(
-            """
-            This graph shows the evolution of the average number of steps
-            per year, with associated ratings of the recepies over the years.
-            \n - The complexity of the recepies is increasing over the years.
-            \n - The ratings given to the recepies are decreasing over the
-            years.
-            """
-        )
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        utils.render_justified_text(analysis_text.interaction_ratings)
 
         st.plotly_chart(interaction_ratings, use_container_width=True)
 
-        st.write(
-            """
-            This graph shows the relationship between the average rating
-            scores, the number of ratings and the cooking time :
-            \n - Recipes with high ratings (between 4 and 5) tend to have the
-            highest number of ratings. Recipes with low ratings (below 3)
-            generally have very few ratings.
-            \n - Longer cooking times are scattered across recipes with lower
-            popularity.
-            Recipes with shorter cooking times dominate the cluster of
-            highly rated and highly reviewed recipes, indicating that users
-            prefer quicker recipes.
-            """
-        )
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        utils.render_justified_text(analysis_text.user_interactions)
 
         st.plotly_chart(user_interactions, use_container_width=True)
 
-        st.write(
-            """
-            This graph explores the relationship between time since
-            submission, average rating, and number of interactions with
-            recipes.
-            \n - Average ratings tend to decline slightly as time progresses,
-            indicating that recipes are generally rated lower as they age.
-            \n - A pattern is visible, with periodic peaks in the number of
-            interactions, some recipes become relevant again during specific
-            times of the year, such as holidays or seasonal celebrations.
-            """
-        )
 
     elif selected == "Eating habits":
 
@@ -809,6 +787,13 @@ def run(path_file, recipe_file, interaction_file, engine):
                 )
     elif selected == "Free Visualisation":
         st.write("## Tags Analysis")
+
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        utils.render_justified_text(analysis_text.free_visualisation_text)
+
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
         col = st.columns([0.8, 0.2])
 
         with col[0]:

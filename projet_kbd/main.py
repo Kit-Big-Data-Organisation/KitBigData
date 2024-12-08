@@ -11,7 +11,7 @@ import sqlalchemy
 from data_downloader import download_data
 from logger_config import logger
 import streamlit_app
-from config import DB_PATH , DATA_DIR , RECIPES_FILE , INTERACTIONS_FILE
+from config import DB_PATH , DATA_DIR , RECIPES_FILE , INTERACTIONS_FILE, BASE_DIR
 
 
 DATA_FILES = {
