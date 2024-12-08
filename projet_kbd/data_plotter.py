@@ -631,12 +631,20 @@ class DataPlotter:
 
         try:
             # Retrieve sentiment data
-            sentiment_over_time_df = self.data_analyzer.sentiment_analysis_over_time(engine)
+            sentiment_over_time_df = (
+                self
+                .data_analyzer
+                .sentiment_analysis_over_time(engine)
+            )
             # Check if the DataFrame is not empty
-            if sentiment_over_time_df is not None and not sentiment_over_time_df.empty:
+            if sentiment_over_time_df is not None and \
+               not sentiment_over_time_df.empty:
                 # Ensure the column names are correct
-                if 'Year' not in sentiment_over_time_df.columns or 'Average Sentiment' not in sentiment_over_time_df.columns:
-                    logger.error("Required columns are missing in the DataFrame.")
+                if 'Year' not in sentiment_over_time_df.columns or \
+                   'Average Sentiment' not in sentiment_over_time_df.columns:
+                    logger.error(
+                        "Required columns are missing in the DataFrame."
+                    )
                     return None
 
                 # Plotting the sentiment analysis over time
@@ -654,7 +662,7 @@ class DataPlotter:
                 fig.update_layout(
                     xaxis_title="Year",
                     yaxis_title="Average Sentiment Polarity",
-                    yaxis=dict(range=[-1, 1]),  # Adjusted range for better context
+                    yaxis=dict(range=[-1, 1]),
                     xaxis=dict(tickmode='linear'),
                     showlegend=False
                 )
@@ -685,11 +693,15 @@ class DataPlotter:
                     font=dict(size=12, color="red"),
                 )
 
-                logger.info("Sentiment analysis over time plot generated successfully.")
+                logger.info(
+                    "Sentiment analysis over time plot generated successfully."
+                )
                 return fig
             else:
                 logger.warning("No data available to plot.")
                 return None
         except Exception as e:
-            logger.error(f"An error occurred while plotting sentiment analysis: {e}")
+            logger.error(
+                f"An error occurred while plotting sentiment analysis: {e}"
+            )
             return None

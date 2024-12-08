@@ -1019,7 +1019,8 @@ class DataAnalyzer:
 
     def sentiment_analysis_over_time(self, engine):
         """
-        Calculate the average sentiment polarity of comments, grouped by year (2002-2010).
+        Calculate the average sentiment polarity of comments, grouped by year
+        (2002-2010).
 
         Parameters
         ----------
@@ -1037,7 +1038,8 @@ class DataAnalyzer:
                 logger.info("Sentiment analysis over time found in database.")
                 # Filter the data for the years 2002 to 2010
                 stored_data = stored_data[
-                    (stored_data['Year'] >= 2002) & (stored_data['Year'] <= 2010)
+                    (stored_data['Year'] >= 2002)
+                    & (stored_data['Year'] <= 2010)
                 ]
                 return stored_data
         except Exception as e:
@@ -1049,7 +1051,6 @@ class DataAnalyzer:
 
         # Ensure 'date' is in datetime format
         self.data['date'] = pd.to_datetime(self.data['date'])
-        # Extract the year from the 'date' column and store it in a new 'year' column
         self.data['year'] = self.data['date'].dt.year
 
         # Perform sentiment analysis if not already done
@@ -1068,7 +1069,8 @@ class DataAnalyzer:
 
         # Filter for the years 2002 to 2010
         sentiment_by_year = sentiment_by_year[
-            (sentiment_by_year['Year'] >= 2002) & (sentiment_by_year['Year'] <= 2010)
+            (sentiment_by_year['Year'] >= 2002)
+            & (sentiment_by_year['Year'] <= 2010)
         ]
 
         logger.info("Sentiment analysis over time (2002-2010) completed.")

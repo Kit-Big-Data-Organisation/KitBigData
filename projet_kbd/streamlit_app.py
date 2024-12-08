@@ -372,9 +372,9 @@ def run(path_file, recipe_file, interaction_file, engine):
         )
 
         st.write(
-            "**🔍 You can search here words in comments, and see their evolution "
-            "over time. For example, search for 'good, bad, delicious' to see "
-            "how often they are mentioned.**"
+            "**🔍 You can search here words in comments, and see their"
+            "evolution over time. For example, search for 'good, bad,"
+            "delicious' to see  how often they are mentioned.**"
         )
         nb = analyzer.data.shape[0]
         st.write(f"Number of comments: {nb}")
