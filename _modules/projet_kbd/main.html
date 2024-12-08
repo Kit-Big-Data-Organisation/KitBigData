@@ -104,6 +104,12 @@
 <span class="n">RECIPES_FILE</span> <span class="o">=</span> <span class="s2">&quot;RAW_recipes.csv&quot;</span>
 <span class="n">INTERACTIONS_FILE</span> <span class="o">=</span> <span class="s2">&quot;RAW_interactions.csv&quot;</span>
 
+<span class="n">DATA_FILES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;RAW_recipes.csv&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w&quot;</span><span class="p">,</span> <span class="n">DATA_DIR</span><span class="p">),</span>
+    <span class="s2">&quot;RAW_interactions.csv&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;https://drive.google.com/uc?id=1ikGYx3h741P2JIkFwIclhciiIGeBWpTL&quot;</span><span class="p">,</span> <span class="n">DATA_DIR</span><span class="p">),</span>
+    <span class="s2">&quot;streamlit.db&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;https://drive.google.com/uc?id=1LboRS888bE4EaKGRQosd_4LspGFOADs7&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;projet_kbd&quot;</span><span class="p">,</span> <span class="s2">&quot;database&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+
 <span class="c1"># Create SQLAlchemy engine dynamically</span>
 <span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;sqlite:///</span><span class="si">{</span><span class="n">DB_PATH</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
@@ -152,11 +158,10 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># Ensure the database exists</span>
-        <span class="n">create_database_if_not_exists</span><span class="p">(</span><span class="n">DB_PATH</span><span class="p">)</span>
-
-        <span class="c1"># Ensure data files are available and validated</span>
-        <span class="n">download_data</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">)</span>
+        <span class="c1"># Ensure the database and data files are downloaded and validated</span>
+        <span class="k">for</span> <span class="n">file_name</span><span class="p">,</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span> <span class="ow">in</span> <span class="n">DATA_FILES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">download_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
+        
         <span class="n">validate_data_files</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">)</span>
 
         <span class="c1"># Initialize and enable the profiler</span>

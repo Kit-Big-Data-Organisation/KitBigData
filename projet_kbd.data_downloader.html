@@ -150,22 +150,22 @@ directory.</p>
 </dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="projet_kbd.data_downloader.download_data">
-<span class="sig-prename descclassname"><span class="pre">projet_kbd.data_downloader.</span></span><span class="sig-name descname"><span class="pre">download_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_downloader.html#download_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_downloader.download_data" title="Link to this definition"></a></dt>
-<dd><p>Downloads data files from Google Drive links if they are not already
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.data_downloader.</span></span><span class="sig-name descname"><span class="pre">download_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_downloader.html#download_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_downloader.download_data" title="Link to this definition"></a></dt>
+<dd><p>Downloads a data file from a Google Drive link if it is not already
 present in the specified directory.</p>
-<p>This function iterates over the <cite>DATA_FILES</cite> dictionary, checking if each
-file exists in the specified <cite>data_dir</cite>. If a file does not exist, it
-downloads the file from the corresponding Google Drive link using the
-<cite>gdown</cite> library and logs the process using the configured logger.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data_dir</strong> (<em>str</em>) – The directory where the data files should be saved.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – The name of the file to download.</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – The Google Drive URL from which to download the file.</p></li>
+<li><p><strong>data_dir</strong> (<em>str</em>) – The directory where the data file should be saved.</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="simple">
 <dt>Logs:</dt><dd><ul class="simple">
-<li><p>Logs a message when a file already exists.</p></li>
-<li><p>Logs a message when a file is being downloaded.</p></li>
+<li><p>Logs a message when the file already exists.</p></li>
+<li><p>Logs a message when the file is being downloaded.</p></li>
 <li><p>Logs any errors encountered during the download process.</p></li>
 </ul>
 </dd>
@@ -176,9 +176,9 @@ downloads the file from the corresponding Google Drive link using the
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">download_data</span><span class="p">(</span><span class="s2">&quot;/path/to/data&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">download_data</span><span class="p">(</span><span class="s2">&quot;RAW_recipes.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;https://drive.google.com/uc?id=example&quot;</span><span class="p">,</span> <span class="s2">&quot;/path/to/data&quot;</span><span class="p">)</span>
 <span class="go">RAW_recipes.csv already exists. Skipping download.</span>
-<span class="go">Downloading RAW_interactions.csv...</span>
+<span class="go">Downloading RAW_recipes.csv...</span>
 </pre></div>
 </div>
 </dd></dl>

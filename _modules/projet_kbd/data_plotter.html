@@ -118,13 +118,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_analyzer</span> <span class="p">,</span> <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the DataPlotter with a DataAnalyzer instance.</span>
+<span class="sd">        Initialize the DataPlotter object.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        data_analyzer : object</span>
-<span class="sd">            An instance of the DataAnalyzer class.</span>
+<span class="sd">            An instance of the DataAnalyzer class for accessing analyzed data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">data_analyzer</span> <span class="o">=</span> <span class="n">data_analyzer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comment_analyzer</span> <span class="o">=</span> <span class="n">comment_analyzer</span>
 
@@ -380,12 +381,12 @@
     <span class="k">def</span> <span class="nf">plot_top_ingredients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a bar chart for the top ingredients used in recipes.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        engine : sqlalchemy.engine.Engine</span>
 <span class="sd">            SQLAlchemy engine for database interactions.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        plotly.graph_objects.Figure</span>
@@ -404,7 +405,7 @@
     <span class="k">def</span> <span class="nf">plot_calories_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a bar chart for the analysis of calories by cuisine.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        engine : sqlalchemy.engine.Engine</span>
@@ -466,7 +467,7 @@
     <span class="k">def</span> <span class="nf">plot_cuisine_nutritions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a bar chart for the nutritional content by cuisine.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        engine : sqlalchemy.engine.Engine</span>
@@ -509,7 +510,7 @@
     <span class="k">def</span> <span class="nf">plot_quick_recipes_evolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the evolution of the proportion of quick recipes over the years.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        engine : sqlalchemy.engine.Engine</span>
@@ -561,7 +562,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        engine : sqlalchemy.engine.Engine</span>
 <span class="sd">            SQLAlchemy engine for database interactions.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        plotly.graph_objects.Figure</span>
@@ -610,7 +611,7 @@
     <span class="k">def</span> <span class="nf">plot_categories_quick_recipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the distribution of categories for quick recipes.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        engine : sqlalchemy.engine.Engine</span>
@@ -736,6 +737,148 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Word Cloud plot for time generated successfully.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="DataPlotter.plot_rating_evolution">
+<a class="viewcode-back" href="../../projet_kbd.data_plotter.html#projet_kbd.data_plotter.DataPlotter.plot_rating_evolution">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_rating_evolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the evolution of comment ratings over the years using a Plotly</span>
+<span class="sd">        line graph.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        plotly.graph_objects.Figure</span>
+<span class="sd">            A Plotly line chart figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculate the rating evolution if not already done</span>
+        <span class="n">rating_evolution_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_analyzer</span><span class="o">.</span><span class="n">calculate_rating_evolution</span><span class="p">(</span>
+            <span class="n">engine</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Check if the DataFrame is not empty and proceed with plotting</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rating_evolution_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data retrieved successfully, plotting.&quot;</span><span class="p">)</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+                <span class="n">rating_evolution_df</span><span class="p">,</span>
+                <span class="n">x</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">,</span>
+                <span class="n">y</span><span class="o">=</span><span class="s2">&quot;average_rating&quot;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Evolution of Comment Ratings Over the Years&#39;</span><span class="p">,</span>
+                <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;average_rating&quot;</span><span class="p">:</span> <span class="s2">&quot;Average Rating&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="s2">&quot;Year&quot;</span><span class="p">},</span>
+                <span class="n">markers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+                <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span>
+                <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Average Rating&quot;</span><span class="p">,</span>
+                <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span>
+                <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">fig</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No data available to plot.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="DataPlotter.plot_sentiment_over_time">
+<a class="viewcode-back" href="../../projet_kbd.data_plotter.html#projet_kbd.data_plotter.DataPlotter.plot_sentiment_over_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_sentiment_over_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Visualize the average sentiment polarity of comments over the years.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            Database engine used for the connection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        plotly.graph_objects.Figure</span>
+<span class="sd">            A Plotly figure object displaying the sentiment over time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Attempting to plot sentiment analysis over time.&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Retrieve sentiment data</span>
+            <span class="n">sentiment_over_time_df</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span>
+                <span class="o">.</span><span class="n">data_analyzer</span>
+                <span class="o">.</span><span class="n">sentiment_analysis_over_time</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1"># Check if the DataFrame is not empty</span>
+            <span class="k">if</span> <span class="n">sentiment_over_time_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
+               <span class="ow">not</span> <span class="n">sentiment_over_time_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="c1"># Ensure the column names are correct</span>
+                <span class="k">if</span> <span class="s1">&#39;Year&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sentiment_over_time_df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> \
+                   <span class="s1">&#39;Average Sentiment&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sentiment_over_time_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                        <span class="s2">&quot;Required columns are missing in the DataFrame.&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">None</span>
+
+                <span class="c1"># Plotting the sentiment analysis over time</span>
+                <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+                    <span class="n">sentiment_over_time_df</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Year&#39;</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Average Sentiment&#39;</span><span class="p">,</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Evolution of Average Sentiment Over Time&#39;</span><span class="p">,</span>
+                    <span class="n">labels</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;Year&quot;</span><span class="p">:</span> <span class="s2">&quot;Year&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Average Sentiment&quot;</span><span class="p">:</span> <span class="s2">&quot;Average Sentiment Polarity&quot;</span>
+                    <span class="p">},</span>
+                    <span class="n">markers</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+                    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span>
+                    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Average Sentiment Polarity&quot;</span><span class="p">,</span>
+                    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">tickmode</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">),</span>
+                    <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Add a horizontal line at y=0 to indicate neutral sentiment</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">add_shape</span><span class="p">(</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;line&quot;</span><span class="p">,</span>
+                    <span class="n">x0</span><span class="o">=</span><span class="n">sentiment_over_time_df</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+                    <span class="n">x1</span><span class="o">=</span><span class="n">sentiment_over_time_df</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+                    <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">y1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s2">&quot;dash&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Add annotations to indicate positive and negative sentiment</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">sentiment_over_time_df</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                    <span class="n">y</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Positive Sentiment&quot;</span><span class="p">,</span>
+                    <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">sentiment_over_time_df</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                    <span class="n">y</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Negative Sentiment&quot;</span><span class="p">,</span>
+                    <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Sentiment analysis over time plot generated successfully.&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">fig</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No data available to plot.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;An error occurred while plotting sentiment analysis: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 </div>
 
 </pre></div>

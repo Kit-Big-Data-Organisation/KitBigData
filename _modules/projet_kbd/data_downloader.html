@@ -106,59 +106,45 @@
 <span class="kn">import</span> <span class="nn">gdown</span>
 <span class="kn">from</span> <span class="nn">logger_config</span> <span class="kn">import</span> <span class="n">logger</span>
 
-<span class="n">DATA_FILES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;RAW_recipes.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;RAW_interactions.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://drive.google.com/uc?id=1ikGYx3h741P2JIkFwIclhciiIGeBWpTL&quot;</span><span class="p">,</span>
-<span class="p">}</span>
-
-
 <div class="viewcode-block" id="download_data">
 <a class="viewcode-back" href="../../projet_kbd.data_downloader.html#projet_kbd.data_downloader.download_data">[docs]</a>
-<span class="k">def</span> <span class="nf">download_data</span><span class="p">(</span><span class="n">data_dir</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">download_data</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data_dir</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Downloads data files from Google Drive links if they are not already</span>
+<span class="sd">    Downloads a data file from a Google Drive link if it is not already</span>
 <span class="sd">    present in the specified directory.</span>
 
-<span class="sd">    This function iterates over the `DATA_FILES` dictionary, checking if each</span>
-<span class="sd">    file exists in the specified `data_dir`. If a file does not exist, it</span>
-<span class="sd">    downloads the file from the corresponding Google Drive link using the</span>
-<span class="sd">    `gdown` library and logs the process using the configured logger.</span>
-
 <span class="sd">    Args:</span>
-<span class="sd">        data_dir (str): The directory where the data files should be saved.</span>
+<span class="sd">        file_name (str): The name of the file to download.</span>
+<span class="sd">        url (str): The Google Drive URL from which to download the file.</span>
+<span class="sd">        data_dir (str): The directory where the data file should be saved.</span>
 
 <span class="sd">    Logs:</span>
-<span class="sd">        - Logs a message when a file already exists.</span>
-<span class="sd">        - Logs a message when a file is being downloaded.</span>
+<span class="sd">        - Logs a message when the file already exists.</span>
+<span class="sd">        - Logs a message when the file is being downloaded.</span>
 <span class="sd">        - Logs any errors encountered during the download process.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        Exception: If the file cannot be downloaded for any reason.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        &gt;&gt;&gt; download_data(&quot;/path/to/data&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; download_data(&quot;RAW_recipes.csv&quot;, &quot;https://drive.google.com/uc?id=example&quot;, &quot;/path/to/data&quot;)</span>
 <span class="sd">        RAW_recipes.csv already exists. Skipping download.</span>
-<span class="sd">        Downloading RAW_interactions.csv...</span>
+<span class="sd">        Downloading RAW_recipes.csv...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Ensure the data directory exists</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">DATA_FILES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloading </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">gdown</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> downloaded successfully to </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">.&quot;</span>
-                <span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to download </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">raise</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> already exists in </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">.Skipping download.&quot;</span>
-            <span class="p">)</span></div>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Downloading </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gdown</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> downloaded successfully to </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to download </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> already exists in </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">. Skipping download.&quot;</span><span class="p">)</span></div>
 
 </pre></div>
 
