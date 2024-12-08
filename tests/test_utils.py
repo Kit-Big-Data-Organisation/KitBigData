@@ -3,6 +3,7 @@ import sqlite3
 import pandas as pd
 import pytest
 
+
 def test_determine_cuisine():
     """
     Test the `determine_cuisine` function.
@@ -50,15 +51,9 @@ def test_highlight_cells():
     - The function returns an empty string for ingredients that should not be
       highlighted.
     """
-    assert (
-        utils.highlight_cells("parmesan cheese") == "background-color: red"
-    )
-    assert (
-        utils.highlight_cells("olive oil") == "background-color: lightgreen"
-    )
-    assert (
-        utils.highlight_cells("chili powder") == "background-color: orange"
-    )
+    assert utils.highlight_cells("parmesan cheese") == "background-color: red"
+    assert utils.highlight_cells("olive oil") == "background-color: lightgreen"
+    assert utils.highlight_cells("chili powder") == "background-color: orange"
     assert (
         utils.highlight_cells("flour tortillas") == "background-color: orange"
     )
@@ -68,9 +63,7 @@ def test_highlight_cells():
     assert (
         utils.highlight_cells("dried oregano") == "background-color: lightblue"
     )
-    assert (
-        utils.highlight_cells("soy sauce") == "background-color: lightpink"
-    )
+    assert utils.highlight_cells("soy sauce") == "background-color: lightpink"
     # Test a value that should not highlight
     assert utils.highlight_cells("water") == ""
 
@@ -88,13 +81,14 @@ def sample_top_tags():
     return {
         0: {
             2002: (["tag1", "tag2"], [10.0, 20.0]),
-            2003: (["tag3", "tag4"], [15.0, 25.0])
+            2003: (["tag3", "tag4"], [15.0, 25.0]),
         },
         1: {
             2002: (["tag5", "tag6"], [5.0, 30.0]),
-            2003: (["tag7", "tag8"], [8.0, 18.0])
-        }
+            2003: (["tag7", "tag8"], [8.0, 18.0]),
+        },
     }
+
 
 @pytest.fixture
 def mock_db_path(tmp_path):
@@ -113,6 +107,7 @@ def mock_db_path(tmp_path):
     """
     db_path = tmp_path / "test.db"
     return str(db_path)
+
 
 def test_create_top_tags_database(mock_db_path, sample_top_tags):
     """
