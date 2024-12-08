@@ -10,7 +10,7 @@ import os
 import cProfile
 import sqlalchemy
 from data_downloader import download_data
-from logger_config import logger
+from projet_kbd.logger_config import logger
 import streamlit_app
 
 # Define base directory (KitBigData)

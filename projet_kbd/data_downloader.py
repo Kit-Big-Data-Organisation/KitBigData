@@ -22,7 +22,7 @@ Functions:
 
 import os
 import gdown
-from logger_config import logger
+from projet_kbd.logger_config import logger
 
 DATA_FILES = {
     "RAW_recipes.csv": "https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w",

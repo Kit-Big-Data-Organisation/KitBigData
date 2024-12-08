@@ -16,7 +16,7 @@ CommentAnalyzer:
 import pandas as pd
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, CountVectorizer
 from textblob import TextBlob
-from logger_config import logger
+from projet_kbd.logger_config import logger
 
 
 class CommentAnalyzer:

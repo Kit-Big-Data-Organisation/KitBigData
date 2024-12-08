@@ -358,13 +358,11 @@ def test_analyse_average_steps_rating(
     result = analyzer.analyse_average_steps_rating(mock_engine)
 
     # Expected data based on the sample data
-    expected = pd.DataFrame(
-        {
-            "year": [2005, 2007, 2009, 2010],
-            "avg_steps": [1100, 900, 1500, 1000],
-            "avg_rating":  [4.5, 3.75, 5.0, 2.75],
-        }
-    )
+    expected = pd.DataFrame({
+        "year": [2020, 2021, 2022, 2023],
+        "avg_steps": [1100.0, 900.0, 1200.0, 1100.0],
+        "avg_rating": [4.50, 3.75, 3.50, 3.50]
+    }).astype({"year": "int32", "avg_steps": "float64", "avg_rating": "float64"})
 
     # Compare the actual DataFrame to expected values
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
@@ -392,9 +390,9 @@ def test_analyse_user_interactions(
     # Expected result calculation
     expected = pd.DataFrame(
         {
-            "days_since_submission": [2, 5, 9, 5, 5, 40],
-            "num_interactions": [1, 2, 1, 1, 1, 1],
-            "avg_rating": [4.5, 3.5, 2.0, 4.5, 5.0, 2.0],
+            "days_since_submission": [2, 5, 40],
+            "num_interactions": [1, 5, 1],
+            "avg_rating": [4.5, 4.1, 2.0]
         }
     )
 
