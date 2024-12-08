@@ -268,7 +268,6 @@ class DataPlotter:
 
         fig.update_layout(
             height=800,
-            #width=2000,
             showlegend=False,
         )
         fig.update_xaxes(title_text="Year")
