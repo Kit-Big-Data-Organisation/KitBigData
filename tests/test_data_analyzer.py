@@ -65,6 +65,27 @@ def sample_data_oils():
 
         })
 
+@pytest.fixture
+def sample_data_word_count_over_time():
+    """Provides sample data including necessary columns and mock comments."""
+    return pd.DataFrame({
+        "year": [2005, 2006, 2007, 2008],
+        "comments": [
+            "This is a test comment test",
+            "Another test comment",
+            "More comments here",
+            "Final comment test"
+        ]
+    })
+
+@pytest.fixture
+def sample_data_rating_evolution():
+    """Generate sample data for testing."""
+    return pd.DataFrame({
+        "date": pd.date_range(start="2001-01-01", periods=10, freq='Y'),
+        "rating": [3, 4, 5, 3, 4, 2, 5, 3, 4, 5]
+    })
+
 @patch("projet_kbd.data_analyzer.pd.read_sql_table")
 def test_analyze_oils_data_found_in_database(mock_read_sql_table):
         # Simulate data being found in the database
@@ -76,7 +97,7 @@ def test_analyze_oils_data_found_in_database(mock_read_sql_table):
         mock_read_sql_table.return_value = mock_existing_data
 
         # Initialize the analyzer
-        analyzer = data_analyzer.DataAnalyzer(data=sample_data_oils())
+        analyzer = DataAnalyzer(data=sample_data_oils())
 
         # Call the method
         result = analyzer.analyze_oils(mock_engine)
@@ -120,7 +141,7 @@ def test_group_interactions_year():
 
     # Initialize the analyzer with sample data
 
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
     # Call the method
     indices, values = analyzer.group_interactions_year()
@@ -142,7 +163,7 @@ def test_group_recipes_year():
     })
 
     # Initialize the analyzer with sample data
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
     # Call the method
     indices, values = analyzer.group_recipes_year()
@@ -171,7 +192,7 @@ def test_get_tags():
     })
 
     # Initialize the analyzer with sample data
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
     # Call the method for the year 2002
     result = analyzer.get_tags(2002)
@@ -204,7 +225,7 @@ def test_get_top_tags():
     })
 
     # Initialize the analyzer with sample data
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
     # Call the method for the year 2002
     result = analyzer.get_top_tags(2002)
@@ -238,7 +259,7 @@ def test_get_top_tag_per_year(mock_get_top_tags, mock_read_sql_table, mock_creat
     })
 
     # Initialize the analyzer
-    analyzer = data_analyzer.DataAnalyzer(data=pd.DataFrame())
+    analyzer = DataAnalyzer(data=pd.DataFrame())
 
     # Call the method with mock engine and database path
     engine = MagicMock()
@@ -277,7 +298,7 @@ def test_analyze_cuisines(mock_to_sql, mock_read_sql_table):
         "id": [1, 2, 3, 4, 5, 6],
         "cuisine": ["Italian", "American", "Mexican", "Mexican", "others", "Greek"]
     })
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
 
     # Call the method with mock engine
@@ -345,7 +366,7 @@ def test_top_commun_ingredients(mock_to_sql, mock_read_sql_table):
             "['tomato', 'cheese', 'garlic', 'basil', 'olive oil']"
         ]
     })
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
 
     # Mock engine
@@ -420,7 +441,7 @@ def test_cuisine_evolution(mock_to_sql, mock_read_sql_table):
         "cuisine": ["Italian", "American", "Mexican", "Greek", "Mexican", "Italian"],
         "year": [2002, 2002, 2003, 2003, 2003, 2003]
     })
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
     # Mock SQLAlchemy engine
     engine = MagicMock()
@@ -475,8 +496,6 @@ def test_cuisine_evolution(mock_to_sql, mock_read_sql_table):
         index_label="Year"
     )
 
-
-
 @patch("projet_kbd.data_analyzer.pd.read_sql_table")
 @patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
 @patch("projet_kbd.data_analyzer.utils.relevant_cuisines", ["Italian", "American", "Mexican", "Greek"])
@@ -509,7 +528,7 @@ def test_analyse_cuisine_nutritions(mock_to_sql, mock_read_sql_table):
         "cal": [300.0, 280.0, 350.0, 250.0],
         "minutes": [30.0, 25.0, 40.0, 20.0]
     })
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
     # Mock engine
     engine = MagicMock()
@@ -559,11 +578,6 @@ def test_analyse_cuisine_nutritions(mock_to_sql, mock_read_sql_table):
         con=engine,
         if_exists="replace"
     )
-    
-
-
-
-
 
 @patch("projet_kbd.data_analyzer.pd.read_sql_table")
 @patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
@@ -914,3 +928,18 @@ def test_analyse_user_interactions(
 
     # Assert that the DataFrame matches expected results
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+@patch('projet_kbd.comment_analyzer.CommentAnalyzer')  # Adjust import path as needed
+def test_word_count_with_missing_year_column(MockCommentAnalyzer, sample_data_word_count_over_time):
+    """Test to ensure proper handling when the 'year' column is missing."""
+    # Modify data to exclude 'year' column
+    sample_data_word_count_over_time.drop(columns=['year'], inplace=True)
+    sample_data_word_count_over_time['cleaned'] = sample_data_word_count_over_time['comments'].str.lower()
+
+    analyzer = DataAnalyzer(data=sample_data_word_count_over_time)
+
+    # Call the function and check for expected failure
+    result = analyzer.word_count_over_time('test')
+
+    assert result.empty, "The result should be empty due to missing 'year' column"
+    print("Column 'year' not found.")  # Ensure this print statement works in your function
