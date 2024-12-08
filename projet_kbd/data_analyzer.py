@@ -85,20 +85,35 @@ class DataAnalyzer:
             A DataFrame with oil type proportions for each year.
         """
 
+
         try:
-            data = pd.read_sql_table("oils_dataframe", con=engine)
+            data = pd.read_sql_table('oils_dataframe', con=engine)
             if not data.empty:
-                logger.info("Data found in the database.")
+                print('data found')
                 return data
         except Exception as e:
-            logger.warning(f"Failed to load data from the database: {e}")
+            print(f"Failed to load data from database: {e}")
 
-        self.data.drop_duplicates(subset=["id"], inplace=True)
-        self.data["ingredients"] = self.data["ingredients"].apply(eval)
+        self.data.drop_duplicates(subset=['id'], inplace=True)
+        
+        self.data['ingredients'] = self.data['ingredients'].apply(eval)
 
         year_oil = {}
+
         for year in range(2002, 2011):
-            oil_types = utils.oil_types
+            oil_types = {
+                'olive oil': 0,
+                'vegetable oil': 0,
+                'canola oil': 0,
+                'sesame oil': 0,
+                'peanut oil': 0,
+                'cooking oil': 0,
+                'salad oil': 0,
+                'oil' : 0,
+                'corn oil' : 0,
+                'extra virgin olive oil' : 0
+            }
+            
             df_year = self.data[self.data['year'] == year]
             number_id = df_year['id'].nunique()
             
@@ -198,7 +213,7 @@ class DataAnalyzer:
 
         return top_commun_year
 
-    def get_top_tag_per_year(self , DB_PATH):
+    def get_top_tag_per_year(self , engine , DB_PATH):
         """
         Extract the top tags for each year in the dataset and store them in the top tag database.
 
@@ -209,7 +224,7 @@ class DataAnalyzer:
             2010.
         """
         try:
-            data = pd.read_sql_table("top_tags", con=DB_PATH)
+            data = pd.read_sql_table("top_tags", con=engine)
             if not data.empty:
                 logger.info("Table Top tags found in the database.")
                 return 
@@ -230,7 +245,7 @@ class DataAnalyzer:
                 top_tags_years[year] = [labels, sizes]
 
             set_number_tags[set_number] = top_tags_years
-
+        logger.info("Creating table top tags ...")
         utils.create_top_tags_database(DB_PATH , set_number_tags)
     
    

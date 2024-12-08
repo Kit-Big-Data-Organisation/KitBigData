@@ -85,7 +85,7 @@ class DataPlotter:
         logger.info("Plot for recipes per year generated successfully.")
         return fig
 
-    def plot_pie_chart_tags(self, set_number ,db_path):
+    def plot_pie_chart_tags(self, set_number ,engine ,db_path):
         """
         Generate pie charts for the top tags per year from the database.
 
@@ -115,7 +115,7 @@ class DataPlotter:
         table_exists = cursor.fetchone() is not None
         if not table_exists:
             logger.info("Creating 'top_tags' table...")
-            self.data_analyzer.get_top_tag_per_year(db_path)
+            self.data_analyzer.get_top_tag_per_year(engine, db_path)
       
         # Query data for the specified set_number
         query = """
