@@ -317,8 +317,7 @@ def test_analyse_interactions_ratings(
     mock_read_sql_table.return_value = pd.DataFrame()
 
     # Create a DataAnalyzer instance
-    analyzer = data_analyzer.DataAnalyzer(sample_data)
-
+    analyzer = DataAnalyzer(sample_data)
 
     # Call the function
     result = analyzer.analyse_interactions_ratings(mock_engine)
@@ -351,7 +350,7 @@ def test_analyse_average_steps_rating(
     mock_read_sql_table.return_value = pd.DataFrame()
 
     # Create the DataAnalyzer instance
-    analyzer = data_analyzer.DataAnalyzer(sample_data)
+    analyzer = DataAnalyzer(sample_data)
 
     # Call the method
     result = analyzer.analyse_average_steps_rating(mock_engine)
@@ -381,7 +380,7 @@ def test_analyse_user_interactions(
     mock_read_sql_table.return_value = pd.DataFrame()
 
     # Create the DataAnalyzer instance with the sample data
-    analyzer = data_analyzer.DataAnalyzer(sample_data)
+    analyzer = DataAnalyzer(sample_data)
 
     # Call the method
     result = analyzer.analyse_user_intractions(mock_engine)
@@ -397,4 +396,3 @@ def test_analyse_user_interactions(
 
     # Assert that the DataFrame matches expected results
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
-    
