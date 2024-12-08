@@ -360,9 +360,9 @@ def test_analyse_average_steps_rating(
     # Expected data based on the sample data
     expected = pd.DataFrame(
         {
-            "year": [2020, 2021, 2022, 2023],
-            "avg_steps": [1100.0, 900.0, 1500.0, 1100.0],
-            "avg_rating": [4.5, 4.25, 5.0, 3.5],
+            "year": [2005, 2007, 2009, 2010],
+            "avg_steps": [1100, 900, 1500, 1000],
+            "avg_rating":  [4.5, 3.75, 5.0, 2.75],
         }
     )
 
@@ -392,9 +392,9 @@ def test_analyse_user_interactions(
     # Expected result calculation
     expected = pd.DataFrame(
         {
-            "days_since_submission": [1, 5, 4, 2, 5, 9, 5],
-            "num_interactions": [1, 2, 1, 1, 1, 1, 1],
-            "avg_rating": [4.0, 3.5, 4.5, 4.5, 5.0, 2.0, 3.5],
+            "days_since_submission": [2, 5, 9, 5, 5, 40],
+            "num_interactions": [1, 2, 1, 1, 1, 1],
+            "avg_rating": [4.5, 3.5, 2.0, 4.5, 5.0, 2.0],
         }
     )
 
