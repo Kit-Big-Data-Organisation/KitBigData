@@ -27,26 +27,22 @@ from logger_config import logger
 
 def download_data(file_name, url, data_dir):
     """
-    Downloads a data file from a Google Drive link if it is not already
-    present in the specified directory.
+    Download a file from a Google Drive link to a specified directory if it
+    does not already exist.
 
-    Args:
-        file_name (str): The name of the file to download.
-        url (str): The Google Drive URL from which to download the file.
-        data_dir (str): The directory where the data file should be saved.
-
-    Logs:
-        - Logs a message when the file already exists.
-        - Logs a message when the file is being downloaded.
-        - Logs any errors encountered during the download process.
+    Parameters:
+    ----------
+    file_name : str
+        The name of the file to download.
+    url : str
+        The Google Drive link to the file.
+    data_dir : str
+        The directory to save the downloaded file.
 
     Raises:
-        Exception: If the file cannot be downloaded for any reason.
-
-    Example:
-        >>> download_data("RAW_recipes.csv", "https://drive.google.com/uc?id=example", "/path/to/data")
-        RAW_recipes.csv already exists. Skipping download.
-        Downloading RAW_recipes.csv...
+    -------
+    Exception
+        If the download fails.
     """
     # Ensure the data directory exists
     os.makedirs(data_dir, exist_ok=True)
