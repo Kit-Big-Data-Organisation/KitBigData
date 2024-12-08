@@ -51,19 +51,29 @@ class CommentAnalyzer:
         The cleaned comments are stored in a new column named 'cleaned'.
         """
         if "review" in self.comments.columns:
-            self.comments["cleaned"] = self.comments["review"].fillna("").astype(str).apply(
-                lambda x: re.sub(r'[^\w\s]', '', x.lower()).strip()
+            self.comments["cleaned"] = (
+                self.comments["review"]
+                .fillna("")  # Remplace les valeurs NaN par des chaînes vides
+                .astype(str)  # Toutes les entrées sont des chaînes de car.
+                .apply(  # Applique une fonction à chaque élément
+                    lambda x: re.sub(r'[^\w\s]', '', x.lower()).strip()
+                )
             )
-            # Afficher les entrées qui ne sont pas des chaînes après le nettoyage
-            problematic_entries = self.comments[self.comments["cleaned"].apply(lambda x: not isinstance(x, str))]
+            # Afficher les entrées qui ne sont pas des chaînes après le
+            # nettoyage
+            problematic_entries = self.comments[
+                self
+                .comments["cleaned"]
+                .apply(lambda x: not isinstance(x, str))
+            ]
             if not problematic_entries.empty:
-                logger.warning("Problematic entries:", problematic_entries)
+                logger.warn("Problematic entries:", problematic_entries)
             else:
                 logger.info("No problematic entries.")
             logger.info("Comments cleaned successfully.")
         else:
             logger.error("Column 'review' not found in the DataFrame.")
-            self.comments["cleaned"] = pd.Series([], dtype=str)  # Create an empty 'cleaned' column if 'review' is missing
+            self.comments["cleaned"] = pd.Series([], dtype=str)
 
     def sentiment_analysis(self) -> pd.DataFrame:
         """
