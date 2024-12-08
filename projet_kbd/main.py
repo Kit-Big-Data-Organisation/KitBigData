@@ -22,9 +22,18 @@ RECIPES_FILE = "RAW_recipes.csv"
 INTERACTIONS_FILE = "RAW_interactions.csv"
 
 DATA_FILES = {
-    "RAW_recipes.csv": ("https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w", DATA_DIR),
-    "RAW_interactions.csv": ("https://drive.google.com/uc?id=1ikGYx3h741P2JIkFwIclhciiIGeBWpTL", DATA_DIR),
-    "streamlit.db": ("https://drive.google.com/uc?id=1LboRS888bE4EaKGRQosd_4LspGFOADs7", os.path.join(BASE_DIR, "projet_kbd", "database"))
+    "RAW_recipes.csv": (
+        "https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w",
+        DATA_DIR,
+    ),
+    "RAW_interactions.csv": (
+        "https://drive.google.com/uc?id=1ikGYx3h741P2JIkFwIclhciiIGeBWpTL",
+        DATA_DIR,
+    ),
+    "streamlit.db": (
+        "https://drive.google.com/uc?id=1LboRS888bE4EaKGRQosd_4LspGFOADs7",
+        os.path.join(BASE_DIR, "projet_kbd", "database"),
+    ),
 }
 
 # Create SQLAlchemy engine dynamically
@@ -72,7 +81,7 @@ if __name__ == "__main__":
         # Ensure the database and data files are downloaded and validated
         for file_name, (url, dir) in DATA_FILES.items():
             download_data(file_name, url, dir)
-        
+
         validate_data_files(DATA_DIR)
 
         logger.info("Starting the Streamlit application...")
