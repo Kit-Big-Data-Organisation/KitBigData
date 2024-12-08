@@ -132,6 +132,24 @@ def create_plot_sentiment_evolution(_analyzer, _engine):
     return plotter.plot_sentiment_over_time(_engine)
 
 
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyze_interactions_ratings(analyzer, _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_interactions_ratings(_engine)
+
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyze_user_interactions(analyzer, _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_user_interactions(_engine)
+
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def analyse_average_steps_rating(analyzer, _engine):
+    plotter = DataPlotter(analyzer)
+    return plotter.plot_average_steps_rating(_engine)
+
+
 def run(path_file, recipe_file, interaction_file, engine):
 
     st.set_page_config(layout="wide")
@@ -177,11 +195,57 @@ def run(path_file, recipe_file, interaction_file, engine):
             analyzer
         )  # Fonction qui génère les figures Plotly
 
-        with col[0]:
-            st.plotly_chart(recipe_fig, use_container_width=True)
+        average_steps_rating = analyse_average_steps_rating(analyzer, engine)
+        interaction_ratings = analyze_interactions_ratings(analyzer, engine)
+        user_interactions = analyze_user_interactions(analyzer, engine)
 
-        with col[1]:
-            st.plotly_chart(interaction_fig, use_container_width=True)
+        st.plotly_chart(recipe_fig, use_container_width=True)
+
+        st.plotly_chart(interaction_fig, use_container_width=True)
+
+        st.plotly_chart(average_steps_rating, use_container_width=True)
+
+        st.write(
+            """
+            This graph shows the evolution of the average number of steps
+            per year, with associated ratings of the recepies over the years.
+            \n - The complexity of the recepies is increasing over the years.
+            \n - The ratings given to the recepies are decreasing over the
+            years.
+            """
+        )
+
+        st.plotly_chart(interaction_ratings, use_container_width=True)
+
+        st.write(
+            """
+            This graph shows the relationship between the average rating
+            scores, the number of ratings and the cooking time :
+            \n - Recipes with high ratings (between 4 and 5) tend to have the
+            highest number of ratings. Recipes with low ratings (below 3)
+            generally have very few ratings.
+            \n - Longer cooking times are scattered across recipes with lower
+            popularity.
+            Recipes with shorter cooking times dominate the cluster of
+            highly rated and highly reviewed recipes, indicating that users
+            prefer quicker recipes.
+            """
+        )
+
+        st.plotly_chart(user_interactions, use_container_width=True)
+
+        st.write(
+            """
+            This graph explores the relationship between time since
+            submission, average rating, and number of interactions with
+            recipes.
+            \n - Average ratings tend to decline slightly as time progresses,
+            indicating that recipes are generally rated lower as they age.
+            \n - A pattern is visible, with periodic peaks in the number of
+            interactions, some recipes become relevant again during specific
+            times of the year, such as holidays or seasonal celebrations.
+            """
+        )
 
     elif selected == "Eating habits":
 

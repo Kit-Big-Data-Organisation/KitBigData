@@ -142,7 +142,7 @@ class Dataloader:
             )
             logger.info(
                 "Merge successful. Adding 'year' column to the mergeddata."
-                )
+            )
             self.add_year(merged_recipe_inter)
             return merged_recipe_inter
         logger.warning("Failed to merge data: one or both datasets are None.")
@@ -165,13 +165,13 @@ class Dataloader:
         """
         logger.info("Adding nutritional columns to the data.")
         NutriList = [
-           "cal",
-           "totalFat",
-           "sugar",
-           "sodium",
-           "protein",
-           "satFat",
-           "carbs",
+            "cal",
+            "totalFat",
+            "sugar",
+            "sodium",
+            "protein",
+            "satFat",
+            "carbs",
         ]
         nutrition_df = pd.DataFrame(
             data["nutrition"].apply(eval).tolist(), columns=NutriList

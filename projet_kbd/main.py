@@ -7,7 +7,6 @@ the `cProfile` module.
 """
 
 import os
-import cProfile
 import sqlalchemy
 from data_downloader import download_data
 from logger_config import logger
@@ -29,7 +28,7 @@ DATA_FILES = {
 }
 
 # Create SQLAlchemy engine dynamically
-engine = sqlalchemy.create_engine(f'sqlite:///{DB_PATH}')
+engine = sqlalchemy.create_engine(f"sqlite:///{DB_PATH}")
 
 
 def create_database_if_not_exists(db_path):
@@ -76,18 +75,12 @@ if __name__ == "__main__":
         
         validate_data_files(DATA_DIR)
 
-        # Initialize and enable the profiler
-        profiler = cProfile.Profile()
-        profiler.enable()
-
         logger.info("Starting the Streamlit application...")
         # Run the Streamlit app
         app = streamlit_app.run(
             DATA_DIR, RECIPES_FILE, INTERACTIONS_FILE, engine
         )
 
-        # Disable the profiler
-        profiler.disable()
         logger.info("Streamlit application finished successfully.")
     except Exception as e:
         logger.error(f"An error occurred: {e}", exc_info=True)
