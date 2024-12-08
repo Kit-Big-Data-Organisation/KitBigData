@@ -1,3 +1,21 @@
+"""
+This module provides utility functions for various tasks including database
+operations, data highlighting, and text rendering.
+Functions:
+    determine_cuisine(tags):
+    highlight_cells(val):
+        Highlights specific cells in a dataframe figure based on the value.
+    create_top_tags_database(DB_PATH, set_number_tags):
+        Creates and populates a database table with top tags data.
+    render_justified_text(content):
+        Renders text content with justified alignment in a Streamlit app.
+Constants:
+    relevant_cuisines (list of str):
+        A list of relevant cuisines.
+    custom_palette (dict):
+        A dictionary mapping oil types to their respective color codes.
+
+"""
 import sqlite3
 import streamlit as st
 relevant_cuisines = [
@@ -29,11 +47,16 @@ def determine_cuisine(tags):
     Determines the cuisine of a recipe based on tags.
 
     Parameters:
-        tags (list of str): The tags associated with a recipe.
+    ----------
+    tags : list of str
+        A list of tags associated with the recipe.
 
     Returns:
-        str: The determined cuisine, or 'other' if no cuisine matches.
+    -------
+    str
+        The determined cuisine of the recipe.
     """
+
     cuisines = {
         "asian": 0,
         "mexican": 0,
@@ -52,7 +75,19 @@ def determine_cuisine(tags):
 
 
 def highlight_cells(val):
-    "to highlight specific cells in dataframe figure"
+    """
+    Highlights specific cells in a dataframe figure based on the value.
+
+    Parameters:
+    ----------
+    val : str
+        The value of the cell.
+
+    Returns:
+    -------
+    str
+        The CSS style string for highlighting the cell.
+    """
 
     if val == "parmesan cheese":
         return "background-color: red"
@@ -66,33 +101,56 @@ def highlight_cells(val):
         return "background-color: lightpink"
     else:
         return ""
-    
+
+
 def create_top_tags_database(DB_PATH , set_number_tags):
+    """
+    Creates and populates a database table with top tags data.
 
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
+    Parameters:
+    ----------
+    DB_PATH : str
+        The path to the SQLite database file.
+    set_number_tags : dict
+        A dictionary containing top tags data for each set number and year.
+    """
 
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS top_tags (
-            set_number INTEGER,
-            year INTEGER,
-            label TEXT,
-            size REAL
-        )
-        """)
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
 
-        for set_number, top_tags_years in set_number_tags.items():
-            for year, data in top_tags_years.items():
-                labels, sizes = data
-                for label, size in zip(labels, sizes):
-                    cursor.execute("""
-                    INSERT INTO top_tags (set_number, year, label, size)
-                    VALUES (?, ?, ?, ?)
-                    """, (set_number, year, label, size))
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS top_tags (
+        set_number INTEGER,
+        year INTEGER,
+        label TEXT,
+        size REAL
+    )
+    """)
 
-        conn.commit()
-        conn.close()
+    for set_number, top_tags_years in set_number_tags.items():
+        for year, data in top_tags_years.items():
+            labels, sizes = data
+            for label, size in zip(labels, sizes):
+                cursor.execute("""
+                INSERT INTO top_tags (set_number, year, label, size)
+                VALUES (?, ?, ?, ?)
+                """, (set_number, year, label, size))
+
+    conn.commit()
+    conn.close()
+
 
 # Helper function to render justified content
 def render_justified_text(content):
-    st.markdown(f"<div class='justified'>{content}</div>", unsafe_allow_html=True)
+    """
+    Renders text content with justified alignment in a Streamlit app.
+
+    Parameters:
+    ----------
+    content : str
+        The text content to be rendered.
+    """
+    st.markdown(
+        f"<div class='justified'>{content}</div>",
+        unsafe_allow_html=True
+    )

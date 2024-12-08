@@ -360,7 +360,11 @@ def test_analyse_average_steps_rating(
         "year": [2020, 2021, 2022, 2023],
         "avg_steps": [1100.0, 900.0, 1200.0, 1100.0],
         "avg_rating": [4.50, 3.75, 3.50, 3.50]
-    }).astype({"year": "int32", "avg_steps": "float64", "avg_rating": "float64"})
+    }).astype({
+        "year": "int32",
+        "avg_steps": "float64",
+        "avg_rating": "float64"
+    })
 
     # Compare the actual DataFrame to expected values
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)

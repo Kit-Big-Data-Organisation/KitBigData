@@ -1,0 +1,205 @@
+2024-12-08 21:31:04,934 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:31:04,934 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:31:04,934 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:31:04,934 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:31:04,934 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:31:04,934 - INFO - Starting the Streamlit application...
+2024-12-08 21:31:15,041 - INFO - Generating plot for number of recipes per year.
+2024-12-08 21:31:15,286 - INFO - Plot for recipes per year generated successfully.
+2024-12-08 21:31:15,286 - INFO - Generating plot for number of interactions per year.
+2024-12-08 21:31:15,335 - INFO - Plot for interactions per year generated successfully.
+2024-12-08 21:31:15,336 - INFO - Starting analysis of average steps and ratings for visualization.
+2024-12-08 21:31:15,336 - INFO - Converting 'submitted' column to datetime andextracting the year.
+2024-12-08 21:31:15,446 - INFO - Grouping data by year to calculate average steps and ratings.
+2024-12-08 21:31:15,468 - INFO - Average steps and ratings calculated successfully.
+2024-12-08 21:31:15,468 - INFO - Data analysis for steps and ratings completed successfully.
+2024-12-08 21:31:15,468 - INFO - Creating a new Plotly bar chart figure.
+2024-12-08 21:31:15,469 - INFO - Adding bar trace for average steps with associated average ratings.
+2024-12-08 21:31:15,485 - INFO - Configuring the layout of the bar chart.
+2024-12-08 21:31:15,488 - INFO - Layout configuration completed successfully.
+2024-12-08 21:31:15,489 - INFO - Analyzing interactions and ratings for plotting.
+2024-12-08 21:31:15,489 - INFO - Aggregating interaction and rating data.
+2024-12-08 21:31:15,542 - INFO - Data aggregation completed successfully.
+2024-12-08 21:31:15,542 - INFO - Generating scatter plot for average ratings vs. number of ratings.
+2024-12-08 21:31:15,570 - INFO - Scatter plot generated successfully.
+2024-12-08 21:31:15,575 - INFO - Starting analysis of user interaction data for visualization.
+2024-12-08 21:31:15,575 - INFO - Converting 'submitted' and 'date' columns to datetime format.
+2024-12-08 21:31:15,720 - INFO - Calculating the number of days since submission for each interaction.
+2024-12-08 21:31:15,730 - INFO - Filtering data to include only rows where 'days_since_submission' > 0.
+2024-12-08 21:31:16,248 - INFO - Grouping data by 'days_since_submission' to calculateinteractions and average ratings.
+2024-12-08 21:31:16,289 - INFO - User interactions analysis completed successfully.
+2024-12-08 21:31:16,585 - INFO - User interaction data analysis completed successfully.
+2024-12-08 21:31:16,585 - INFO - Creating a new Plotly figure.
+2024-12-08 21:31:16,586 - INFO - Adding scatter trace for the number of interactions.
+2024-12-08 21:31:16,590 - INFO - Adding scatter trace for the average rating.
+2024-12-08 21:31:16,591 - INFO - Updating figure layout with multiple axes.
+2024-12-08 21:31:16,597 - INFO - Figure layout updated successfully.
+2024-12-08 21:31:16,960 - INFO - Streamlit application finished successfully.
+2024-12-08 21:36:20,240 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:36:20,243 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:36:20,243 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:36:20,243 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:36:20,244 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:36:20,244 - INFO - Starting the Streamlit application...
+2024-12-08 21:36:22,338 - INFO - Generating bar chart for oil analysis.
+2024-12-08 21:36:22,550 - INFO - Streamlit application finished successfully.
+2024-12-08 21:36:26,847 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:36:26,848 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:36:26,849 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:36:26,850 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:36:26,850 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:36:26,850 - INFO - Starting the Streamlit application...
+2024-12-08 21:36:28,199 - INFO - Generating pie chart for cuisine analysis.
+2024-12-08 21:36:28,218 - INFO - Generating line chart for cuisine evolution.
+2024-12-08 21:36:28,250 - INFO - Line chart for cuisine evolution generated.
+2024-12-08 21:36:28,252 - INFO - Generating bar chart for calories analysis.
+2024-12-08 21:36:28,278 - INFO - Bar chart for calories analysis generated.
+2024-12-08 21:36:28,280 - INFO - Generating bar chart for cuisine time analysis.
+2024-12-08 21:36:28,304 - INFO - Bar chart for cuisine time analysis generated.
+2024-12-08 21:36:28,306 - INFO - Generating bar chart for nutritional content by cuisine.
+2024-12-08 21:36:28,335 - INFO - Bar chart for nutritional content by cuisine generated.
+2024-12-08 21:36:28,337 - INFO - Generating bar chart for top ingredients.
+2024-12-08 21:36:28,340 - INFO - Top ingredients generated.
+2024-12-08 21:36:28,576 - INFO - Streamlit application finished successfully.
+2024-12-08 21:36:36,241 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:36:36,244 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:36:36,245 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:36:36,245 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:36:36,245 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:36:36,245 - INFO - Starting the Streamlit application...
+2024-12-08 21:36:37,911 - INFO - Attempting to plot the evolution of quick recipes proportions.
+2024-12-08 21:36:37,915 - INFO - Data found in the database.
+2024-12-08 21:36:37,915 - INFO - Data retrieved successfully, plotting.
+2024-12-08 21:36:37,927 - INFO - Attempting to plot the evolution of the rate of the interactions
+            for quick recipes.
+2024-12-08 21:36:37,930 - INFO - Data found in the database.
+2024-12-08 21:36:37,930 - INFO - Data retrieved successfully, plotting.
+2024-12-08 21:36:37,942 - INFO - Attempting to plot categories for quick recipes.
+2024-12-08 21:36:37,942 - INFO - Starting the process to calculate quick recipe categories.
+2024-12-08 21:36:37,944 - INFO - Data found in the database. Returning existing data.
+2024-12-08 21:36:37,944 - INFO - Data retrieved successfully, plotting.
+2024-12-08 21:36:41,227 - INFO - No problematic entries.
+2024-12-08 21:36:41,227 - INFO - Comments cleaned successfully.
+2024-12-08 21:36:41,231 - INFO - Word frequencies found in database.
+2024-12-08 21:36:41,231 - INFO - Generating Word Cloud plot.
+2024-12-08 21:36:41,450 - INFO - Word Cloud plot generated successfully.
+2024-12-08 21:36:44,643 - INFO - No problematic entries.
+2024-12-08 21:36:44,643 - INFO - Comments cleaned successfully.
+2024-12-08 21:36:44,645 - INFO - Word frequencies for 'time' found in database.
+2024-12-08 21:36:44,645 - INFO - Generating Word Cloud plot for time.
+2024-12-08 21:36:44,727 - INFO - Word Cloud plot for time generated successfully.
+2024-12-08 21:36:45,415 - INFO - Streamlit application finished successfully.
+2024-12-08 21:36:50,213 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:36:50,215 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:36:50,216 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:36:50,216 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:36:50,217 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:36:50,217 - INFO - Starting the Streamlit application...
+2024-12-08 21:36:51,814 - INFO - Rate evolution...
+2024-12-08 21:36:51,819 - INFO - Data found in the database. Filtering for years 2002 to 2010.
+2024-12-08 21:36:51,819 - INFO - Data retrieved successfully, plotting.
+2024-12-08 21:36:51,834 - INFO - Sentiment analysis...
+2024-12-08 21:36:51,835 - INFO - Attempting to plot sentiment analysis over time.
+2024-12-08 21:36:51,837 - INFO - Sentiment analysis over time found in database.
+2024-12-08 21:36:51,853 - INFO - Sentiment analysis over time plot generated successfully.
+2024-12-08 21:36:52,042 - INFO - Streamlit application finished successfully.
+2024-12-08 21:36:59,367 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:36:59,369 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:36:59,372 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:36:59,372 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:36:59,372 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:36:59,372 - INFO - Starting the Streamlit application...
+2024-12-08 21:37:00,354 - INFO - Generating pie charts for tag set 0.
+2024-12-08 21:37:00,420 - INFO - Pie charts for tag set 0 generated.
+2024-12-08 21:37:00,639 - INFO - Streamlit application finished successfully.
+2024-12-08 21:37:02,601 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:37:02,601 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:37:02,604 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:37:02,608 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:37:02,609 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:37:02,609 - INFO - Starting the Streamlit application...
+2024-12-08 21:37:03,675 - INFO - Generating pie charts for tag set 1.
+2024-12-08 21:37:03,735 - INFO - Pie charts for tag set 1 generated.
+2024-12-08 21:37:03,918 - INFO - Streamlit application finished successfully.
+2024-12-08 21:37:10,696 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:37:10,697 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:37:10,698 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:37:10,698 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:37:10,698 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:37:10,698 - INFO - Starting the Streamlit application...
+2024-12-08 21:37:11,633 - INFO - Generating plot for number of recipes per year.
+2024-12-08 21:37:11,679 - INFO - Plot for recipes per year generated successfully.
+2024-12-08 21:37:11,679 - INFO - Generating plot for number of interactions per year.
+2024-12-08 21:37:11,714 - INFO - Plot for interactions per year generated successfully.
+2024-12-08 21:37:11,715 - INFO - Starting analysis of average steps and ratings for visualization.
+2024-12-08 21:37:11,715 - INFO - Converting 'submitted' column to datetime andextracting the year.
+2024-12-08 21:37:11,775 - INFO - Grouping data by year to calculate average steps and ratings.
+2024-12-08 21:37:11,794 - INFO - Average steps and ratings calculated successfully.
+2024-12-08 21:37:11,794 - INFO - Data analysis for steps and ratings completed successfully.
+2024-12-08 21:37:11,794 - INFO - Creating a new Plotly bar chart figure.
+2024-12-08 21:37:11,795 - INFO - Adding bar trace for average steps with associated average ratings.
+2024-12-08 21:37:11,795 - INFO - Configuring the layout of the bar chart.
+2024-12-08 21:37:11,797 - INFO - Layout configuration completed successfully.
+2024-12-08 21:37:11,798 - INFO - Analyzing interactions and ratings for plotting.
+2024-12-08 21:37:11,798 - INFO - Aggregating interaction and rating data.
+2024-12-08 21:37:11,842 - INFO - Data aggregation completed successfully.
+2024-12-08 21:37:11,843 - INFO - Generating scatter plot for average ratings vs. number of ratings.
+2024-12-08 21:37:11,856 - INFO - Scatter plot generated successfully.
+2024-12-08 21:37:11,861 - INFO - Starting analysis of user interaction data for visualization.
+2024-12-08 21:37:11,861 - INFO - Converting 'submitted' and 'date' columns to datetime format.
+2024-12-08 21:37:11,973 - INFO - Calculating the number of days since submission for each interaction.
+2024-12-08 21:37:11,983 - INFO - Filtering data to include only rows where 'days_since_submission' > 0.
+2024-12-08 21:37:12,177 - INFO - Grouping data by 'days_since_submission' to calculateinteractions and average ratings.
+2024-12-08 21:37:12,195 - INFO - User interactions analysis completed successfully.
+2024-12-08 21:37:12,232 - INFO - User interaction data analysis completed successfully.
+2024-12-08 21:37:12,232 - INFO - Creating a new Plotly figure.
+2024-12-08 21:37:12,233 - INFO - Adding scatter trace for the number of interactions.
+2024-12-08 21:37:12,233 - INFO - Adding scatter trace for the average rating.
+2024-12-08 21:37:12,233 - INFO - Updating figure layout with multiple axes.
+2024-12-08 21:37:12,235 - INFO - Figure layout updated successfully.
+2024-12-08 21:37:12,484 - INFO - Streamlit application finished successfully.
+2024-12-08 21:37:30,680 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:37:30,681 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:37:30,681 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:37:30,682 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:37:30,682 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:37:30,682 - INFO - Starting the Streamlit application...
+2024-12-08 21:37:32,220 - INFO - Generating pie chart for cuisine analysis.
+2024-12-08 21:37:32,235 - INFO - Generating line chart for cuisine evolution.
+2024-12-08 21:37:32,260 - INFO - Line chart for cuisine evolution generated.
+2024-12-08 21:37:32,262 - INFO - Generating bar chart for calories analysis.
+2024-12-08 21:37:32,287 - INFO - Bar chart for calories analysis generated.
+2024-12-08 21:37:32,289 - INFO - Generating bar chart for cuisine time analysis.
+2024-12-08 21:37:32,309 - INFO - Bar chart for cuisine time analysis generated.
+2024-12-08 21:37:32,310 - INFO - Generating bar chart for nutritional content by cuisine.
+2024-12-08 21:37:32,333 - INFO - Bar chart for nutritional content by cuisine generated.
+2024-12-08 21:37:32,335 - INFO - Generating bar chart for top ingredients.
+2024-12-08 21:37:32,338 - INFO - Top ingredients generated.
+2024-12-08 21:37:32,532 - INFO - Streamlit application finished successfully.
+2024-12-08 21:37:41,427 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:37:41,428 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:37:41,429 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:37:41,429 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:37:41,429 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:37:41,429 - INFO - Starting the Streamlit application...
+2024-12-08 21:37:42,675 - INFO - Attempting to plot the evolution of quick recipes proportions.
+2024-12-08 21:37:42,678 - INFO - Data found in the database.
+2024-12-08 21:37:42,678 - INFO - Data retrieved successfully, plotting.
+2024-12-08 21:37:42,689 - INFO - Attempting to plot the evolution of the rate of the interactions
+            for quick recipes.
+2024-12-08 21:37:42,690 - INFO - Data found in the database.
+2024-12-08 21:37:42,690 - INFO - Data retrieved successfully, plotting.
+2024-12-08 21:37:42,702 - INFO - Attempting to plot categories for quick recipes.
+2024-12-08 21:37:42,702 - INFO - Starting the process to calculate quick recipe categories.
+2024-12-08 21:37:42,703 - INFO - Data found in the database. Returning existing data.
+2024-12-08 21:37:42,703 - INFO - Data retrieved successfully, plotting.
+2024-12-08 21:37:43,227 - INFO - Streamlit application finished successfully.
+2024-12-08 21:37:45,280 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:37:45,281 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:37:45,282 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:37:45,282 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:37:45,282 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:37:45,282 - INFO - Starting the Streamlit application...
+2024-12-08 21:37:46,368 - INFO - Rate evolution...
+2024-12-08 21:37:46,372 - INFO - Sentiment analysis...
+2024-12-08 21:37:46,564 - INFO - Streamlit application finished successfully.
