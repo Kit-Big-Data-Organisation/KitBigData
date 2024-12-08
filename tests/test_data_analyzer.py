@@ -72,6 +72,49 @@ def sample_data_oils():
                             "['extra virgin olive oil', 'pepper']"]
         })
 
+@pytest.fixture
+def sample_data_word_count_over_time():
+    """Provides sample data including necessary columns and mock comments."""
+    return pd.DataFrame({
+        "year": [2005, 2006, 2007, 2008],
+        "comments": [
+            "This is a test comment test",
+            "Another test comment",
+            "More comments here",
+            "Final comment test"
+        ]
+    })
+
+@pytest.fixture
+def sample_data_rating_evolution():
+    """Generate sample data for testing."""
+    return pd.DataFrame({
+        "date": pd.date_range(start="2001-01-01", periods=10, freq='Y'),
+        "rating": [3, 4, 5, 3, 4, 2, 5, 3, 4, 5]
+    })
+
+
+@pytest.fixture
+def sample_data_word_count_over_time():
+    """Provides sample data including necessary columns and mock comments."""
+    return pd.DataFrame({
+        "year": [2005, 2006, 2007, 2008],
+        "comments": [
+            "This is a test comment test",
+            "Another test comment",
+            "More comments here",
+            "Final comment test"
+        ]
+    })
+
+@pytest.fixture
+def sample_data_rating_evolution():
+    """Generate sample data for testing."""
+    return pd.DataFrame({
+        "date": pd.date_range(start="2001-01-01", periods=10, freq='Y'),
+        "rating": [3, 4, 5, 3, 4, 2, 5, 3, 4, 5]
+    })
+
 @patch("projet_kbd.data_analyzer.pd.read_sql_table")
 def test_analyze_oils_data_found_in_database(mock_read_sql_table):
     """
@@ -336,6 +379,7 @@ def test_get_top_tag_per_year(mock_get_top_tags, mock_read_sql_table, mock_creat
     })
 
     # Initialize the analyzer
+    analyzer = DataAnalyzer(data=pd.DataFrame())
     analyzer = DataAnalyzer(data=pd.DataFrame())
 
     # Call the method with mock engine and database path
@@ -1072,3 +1116,18 @@ def test_analyse_user_interactions(
 
     # Assert that the DataFrame matches expected results
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+@patch('projet_kbd.comment_analyzer.CommentAnalyzer')  # Adjust import path as needed
+def test_word_count_with_missing_year_column(MockCommentAnalyzer, sample_data_word_count_over_time):
+    """Test to ensure proper handling when the 'year' column is missing."""
+    # Modify data to exclude 'year' column
+    sample_data_word_count_over_time.drop(columns=['year'], inplace=True)
+    sample_data_word_count_over_time['cleaned'] = sample_data_word_count_over_time['comments'].str.lower()
+
+    analyzer = DataAnalyzer(data=sample_data_word_count_over_time)
+
+    # Call the function and check for expected failure
+    result = analyzer.word_count_over_time('test')
+
+    assert result.empty, "The result should be empty due to missing 'year' column"
+    print("Column 'year' not found.")  # Ensure this print statement works in your function
