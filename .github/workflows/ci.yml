@@ -47,7 +47,7 @@ jobs:
         run: poetry run flake8 .
 
       - name: Run unit tests with Pytest
-        run: poetry run 
+        run: poetry run pytest -v
       
       # - name: Run tests with coverage
       #   run: |
