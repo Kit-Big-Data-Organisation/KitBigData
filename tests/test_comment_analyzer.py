@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 import pandas as pd
 import pytest
-from comment_analyzer import CommentAnalyzer
+from projet_kbd.comment_analyzer import CommentAnalyzer
 
 
 @pytest.fixture

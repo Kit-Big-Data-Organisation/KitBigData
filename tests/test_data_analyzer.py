@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
-from data_analyzer import DataAnalyzer
+from projet_kbd.data_analyzer import DataAnalyzer
 
 
 @pytest.fixture
