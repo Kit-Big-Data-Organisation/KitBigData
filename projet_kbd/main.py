@@ -24,7 +24,7 @@ INTERACTIONS_FILE = "RAW_interactions.csv"
 DATA_FILES = {
     "RAW_recipes.csv": ("https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w", DATA_DIR),
     "RAW_interactions.csv": ("https://drive.google.com/uc?id=1ikGYx3h741P2JIkFwIclhciiIGeBWpTL", DATA_DIR),
-    "streamlit.db": ("https://drive.google.com/uc?id=1LboRS888bE4EaKGRQosd_4LspGFOADs7", os.path.join(BASE_DIR, "projet_kbd", "database"))
+    "streamlit.db": ("https://drive.google.com/uc?id=1zLTBuYKqJh3KMFWtO2ODtwl-ZuI5wml0", os.path.join(BASE_DIR, "projet_kbd", "database"))
 }
 
 # Create SQLAlchemy engine dynamically
