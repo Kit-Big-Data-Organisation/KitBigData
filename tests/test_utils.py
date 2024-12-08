@@ -3,8 +3,22 @@ import sqlite3
 import pandas as pd
 import pytest
 
-# Tests for the determine_cuisine function
 def test_determine_cuisine():
+    """
+    Test the `determine_cuisine` function.
+
+    This test ensures that the function correctly determines the cuisine based
+    on the provided tags.
+
+    Assertions
+    ----------
+    - The function returns the correct cuisine for known tags.
+    - The function returns the first matching cuisine when multiple cuisines
+      are present.
+    - The function returns "other" when no matching cuisines are found.
+    - The function returns "other" for empty tags.
+    - The function correctly identifies newly added cuisines.
+    """
     # Test with tags matching known cuisines
     assert utils.determine_cuisine(["asian", "noodle"]) == "asian"
     assert utils.determine_cuisine(["taco", "mexican"]) == "mexican"
@@ -23,8 +37,19 @@ def test_determine_cuisine():
     assert utils.determine_cuisine(["indian", "curry"]) == "indian"
 
 
-# Tests for the highlight_cells function
 def test_highlight_cells():
+    """
+    Test the `highlight_cells` function.
+
+    This test ensures that the function correctly applies the appropriate
+    background color based on the ingredient.
+
+    Assertions
+    ----------
+    - The function returns the correct background color for known ingredients.
+    - The function returns an empty string for ingredients that should not be
+      highlighted.
+    """
     assert (
         utils.highlight_cells("parmesan cheese") == "background-color: red"
     )
@@ -49,9 +74,17 @@ def test_highlight_cells():
     # Test a value that should not highlight
     assert utils.highlight_cells("water") == ""
 
+
 @pytest.fixture
 def sample_top_tags():
-    """Provide sample top tags data for testing."""
+    """
+    Provide sample top tags data for testing.
+
+    Returns
+    -------
+    dict
+        A dictionary containing sample top tags data.
+    """
     return {
         0: {
             2002: (["tag1", "tag2"], [10.0, 20.0]),
@@ -65,13 +98,40 @@ def sample_top_tags():
 
 @pytest.fixture
 def mock_db_path(tmp_path):
-    """Create a temporary SQLite database for testing."""
+    """
+    Create a temporary SQLite database for testing.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Temporary directory provided by pytest.
+
+    Returns
+    -------
+    str
+        The path to the temporary SQLite database.
+    """
     db_path = tmp_path / "test.db"
     return str(db_path)
 
 def test_create_top_tags_database(mock_db_path, sample_top_tags):
-    """Test the create_top_tags_database function."""
-    
+    """
+    Test the `create_top_tags_database` function.
+
+    This test ensures that the function correctly creates and populates the
+    top tags database.
+
+    Parameters
+    ----------
+    mock_db_path : str
+        The path to the temporary SQLite database.
+    sample_top_tags : dict
+        Sample top tags data for testing.
+
+    Assertions
+    ----------
+    - The database contains the expected top tags data.
+    """
     # Call the function
     utils.create_top_tags_database(mock_db_path, sample_top_tags)
 
