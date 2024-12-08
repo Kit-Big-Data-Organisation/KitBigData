@@ -369,7 +369,7 @@ def create_wordcloud_plot(_analyzer, _Comment_analyzer, _engine):
     matplotlib.figure.Figure
         A matplotlib figure showing the wordcloud plot.
     """
-    plotter = DataPlotter(_analyzer , _Comment_analyzer)
+    plotter = DataPlotter(_analyzer, _Comment_analyzer)
     return plotter.plot_wordcloud(_engine)
 
 
@@ -395,7 +395,7 @@ def create_time_wordcloud_plot(_analyzer, _Comment_analyzer, _engine):
     matplotlib.figure.Figure
         A matplotlib figure showing the wordcloud plot.
     """
-    plotter = DataPlotter(_analyzer , _Comment_analyzer)
+    plotter = DataPlotter(_analyzer, _Comment_analyzer)
     return plotter.plot_time_wordcloud(_engine)
 
 

@@ -16,24 +16,7 @@ Constants:
         A dictionary mapping oil types to their respective color codes.
 
 """
-"""
-This module provides utility functions for various tasks including database
-operations, data highlighting, and text rendering.
-Functions:
-    determine_cuisine(tags):
-    highlight_cells(val):
-        Highlights specific cells in a dataframe figure based on the value.
-    create_top_tags_database(DB_PATH, set_number_tags):
-        Creates and populates a database table with top tags data.
-    render_justified_text(content):
-        Renders text content with justified alignment in a Streamlit app.
-Constants:
-    relevant_cuisines (list of str):
-        A list of relevant cuisines.
-    custom_palette (dict):
-        A dictionary mapping oil types to their respective color codes.
 
-"""
 import sqlite3
 import streamlit as st
 
@@ -81,7 +64,6 @@ def determine_cuisine(tags):
     str
         The determined cuisine of the recipe.
     """
-
 
     cuisines = {
         "asian": 0,
@@ -142,9 +124,7 @@ def highlight_cells(val):
         return ""
 
 
-
-
-def create_top_tags_database(DB_PATH , set_number_tags):
+def create_top_tags_database(DB_PATH, set_number_tags):
     """
     Creates and populates a database table with top tags data.
 
@@ -159,23 +139,28 @@ def create_top_tags_database(DB_PATH , set_number_tags):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
     CREATE TABLE IF NOT EXISTS top_tags (
         set_number INTEGER,
         year INTEGER,
         label TEXT,
         size REAL
     )
-    """)
+    """
+    )
 
     for set_number, top_tags_years in set_number_tags.items():
         for year, data in top_tags_years.items():
             labels, sizes = data
             for label, size in zip(labels, sizes):
-                cursor.execute("""
+                cursor.execute(
+                    """
                 INSERT INTO top_tags (set_number, year, label, size)
                 VALUES (?, ?, ?, ?)
-                """, (set_number, year, label, size))
+                """,
+                    (set_number, year, label, size),
+                )
 
     conn.commit()
     conn.close()
@@ -192,8 +177,7 @@ def render_justified_text(content):
         The text content to be rendered.
     """
     st.markdown(
-        f"<div class='justified'>{content}</div>",
-        unsafe_allow_html=True
+        f"<div class='justified'>{content}</div>", unsafe_allow_html=True
     )
 
     """
@@ -205,6 +189,5 @@ def render_justified_text(content):
         The text content to be rendered.
     """
     st.markdown(
-        f"<div class='justified'>{content}</div>",
-        unsafe_allow_html=True
+        f"<div class='justified'>{content}</div>", unsafe_allow_html=True
     )

@@ -311,7 +311,7 @@ class CommentAnalyzer:
 
         return word_frequencies
 
-    def sentiment_analysis_over_time(self, engine, period='Y'):
+    def sentiment_analysis_over_time(self, engine, period="Y"):
         """
         Calculate the average sentiment polarity of comments over specified
         time periods.
@@ -341,26 +341,24 @@ class CommentAnalyzer:
         except Exception as e:
             logger.warning(f"Table not found or error loading data: {e}")
 
-        if 'date' not in self.comments.columns:
+        if "date" not in self.comments.columns:
             logger.error("Date column missing from DataFrame.")
             return None
 
         # Ensure 'date' is in datetime format
-        self.comments['date'] = pd.to_datetime(self.comments['date'])
+        self.comments["date"] = pd.to_datetime(self.comments["date"])
 
         # Perform sentiment analysis if not already done
-        if 'polarity' not in self.comments.columns:
+        if "polarity" not in self.comments.columns:
             self.sentiment_analysis()
 
         # Group by the specified period and calculate the average polarity
-        self.comments['period'] = self.comments['date'].dt.to_period(period)
+        self.comments["period"] = self.comments["date"].dt.to_period(period)
         sentiment_by_period = (
-            self.comments.groupby('period')['polarity']
-            .mean()
-            .reset_index()
+            self.comments.groupby("period")["polarity"].mean().reset_index()
         )
 
-        sentiment_by_period.columns = ['Period', 'Average Sentiment']
+        sentiment_by_period.columns = ["Period", "Average Sentiment"]
 
         logger.info("Sentiment analysis over time completed.")
 

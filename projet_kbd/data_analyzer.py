@@ -19,6 +19,7 @@ import utils
 from comment_analyzer import CommentAnalyzer
 from logger_config import logger
 
+
 class DataAnalyzer:
     """
     A class for analyzing and processing recipe data.
@@ -117,7 +118,7 @@ class DataAnalyzer:
             if number_id == 0:
                 year_oil[year] = {oil: 0 for oil in oil_types.keys()}
                 continue
-                    
+
             for _, row in df_year.iterrows():
                 ingredients_set = set(row["ingredients"])
                 for oil_type in oil_types.keys():
