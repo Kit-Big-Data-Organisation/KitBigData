@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>projet_kbd.logger_config module &mdash; Projet Kit Big Data 1 documentation</title>
+  <title>projet_kbd.analysis_text module &mdash; Projet Kit Big Data 1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -19,8 +19,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="projet_kbd.main module" href="projet_kbd.main.html" />
-    <link rel="prev" title="projet_kbd.data_plotter module" href="projet_kbd.data_plotter.html" /> 
+    <link rel="next" title="projet_kbd.comment_analyzer module" href="projet_kbd.comment_analyzer.html" />
+    <link rel="prev" title="projet_kbd package" href="projet_kbd.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,13 +48,13 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="projet_kbd.html">projet_kbd package</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.analysis_text module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.logger_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
@@ -67,7 +67,7 @@
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
@@ -89,9 +89,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="projet_kbd.html">projet_kbd package</a></li>
-      <li class="breadcrumb-item active">projet_kbd.logger_config module</li>
+      <li class="breadcrumb-item active">projet_kbd.analysis_text module</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/projet_kbd.logger_config.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/projet_kbd.analysis_text.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -99,22 +99,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-projet_kbd.logger_config">
-<span id="projet-kbd-logger-config-module"></span><h1>projet_kbd.logger_config module<a class="headerlink" href="#module-projet_kbd.logger_config" title="Link to this heading"></a></h1>
-<p>Logging configuration module for the project.</p>
-<p>This module sets up the logging configuration for the application,
-allowing logs to be displayed in the console and saved to a rotating log file.
-The log file rotates when it reaches a specified size, and a fixed number of
-backup log files are kept to manage disk usage efficiently.</p>
-<p>Log messages are formatted with timestamps, log levels, and messages.</p>
+  <section id="module-projet_kbd.analysis_text">
+<span id="projet-kbd-analysis-text-module"></span><h1>projet_kbd.analysis_text module<a class="headerlink" href="#module-projet_kbd.analysis_text" title="Link to this heading"></a></h1>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="projet_kbd.data_plotter.html" class="btn btn-neutral float-left" title="projet_kbd.data_plotter module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="projet_kbd.main.html" class="btn btn-neutral float-right" title="projet_kbd.main module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="projet_kbd.html" class="btn btn-neutral float-left" title="projet_kbd package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="projet_kbd.comment_analyzer.html" class="btn btn-neutral float-right" title="projet_kbd.comment_analyzer module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

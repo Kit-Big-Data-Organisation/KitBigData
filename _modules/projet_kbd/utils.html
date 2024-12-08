@@ -80,7 +80,9 @@
            <div itemprop="articleBody">
              
   <h1>Source code for projet_kbd.utils</h1><div class="highlight"><pre>
-<span></span><span class="n">relevant_cuisines</span> <span class="o">=</span> <span class="p">[</span>
+<span></span><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+
+<span class="n">relevant_cuisines</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;asian&quot;</span><span class="p">,</span>
     <span class="s2">&quot;mexican&quot;</span><span class="p">,</span>
     <span class="s2">&quot;italian&quot;</span><span class="p">,</span>
@@ -163,6 +165,13 @@
         <span class="k">return</span> <span class="s2">&quot;background-color: lightpink&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<span class="c1"># Helper function to render justified content</span>
+<div class="viewcode-block" id="render_justified_text">
+<a class="viewcode-back" href="../../projet_kbd.utils.html#projet_kbd.utils.render_justified_text">[docs]</a>
+<span class="k">def</span> <span class="nf">render_justified_text</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;div class=&#39;justified&#39;&gt;</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2">&lt;/div&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 </pre></div>
 

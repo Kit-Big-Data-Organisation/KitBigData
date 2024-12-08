@@ -7,6 +7,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
+   projet_kbd.analysis_text
    projet_kbd.comment_analyzer
    projet_kbd.data_analyzer
    projet_kbd.data_downloader

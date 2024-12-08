@@ -83,11 +83,13 @@
 <span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
 <span class="kn">import</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">analysis_text</span>
 <span class="kn">from</span> <span class="nn">comment_analyzer</span> <span class="kn">import</span> <span class="n">CommentAnalyzer</span>
 <span class="kn">from</span> <span class="nn">data_analyzer</span> <span class="kn">import</span> <span class="n">DataAnalyzer</span>
 <span class="kn">from</span> <span class="nn">data_loader</span> <span class="kn">import</span> <span class="n">Dataloader</span>
 <span class="kn">from</span> <span class="nn">data_plotter</span> <span class="kn">import</span> <span class="n">DataPlotter</span>
 <span class="kn">from</span> <span class="nn">streamlit_option_menu</span> <span class="kn">import</span> <span class="n">option_menu</span>
+<span class="kn">from</span> <span class="nn">main</span> <span class="kn">import</span> <span class="n">DB_PATH</span>
 
 
 <div class="viewcode-block" id="load_and_analyze_data">
@@ -107,6 +109,7 @@
     <span class="n">data</span> <span class="o">=</span> <span class="n">data_loader</span><span class="o">.</span><span class="n">processed_recipe_interaction</span><span class="p">(</span><span class="n">interactions_loader</span><span class="p">)</span>
     <span class="n">analyzer</span> <span class="o">=</span> <span class="n">DataAnalyzer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">analyzer</span><span class="o">.</span><span class="n">clean_from_outliers</span><span class="p">()</span>
+
     <span class="n">analyzer</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;recipe_interaction&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">_engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span>
     <span class="p">)</span>
@@ -128,9 +131,9 @@
 <div class="viewcode-block" id="create_charts">
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_charts">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
-<span class="k">def</span> <span class="nf">create_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">set_number</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">create_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">set_number</span> <span class="p">,</span> <span class="n">_DB_PATH</span><span class="p">):</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_pie_chart_tags</span><span class="p">(</span><span class="n">set_number</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_pie_chart_tags</span><span class="p">(</span><span class="n">set_number</span><span class="p">,</span> <span class="n">_DB_PATH</span><span class="p">)</span></div>
 
 
 
@@ -179,10 +182,10 @@
 
 
 
-<div class="viewcode-block" id="analyze_cuisine_minutes">
-<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_cuisine_minutes">[docs]</a>
+<div class="viewcode-block" id="analyze_cuisine_time">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_cuisine_time">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
-<span class="k">def</span> <span class="nf">analyze_cuisine_minutes</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">analyze_cuisine_time</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisine_time_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
@@ -227,51 +230,18 @@
 <div class="viewcode-block" id="create_wordcloud_plot">
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_wordcloud_plot">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
-<span class="k">def</span> <span class="nf">create_wordcloud_plot</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
-    <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="n">CommentAnalyzer</span><span class="p">(</span><span class="n">_analyzer</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s2">&quot;review&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
-    <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">clean_comments</span><span class="p">()</span>
-    <span class="n">word_frequencies</span> <span class="o">=</span> <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">generate_word_frequencies</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">DataPlotter</span><span class="o">.</span><span class="n">plot_wordcloud</span><span class="p">(</span><span class="n">word_frequencies</span><span class="p">)</span></div>
+<span class="k">def</span> <span class="nf">create_wordcloud_plot</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span> <span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_wordcloud</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="create_time_wordcloud_plot">
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_time_wordcloud_plot">[docs]</a>
 <span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
-<span class="k">def</span> <span class="nf">create_time_wordcloud_plot</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
-    <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="n">CommentAnalyzer</span><span class="p">(</span><span class="n">_analyzer</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s2">&quot;review&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
-    <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">clean_comments</span><span class="p">()</span>
-    <span class="n">word_frequencies_time</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">generate_word_frequencies_associated_to_time</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">DataPlotter</span><span class="o">.</span><span class="n">plot_time_wordcloud</span><span class="p">(</span><span class="n">word_frequencies_time</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="analyze_interactions_ratings">
-<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_interactions_ratings">[docs]</a>
-<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
-<span class="k">def</span> <span class="nf">analyze_interactions_ratings</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
-    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_interactions_ratings</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="analyze_user_interactions">
-<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_user_interactions">[docs]</a>
-<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
-<span class="k">def</span> <span class="nf">analyze_user_interactions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
-    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_user_interactions</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="analyse_average_steps_rating">
-<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyse_average_steps_rating">[docs]</a>
-<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
-<span class="k">def</span> <span class="nf">analyse_average_steps_rating</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
-    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_average_steps_rating</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+<span class="k">def</span> <span class="nf">create_time_wordcloud_plot</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_Comment_analyzer</span> <span class="p">,</span><span class="n">_engine</span><span class="p">):</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span> <span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_time_wordcloud</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
 
 
 
@@ -284,12 +254,15 @@
     <span class="n">analyzer</span> <span class="o">=</span> <span class="n">load_and_analyze_data</span><span class="p">(</span>
         <span class="n">path_file</span><span class="p">,</span> <span class="n">recipe_file</span><span class="p">,</span> <span class="n">interaction_file</span><span class="p">,</span> <span class="n">engine</span>
     <span class="p">)</span>
+    <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="n">CommentAnalyzer</span><span class="p">(</span><span class="n">analyzer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+
     <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">sidebar</span><span class="p">:</span>
         <span class="n">selected</span> <span class="o">=</span> <span class="n">option_menu</span><span class="p">(</span>
             <span class="s2">&quot;Dashboard&quot;</span><span class="p">,</span>
             <span class="p">[</span>
                 <span class="s2">&quot;Presentation&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;Nutrition Analysis&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Eating habits&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Cuisine Analysis&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Sociological Insight&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Free Visualisation&quot;</span><span class="p">,</span>
@@ -297,24 +270,25 @@
             <span class="n">menu_icon</span><span class="o">=</span><span class="s2">&quot;cast&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
+
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            &lt;style&gt;</span>
+<span class="s2">                .justified {</span>
+<span class="s2">                    text-align: justify;</span>
+<span class="s2">                    text-justify: inter-word;</span>
+<span class="s2">                }</span>
+<span class="s2">            &lt;/style&gt;</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Presentation&quot;</span><span class="p">:</span>
 
+            
         <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Presentation&quot;</span><span class="p">)</span>
 
         <span class="c1"># Texte indiquant la période d&#39;analyse</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Based on the graphs above, we observe that both the number of</span>
-<span class="sd">            recipes and the number of interactions peak between</span>
-<span class="sd">            2002 and 2010.</span>
-<span class="sd">            \nBefore 2002, the data is sparse, with significantly fewer</span>
-<span class="sd">            recipes and interactions recorded.</span>
-<span class="sd">            \nAfter 2010, there is a noticeable decline in both metrics. To</span>
-<span class="sd">            ensure a meaningful analysis, we will focus on the period between</span>
-<span class="sd">            2002 and 2010, where the data is most abundant and representative</span>
-<span class="sd">            of user engagement.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-        <span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">presentation</span><span class="p">)</span>
+
 
         <span class="c1"># Création des colonnes et affichage des graphiques</span>
         <span class="n">col</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
@@ -322,100 +296,80 @@
             <span class="n">analyzer</span>
         <span class="p">)</span>  <span class="c1"># Fonction qui génère les figures Plotly</span>
 
-        <span class="n">average_steps_rating</span> <span class="o">=</span> <span class="n">analyse_average_steps_rating</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-        <span class="n">interaction_ratings</span> <span class="o">=</span> <span class="n">analyze_interactions_ratings</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-        <span class="n">user_interactions</span> <span class="o">=</span> <span class="n">analyze_user_interactions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">recipe_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">interaction_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">average_steps_rating</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            This graph shows the evolution of the average number of steps</span>
-<span class="sd">            per year, with associated ratings of the recepies over the years.</span>
-<span class="sd">            \n - The complexity of the recepies is increasing over the years.</span>
-<span class="sd">            \n - The ratings given to the recepies are decreasing over the</span>
-<span class="sd">            years.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-        <span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">interaction_ratings</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            This graph shows the relationship between the average rating</span>
-<span class="sd">            scores, the number of ratings and the cooking time :</span>
-<span class="sd">            \n - Recipes with high ratings (between 4 and 5) tend to have the</span>
-<span class="sd">            highest number of ratings. Recipes with low ratings (below 3)</span>
-<span class="sd">            generally have very few ratings.</span>
-<span class="sd">            \n - Longer cooking times are scattered across recipes with lower</span>
-<span class="sd">            popularity.</span>
-<span class="sd">            Recipes with shorter cooking times dominate the cluster of</span>
-<span class="sd">            highly rated and highly reviewed recipes, indicating that users</span>
-<span class="sd">            prefer quicker recipes.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-        <span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">user_interactions</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            This graph explores the relationship between time since</span>
-<span class="sd">            submission, average rating, and number of interactions with</span>
-<span class="sd">            recipes.</span>
-<span class="sd">            \n - Average ratings tend to decline slightly as time progresses,</span>
-<span class="sd">            indicating that recipes are generally rated lower as they age.</span>
-<span class="sd">            \n - A pattern is visible, with periodic peaks in the number of</span>
-<span class="sd">            interactions, some recipes become relevant again during specific</span>
-<span class="sd">            times of the year, such as holidays or seasonal celebrations.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-        <span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Nutrition Analysis&quot;</span><span class="p">:</span>
-
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Nutrition Analysis&quot;</span><span class="p">)</span>
-
-        <span class="n">col</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
-        <span class="n">oils_analysis</span> <span class="o">=</span> <span class="n">create_oils_stacked_histograms</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">oils_analysis</span><span class="p">)</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">recipe_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">interaction_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Eating habits&quot;</span><span class="p">:</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Eating habits&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">eating_habit_presentation</span><span class="p">)</span>
+        <span class="n">oils_analysis</span> <span class="o">=</span> <span class="n">create_oils_stacked_histograms</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">oils_analysis</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">oil_analysis</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Cuisine Analysis&quot;</span><span class="p">:</span>
 
-        <span class="n">col</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">])</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;## Cuisine Analysis&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine Analysis&quot;</span><span class="p">)</span>
-            <span class="n">cuisine_analysis</span> <span class="o">=</span> <span class="n">create_cuisine_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_analysis</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_presentation</span><span class="p">)</span>
+   
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine Evolution&quot;</span><span class="p">)</span>
-            <span class="n">cuisine_evolution</span> <span class="o">=</span> <span class="n">create_cuisine_evolution_charts</span><span class="p">(</span>
-                <span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span>
-            <span class="p">)</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_evolution</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine nutrition analysis&quot;</span><span class="p">)</span>
-            <span class="n">cuisine_calories</span> <span class="o">=</span> <span class="n">analyze_cuisine_calories</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_calories</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Distribution of Cuisine Types&quot;</span><span class="p">)</span>
+        <span class="n">cuisine_analysis</span> <span class="o">=</span> <span class="n">create_cuisine_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_analysis</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_distribtuion</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="n">cuisine_minutes</span> <span class="o">=</span> <span class="n">analyze_cuisine_minutes</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_minutes</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="n">cuisine_nutritions</span> <span class="o">=</span> <span class="n">analyze_cuisine_nutritions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_nutritions</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine Evolution over the years&quot;</span><span class="p">)</span>
+        <span class="n">cuisine_evolution</span> <span class="o">=</span> <span class="n">create_cuisine_evolution_charts</span><span class="p">(</span>
+            <span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_evolution</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Top ingredients&quot;</span><span class="p">)</span>
-            <span class="n">top_ingredients_cuisine</span> <span class="o">=</span> <span class="n">create_top_ingredients_table</span><span class="p">(</span>
-                <span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span>
-            <span class="p">)</span>
-            <span class="n">styled_df</span> <span class="o">=</span> <span class="n">top_ingredients_cuisine</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span>
-                <span class="n">utils</span><span class="o">.</span><span class="n">highlight_cells</span>
-            <span class="p">)</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">styled_df</span><span class="p">,</span> <span class="n">hide_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_evolution</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine Calories analysis&quot;</span><span class="p">)</span>
+
+        <span class="n">cuisine_calories</span> <span class="o">=</span> <span class="n">analyze_cuisine_calories</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_calories</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_calories</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine time analysis&quot;</span><span class="p">)</span>
+        <span class="n">cuisine_time</span> <span class="o">=</span> <span class="n">analyze_cuisine_time</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_time</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_time_analysis</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Nutritional content by Cuisine in PDV&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_nutritions</span><span class="p">)</span>
+        <span class="n">cuisine_nutritions</span> <span class="o">=</span> <span class="n">analyze_cuisine_nutritions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_nutritions</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_nutritions</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Top ingredients&quot;</span><span class="p">)</span>
+        <span class="n">top_ingredients_cuisine</span> <span class="o">=</span> <span class="n">create_top_ingredients_table</span><span class="p">(</span>
+            <span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span>
+        <span class="p">)</span>
+        <span class="n">styled_df</span> <span class="o">=</span> <span class="n">top_ingredients_cuisine</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">highlight_cells</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">styled_df</span><span class="p">,</span> <span class="n">hide_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_top_ingredients</span><span class="p">)</span>
+        
+
 
     <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Sociological Insight&quot;</span><span class="p">:</span>
 
@@ -503,7 +457,7 @@
 
         <span class="c1"># Analyse des commentaires (Word Cloud général)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;### Word Cloud: Frequent Terms in Comments 📝&quot;</span><span class="p">)</span>
-        <span class="n">wordcloud_fig</span> <span class="o">=</span> <span class="n">create_wordcloud_plot</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">wordcloud_fig</span> <span class="o">=</span> <span class="n">create_wordcloud_plot</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">comment_analyzer</span> <span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">pyplot</span><span class="p">(</span><span class="n">wordcloud_fig</span><span class="p">)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
@@ -515,7 +469,7 @@
 
         <span class="c1"># Analyse des termes associés à &quot;time&quot;</span>
         <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;### Word Cloud: Context Around &#39;Time&#39; ⏱️&quot;</span><span class="p">)</span>
-        <span class="n">time_wordcloud_fig</span> <span class="o">=</span> <span class="n">create_time_wordcloud_plot</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">time_wordcloud_fig</span> <span class="o">=</span> <span class="n">create_time_wordcloud_plot</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span><span class="n">comment_analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">pyplot</span><span class="p">(</span><span class="n">time_wordcloud_fig</span><span class="p">)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
@@ -537,7 +491,7 @@
                 <span class="mi">9</span><span class="p">,</span>
                 <span class="mi">0</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">tags_chart</span> <span class="o">=</span> <span class="n">create_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">set_number</span><span class="p">)</span>
+            <span class="n">tags_chart</span> <span class="o">=</span> <span class="n">create_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">set_number</span> <span class="p">,</span> <span class="n">DB_PATH</span><span class="p">)</span>
             <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">container</span><span class="p">():</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
                     <span class="n">cols</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>

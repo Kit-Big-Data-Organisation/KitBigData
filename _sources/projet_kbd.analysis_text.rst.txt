@@ -1,0 +1,7 @@
+projet\_kbd.analysis\_text module
+=================================
+
+.. automodule:: projet_kbd.analysis_text
+   :members:
+   :undoc-members:
+   :show-inheritance:
