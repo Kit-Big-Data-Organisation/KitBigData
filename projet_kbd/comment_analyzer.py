@@ -17,6 +17,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, CountVectorizer
 from textblob import TextBlob
 from projet_kbd.logger_config import logger
+import re
 
 
 class CommentAnalyzer:
@@ -40,6 +41,8 @@ class CommentAnalyzer:
         """
         self.comments = comments_df
 
+    import re  # Assurez-vous d'importer le module 're'
+
     def clean_comments(self) -> None:
         """
         Clean comments by converting to lowercase, removing punctuation,
@@ -49,18 +52,18 @@ class CommentAnalyzer:
         """
         if "review" in self.comments.columns:
             self.comments["cleaned"] = self.comments["review"].fillna("").astype(str).apply(
-                lambda x: x.lower().replace(r"[^\w\s]", "").strip()
+                lambda x: re.sub(r'[^\w\s]', '', x.lower()).strip()
             )
             # Afficher les entrées qui ne sont pas des chaînes après le nettoyage
             problematic_entries = self.comments[self.comments["cleaned"].apply(lambda x: not isinstance(x, str))]
             if not problematic_entries.empty:
-                print("Problematic entries:", problematic_entries)
-            else :
-                print("No problematic entries.")
+                logger.warning("Problematic entries:", problematic_entries)
+            else:
+                logger.info("No problematic entries.")
             logger.info("Comments cleaned successfully.")
         else:
             logger.error("Column 'review' not found in the DataFrame.")
-            self.comments["cleaned"] = pd.Series([], dtype=str)  # Create an empty 'cleaned' column if 'review' is missing                
+            self.comments["cleaned"] = pd.Series([], dtype=str)  # Create an empty 'cleaned' column if 'review' is missing
 
     def sentiment_analysis(self) -> pd.DataFrame:
         """

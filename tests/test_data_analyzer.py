@@ -1,8 +1,7 @@
 from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
-
-from projet_kbd import data_analyzer
+from data_analyzer import DataAnalyzer
 
 
 @pytest.fixture
@@ -97,7 +96,7 @@ def test_proportion_quick_recipe(
     mock_read_sql_table.return_value = pd.DataFrame()
 
     # Créer une instance avec des données fictives
-    analyzer = data_analyzer.DataAnalyzer(data=sample_data)
+    analyzer = DataAnalyzer(data=sample_data)
 
     # Appeler la fonction
     result = analyzer.proportion_quick_recipe(mock_engine)
@@ -148,7 +147,7 @@ def test_proportion_quick_recipe_calculation(
     mock_read_sql_table.return_value = pd.DataFrame()
 
     # Create a DataAnalyzer instance
-    analyzer = data_analyzer.DataAnalyzer(sample_data)
+    analyzer = DataAnalyzer(sample_data)
 
     # Call the function
     result = analyzer.proportion_quick_recipe(mock_engine)
@@ -201,7 +200,7 @@ def test_get_quick_recipe_interaction_rate(
     mock_read_sql_table.return_value = pd.DataFrame()
 
     # Create a DataAnalyzer instance
-    analyzer = data_analyzer.DataAnalyzer(sample_data)
+    analyzer = DataAnalyzer(sample_data)
 
     # Call the function
     result = analyzer.get_quick_recipe_interaction_rate(mock_engine)
@@ -255,7 +254,7 @@ def test_get_categories_quick_recipe(
     mock_read_sql_table.return_value = pd.DataFrame()
 
     # Create a DataAnalyzer instance
-    analyzer = data_analyzer.DataAnalyzer(sample_data)
+    analyzer = DataAnalyzer(sample_data)
 
     # Call the function
     result = analyzer.get_categories_quick_recipe(mock_engine)
