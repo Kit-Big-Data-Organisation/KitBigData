@@ -778,6 +778,8 @@ class DataAnalyzer:
             logger.error(
                 f"Failed to save category counts to the database: {e}"
             )
+        
+        return category_df
 
     def analyse_interactions_ratings(self, engine):
         """
