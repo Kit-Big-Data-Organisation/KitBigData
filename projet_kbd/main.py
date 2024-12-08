@@ -29,7 +29,7 @@ DATA_FILES = {
 }
 
 # Create SQLAlchemy engine dynamically
-engine = sqlalchemy.create_engine(f'sqlite:///{DB_PATH}')
+engine = sqlalchemy.create_engine(f"sqlite:///{DB_PATH}")
 
 
 def create_database_if_not_exists(db_path):
