@@ -102,6 +102,7 @@
 <span class="kn">import</span> <span class="nn">utils</span>
 <span class="kn">from</span> <span class="nn">comment_analyzer</span> <span class="kn">import</span> <span class="n">CommentAnalyzer</span>
 <span class="kn">from</span> <span class="nn">logger_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">DB_PATH</span>
 
 
 <div class="viewcode-block" id="DataAnalyzer">
@@ -205,6 +206,11 @@
             <span class="n">df_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">]</span>
             <span class="n">number_id</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 
+            <span class="c1"># Skip if no unique IDs are found for the year</span>
+            <span class="k">if</span> <span class="n">number_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">oil</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+                <span class="k">continue</span>
+                    
             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df_year</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
                 <span class="n">ingredients_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">oil_type</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -220,9 +226,10 @@
             <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">oils</span> <span class="ow">in</span> <span class="n">year_oil</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oils</span><span class="p">:</span>
-                <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-                <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Avoid division by zero in normalization</span>
+                <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oils</span><span class="p">:</span>
+                    <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">oils</span><span class="p">[</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="n">total</span>
 
         <span class="n">df_oils</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">year_oil</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="s1">&#39;Year&#39;</span><span class="p">}</span>

@@ -124,7 +124,7 @@
 <span class="kn">from</span> <span class="nn">data_plotter</span> <span class="kn">import</span> <span class="n">DataPlotter</span>
 <span class="kn">from</span> <span class="nn">logger_config</span> <span class="kn">import</span> <span class="n">logger</span>
 <span class="kn">from</span> <span class="nn">streamlit_option_menu</span> <span class="kn">import</span> <span class="n">option_menu</span>
-<span class="kn">from</span> <span class="nn">main</span> <span class="kn">import</span> <span class="n">DB_PATH</span>
+<span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">DB_PATH</span>
 
 
 <div class="viewcode-block" id="load_and_analyze_data">
@@ -813,7 +813,6 @@
         <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Nutritional content by Cuisine in PDV&quot;</span><span class="p">)</span>
-        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_nutritions</span><span class="p">)</span>
         <span class="n">cuisine_nutritions</span> <span class="o">=</span> <span class="n">analyze_cuisine_nutritions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_nutritions</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_nutritions</span><span class="p">)</span>
