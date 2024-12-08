@@ -19,7 +19,7 @@ from collections import Counter
 import pandas as pd
 import utils
 from logger_config import logger
-from main import DB_PATH
+from config import DB_PATH
 
 class DataAnalyzer:
     """
@@ -116,7 +116,12 @@ class DataAnalyzer:
             
             df_year = self.data[self.data['year'] == year]
             number_id = df_year['id'].nunique()
-            
+
+            # Skip if no unique IDs are found for the year
+            if number_id == 0:
+                year_oil[year] = {oil: 0 for oil in oil_types.keys()}
+                continue
+                    
             for _, row in df_year.iterrows():
                 ingredients_set = set(row['ingredients'])
                 for oil_type in oil_types.keys():
@@ -126,8 +131,10 @@ class DataAnalyzer:
             year_oil[year] = {oil: count / number_id for oil, count in oil_types.items()}
 
         for year, oils in year_oil.items():
-            for oil in oils:
-                year_oil[year][oil] =  year_oil[year][oil]/sum(oils.values())
+            total = sum(oils.values())
+            if total > 0:  # Avoid division by zero in normalization
+                for oil in oils:
+                    year_oil[year][oil] = oils[oil] / total
 
         df_oils = pd.DataFrame(year_oil).T.reset_index().rename(columns={'index': 'Year'})
         df_oils = df_oils.melt(id_vars=['Year'], var_name='Oil Type', value_name='Proportion')

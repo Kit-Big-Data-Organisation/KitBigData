@@ -12,15 +12,8 @@ import sqlalchemy
 from data_downloader import download_data
 from logger_config import logger
 import streamlit_app
+from config import DB_PATH , DATA_DIR , RECIPES_FILE , INTERACTIONS_FILE
 
-# Define base directory (KitBigData)
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-# Paths to database and data files
-DB_PATH = os.path.join(BASE_DIR, "projet_kbd", "database", "streamlit.db")
-DATA_DIR = os.path.join(BASE_DIR, "Data")
-RECIPES_FILE = "RAW_recipes.csv"
-INTERACTIONS_FILE = "RAW_interactions.csv"
 
 # Create SQLAlchemy engine dynamically
 engine = sqlalchemy.create_engine(f'sqlite:///{DB_PATH}')
