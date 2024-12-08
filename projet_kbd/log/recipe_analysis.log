@@ -1,0 +1,37 @@
+2024-12-08 21:31:04,934 - INFO - RAW_recipes.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv. Skipping download.
+2024-12-08 21:31:04,934 - INFO - RAW_interactions.csv already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv. Skipping download.
+2024-12-08 21:31:04,934 - INFO - streamlit.db already exists in /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/projet_kbd/database/streamlit.db. Skipping download.
+2024-12-08 21:31:04,934 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_recipes.csv
+2024-12-08 21:31:04,934 - INFO - File validated: /Users/ghalia/Desktop/Telecom_IA/Projet KBD/KitBigData/Data/RAW_interactions.csv
+2024-12-08 21:31:04,934 - INFO - Starting the Streamlit application...
+2024-12-08 21:31:15,041 - INFO - Generating plot for number of recipes per year.
+2024-12-08 21:31:15,286 - INFO - Plot for recipes per year generated successfully.
+2024-12-08 21:31:15,286 - INFO - Generating plot for number of interactions per year.
+2024-12-08 21:31:15,335 - INFO - Plot for interactions per year generated successfully.
+2024-12-08 21:31:15,336 - INFO - Starting analysis of average steps and ratings for visualization.
+2024-12-08 21:31:15,336 - INFO - Converting 'submitted' column to datetime andextracting the year.
+2024-12-08 21:31:15,446 - INFO - Grouping data by year to calculate average steps and ratings.
+2024-12-08 21:31:15,468 - INFO - Average steps and ratings calculated successfully.
+2024-12-08 21:31:15,468 - INFO - Data analysis for steps and ratings completed successfully.
+2024-12-08 21:31:15,468 - INFO - Creating a new Plotly bar chart figure.
+2024-12-08 21:31:15,469 - INFO - Adding bar trace for average steps with associated average ratings.
+2024-12-08 21:31:15,485 - INFO - Configuring the layout of the bar chart.
+2024-12-08 21:31:15,488 - INFO - Layout configuration completed successfully.
+2024-12-08 21:31:15,489 - INFO - Analyzing interactions and ratings for plotting.
+2024-12-08 21:31:15,489 - INFO - Aggregating interaction and rating data.
+2024-12-08 21:31:15,542 - INFO - Data aggregation completed successfully.
+2024-12-08 21:31:15,542 - INFO - Generating scatter plot for average ratings vs. number of ratings.
+2024-12-08 21:31:15,570 - INFO - Scatter plot generated successfully.
+2024-12-08 21:31:15,575 - INFO - Starting analysis of user interaction data for visualization.
+2024-12-08 21:31:15,575 - INFO - Converting 'submitted' and 'date' columns to datetime format.
+2024-12-08 21:31:15,720 - INFO - Calculating the number of days since submission for each interaction.
+2024-12-08 21:31:15,730 - INFO - Filtering data to include only rows where 'days_since_submission' > 0.
+2024-12-08 21:31:16,248 - INFO - Grouping data by 'days_since_submission' to calculateinteractions and average ratings.
+2024-12-08 21:31:16,289 - INFO - User interactions analysis completed successfully.
+2024-12-08 21:31:16,585 - INFO - User interaction data analysis completed successfully.
+2024-12-08 21:31:16,585 - INFO - Creating a new Plotly figure.
+2024-12-08 21:31:16,586 - INFO - Adding scatter trace for the number of interactions.
+2024-12-08 21:31:16,590 - INFO - Adding scatter trace for the average rating.
+2024-12-08 21:31:16,591 - INFO - Updating figure layout with multiple axes.
+2024-12-08 21:31:16,597 - INFO - Figure layout updated successfully.
+2024-12-08 21:31:16,960 - INFO - Streamlit application finished successfully.
