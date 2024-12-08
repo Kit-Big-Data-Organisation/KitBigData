@@ -401,10 +401,15 @@ def run(path_file, recipe_file, interaction_file, engine):
                     word_counts,
                     x='year',
                     y='Co-occurrence Percentage',
-                    title='Proportion of Comments Containing the Specified Words Over Time',
+                    title=(
+                        'Proportion of Comments Containing the '
+                        'Specified Words Over Time'
+                    ),
                     labels={
                         'year': 'Year',
-                        'Co-occurrence Percentage': 'Percentage of Comments (%)'
+                        'Co-occurrence Percentage': (
+                            'Percentage of Comments (%)'
+                        )
                     }
                 )
                 fig.update_layout(
@@ -419,7 +424,9 @@ def run(path_file, recipe_file, interaction_file, engine):
                 )
                 st.plotly_chart(fig, use_container_width=True)
             else:
-                st.write("No co-occurrence data found for the specified words.")
+                st.write(
+                    "No co-occurrence data found for the specified words."
+                )
     elif selected == "Free Visualisation":
         st.write("## Tags Analysis")
         col = st.columns([0.8, 0.2])
