@@ -40,7 +40,7 @@ from data_loader import Dataloader
 from data_plotter import DataPlotter
 from logger_config import logger
 from streamlit_option_menu import option_menu
-from main import DB_PATH
+from config import DB_PATH
 
 
 @st.cache_data
@@ -667,7 +667,6 @@ def run(path_file, recipe_file, interaction_file, engine):
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
         st.markdown("#### Nutritional content by Cuisine in PDV")
-        utils.render_justified_text(analysis_text.cuisine_nutritions)
         cuisine_nutritions = analyze_cuisine_nutritions(analyzer, engine)
         st.plotly_chart(cuisine_nutritions, use_container_width=False)
         utils.render_justified_text(analysis_text.cuisine_nutritions)
