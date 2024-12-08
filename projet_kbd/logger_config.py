@@ -2,24 +2,30 @@
 Logging configuration module for the project.
 
 This module sets up the logging configuration for the application,
-allowing logs to be displayed in the console and saved to a rotating log file.
-The log file rotates when it reaches a specified size, and a fixed number of
-backup log files are kept to manage disk usage efficiently.
+allowing logs to be displayed in the console and saved to a rotating log file
+in a specific 'log' directory. The log file rotates when it reaches a specified
+size, and a fixed number of backup log files are kept to manage disk usage
+efficiently.
 
 Log messages are formatted with timestamps, log levels, and messages.
 """
 
+import os
 import logging
 from logging.handlers import RotatingFileHandler
 
+# Ensure the directory for log files exists
+log_directory = "log"
+os.makedirs(log_directory, exist_ok=True)
+
 # Log file path and configuration for rotation
-log_file = "recipe_analysis.log"
+log_file_path = os.path.join(log_directory, "recipe_analysis.log")
 max_file_size = 5 * 1024 * 1024  # Maximum size per log file: 5 MB
 backup_count = 3  # Number of backup log files to keep
 
 # Create a rotating file handler
 rotating_handler = RotatingFileHandler(
-    log_file, maxBytes=max_file_size, backupCount=backup_count
+    log_file_path, maxBytes=max_file_size, backupCount=backup_count
 )
 
 # Set up the logging configuration
