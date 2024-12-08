@@ -105,6 +105,7 @@
 <span class="kn">from</span> <span class="nn">wordcloud</span> <span class="kn">import</span> <span class="n">WordCloud</span>
 <span class="kn">import</span> <span class="nn">sqlite3</span>
 
+
 <div class="viewcode-block" id="DataPlotter">
 <a class="viewcode-back" href="../../projet_kbd.data_plotter.html#projet_kbd.data_plotter.DataPlotter">[docs]</a>
 <span class="k">class</span> <span class="nc">DataPlotter</span><span class="p">:</span>
@@ -116,7 +117,7 @@
 <span class="sd">    data_analyzer : object</span>
 <span class="sd">        An instance of the DataAnalyzer class for accessing analyzed data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_analyzer</span> <span class="p">,</span> <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_analyzer</span> <span class="p">,</span> <span class="n">comment_analyzer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the DataPlotter object.</span>
 
@@ -178,7 +179,7 @@
 
 <div class="viewcode-block" id="DataPlotter.plot_pie_chart_tags">
 <a class="viewcode-back" href="../../projet_kbd.data_plotter.html#projet_kbd.data_plotter.DataPlotter.plot_pie_chart_tags">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_pie_chart_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_number</span> <span class="p">,</span><span class="n">engine</span> <span class="p">,</span><span class="n">db_path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">plot_pie_chart_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_number</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">db_path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate pie charts for the top tags per year from the database.</span>
 
@@ -203,13 +204,14 @@
 
         <span class="c1"># Check if the table exists</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-            <span class="s2">&quot;SELECT name FROM sqlite_master WHERE type=&#39;table&#39; AND name=&#39;top_tags&#39;;&quot;</span>
+            <span class="s2">&quot;SELECT name FROM sqlite_master WHERE type=&#39;table&#39; &quot;</span>
+            <span class="s2">&quot;AND name=&#39;top_tags&#39;;&quot;</span>
         <span class="p">)</span>
         <span class="n">table_exists</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">table_exists</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating &#39;top_tags&#39; table...&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_analyzer</span><span class="o">.</span><span class="n">get_top_tag_per_year</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">db_path</span><span class="p">)</span>
-      
+
         <span class="c1"># Query data for the specified set_number</span>
         <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        SELECT year, label, size</span>
@@ -395,7 +397,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating bar chart for top ingredients.&quot;</span><span class="p">)</span>
         <span class="n">df_top_ingredients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_analyzer</span><span class="o">.</span><span class="n">top_commun_ingredients</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
-        <span class="n">df_top_ingredients</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">}</span> <span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">df_top_ingredients</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Top ingredients generated.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df_top_ingredients</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span></div>
 
@@ -671,7 +673,6 @@
 
     <span class="c1"># Analyse des commentaires</span>
 
-
 <div class="viewcode-block" id="DataPlotter.plot_wordcloud">
 <a class="viewcode-back" href="../../projet_kbd.data_plotter.html#projet_kbd.data_plotter.DataPlotter.plot_wordcloud">[docs]</a>
     <span class="k">def</span> <span class="nf">plot_wordcloud</span><span class="p">(</span><span class="bp">self</span> <span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
@@ -724,7 +725,8 @@
         <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comment_analyzer</span>
         <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">clean_comments</span><span class="p">()</span>
         <span class="n">word_frequencies_time</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">generate_word_frequencies_associated_to_time</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+            <span class="n">comment_analyzer</span>
+            <span class="o">.</span><span class="n">generate_word_frequencies_associated_to_time</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating Word Cloud plot for time.&quot;</span><span class="p">)</span>
         <span class="n">wordcloud</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span>
