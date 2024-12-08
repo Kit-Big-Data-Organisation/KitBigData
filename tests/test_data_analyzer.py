@@ -1131,3 +1131,39 @@ def test_word_count_with_missing_year_column(MockCommentAnalyzer, sample_data_wo
 
     assert result.empty, "The result should be empty due to missing 'year' column"
     print("Column 'year' not found.")  # Ensure this print statement works in your function
+
+@pytest.fixture
+def sample_data_evolution():
+    return pd.DataFrame({
+        'date': pd.date_range(start='2001-01-01', end='2010-12-31', freq='A'),
+        'rating': [5, 4, 3, 2, 5, 4, 3, 5, 4, 3]  # Sample ratings
+    })
+
+
+@patch("sqlite3.connect")  # Patch sqlite3 globally, not under your module
+@patch("projet_kbd.data_analyzer.logger")
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+def test_calculate_rating_evolution(mock_connect, mock_logger, mock_read_sql_table, sample_data_evolution, mock_engine):
+    """Test the calculate_rating_evolution function."""
+
+    # Configure the mock to return the sample data
+    mock_read_sql_table.return_value = sample_data_evolution
+    
+    # Instantiate the DataAnalyzer
+    analyzer = DataAnalyzer(sample_data_evolution)
+
+    # Call the function
+    result = analyzer.calculate_rating_evolution(mock_engine)
+
+    print('result')
+    print(result)
+    # Expected Result
+    expected_result = pd.DataFrame({
+        "year": [2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010],
+        "average_rating": [4.0, 3.0, 2.0, 5.0, 4.0, 3.0, 5.0, 4.0, 3.0]
+    })
+
+    print('expected result')
+    print(expected_result)
+    # Assert the result
+    pd.testing.assert_frame_equal(result, expected_result, check_dtype=False)
