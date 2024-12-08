@@ -18,7 +18,6 @@ import pandas as pd
 import utils
 from comment_analyzer import CommentAnalyzer
 from logger_config import logger
-from config import DB_PATH
 
 class DataAnalyzer:
     """
