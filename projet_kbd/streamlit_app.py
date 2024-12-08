@@ -2,10 +2,12 @@ import pandas as pd
 import streamlit as st
 import utils
 import analysis_text
+import plotly.express as px
 from comment_analyzer import CommentAnalyzer
 from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
 from data_plotter import DataPlotter
+from logger_config import logger
 from streamlit_option_menu import option_menu
 from main import DB_PATH
 
@@ -118,6 +120,28 @@ def create_time_wordcloud_plot(_analyzer, _Comment_analyzer ,_engine):
     return plotter.plot_time_wordcloud(_engine)
 
 
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_plot_rating_evolution(_analyzer, _engine):
+    plotter = DataPlotter(_analyzer)
+    return plotter.plot_rating_evolution(_engine)
+
+
+def create_plot_sentiment_evolution(_analyzer, _engine):
+    plotter = DataPlotter(_analyzer)
+    return plotter.plot_sentiment_over_time(_engine)
+
+
+@st.cache_data(hash_funcs={DataAnalyzer: id})
+def create_plot_rating_evolution(_analyzer, _engine):
+    plotter = DataPlotter(_analyzer)
+    return plotter.plot_rating_evolution(_engine)
+
+
+def create_plot_sentiment_evolution(_analyzer, _engine):
+    plotter = DataPlotter(_analyzer)
+    return plotter.plot_sentiment_over_time(_engine)
+
+
 def run(path_file, recipe_file, interaction_file, engine):
 
     st.set_page_config(layout="wide")
@@ -136,7 +160,8 @@ def run(path_file, recipe_file, interaction_file, engine):
                 "Eating habits",
                 "Cuisine Analysis",
                 "Sociological Insight",
-                "Free Visualisation",
+                "Interaction with the reviews",
+                "Free Visualisation"
             ],
             menu_icon="cast",
         )
@@ -351,6 +376,95 @@ def run(path_file, recipe_file, interaction_file, engine):
             """
         )
 
+    elif selected == "Interaction with the reviews":
+        st.title('📈 Rate Evolution and Sentiment Analysis Over Time')
+
+        logger.info("Rate evolution...")
+        rate_evolution = create_plot_rating_evolution(analyzer, engine)
+        st.plotly_chart(rate_evolution, use_container_width=True)
+        st.write(
+            """
+            The graph "Evolution of Comment Ratings Over the Years" shows that
+            from 2002 to 2010, the average ratings of comments remained
+            remarkably stable, hovering close to 4.5 out of a maximum of 5.
+            This indicates a consistent level of high-quality comments and
+            user satisfaction over the years, suggesting effective content
+            moderation and stable user expectations. Such stability is crucial
+            for maintaining user engagement and satisfaction on the platform.
+            """
+        )
+        logger.info("Sentiment analysis...")
+        sentiment_evolution = create_plot_sentiment_evolution(analyzer, engine)
+        st.plotly_chart(sentiment_evolution, use_container_width=True)
+        st.write(
+            """
+            The chart shows a consistent trend of positive sentiment in user
+            comments from **2002 to 2010**, with average sentiment polarity
+            remaining above **zero** and hovering between **0.3 and 0.33**.
+
+            This indicates:
+            - Overall stable and moderately positive feedback, reflecting
+              **reliability** in the platform or content.
+            - Minimal fluctuations, suggesting **steady user satisfaction**
+              and a lack of major emotional shifts during this period.
+            """
+        )
+
+        st.write(
+            "**🔍 Explore the frequency of words in comments and observe their "
+            "evolution over time.** Enter words like *'good,'* *'bad,'* "
+            "*'delicious,'* or *'tasty'* to discover how often these terms are"
+            " mentioned and compare their usage trends over the years."
+            "This analysis can help identify patterns of positivity and"
+            " negativity in user comments, complementing insights from "
+            "sentiment analysis."
+        )
+
+        words_input = st.text_input(
+            'Enter words to search for co-occurrence, separated by commas:',
+            ''
+        )
+        words = [
+            word.strip() for word in words_input.split(',')
+        ] if words_input else []
+
+        if words:
+            word_counts = (
+                DataAnalyzer
+                .word_co_occurrence_over_time(analyzer, words)
+            )
+
+            if not word_counts.empty:
+                fig = px.line(
+                    word_counts,
+                    x='year',
+                    y='Co-occurrence Percentage',
+                    title=(
+                        'Proportion of Comments Containing the '
+                        'Specified Words Over Time'
+                    ),
+                    labels={
+                        'year': 'Year',
+                        'Co-occurrence Percentage': (
+                            'Percentage of Comments (%)'
+                        )
+                    }
+                )
+                fig.update_layout(
+                    xaxis=dict(
+                        tickmode='linear',
+                        tickformat='d'  # Afficher les années sans virgules
+                    ),
+                    yaxis=dict(range=[0, 100]),
+                    yaxis_title='Percentage of Comments (%)',
+                    xaxis_title='Year',
+                    legend_title='Words'
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.write(
+                    "No co-occurrence data found for the specified words."
+                )
     elif selected == "Free Visualisation":
         st.write("## Tags Analysis")
         col = st.columns([0.8, 0.2])

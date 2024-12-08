@@ -36,7 +36,7 @@ jobs:
 
       - name: Install project dependencies
         run: poetry install
-      
+        
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=${{ github.workspace }}/projet_kbd" >> $GITHUB_ENV
 
