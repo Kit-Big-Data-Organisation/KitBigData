@@ -623,7 +623,6 @@ def test_cuisine_evolution(mock_to_sql, mock_read_sql_table):
         "American": [50.0, 40.0],
         "Greek": [5.0, 5.0],
         "Italian": [30.0, 35.0],
-        "Greek": [15.0, 20.0]
     }).set_index("Year")
 
     # Initialize the analyzer with sample data
