@@ -83,7 +83,7 @@ def test_generate_word_frequencies(sample_comments, mock_engine):
     Test the `generate_word_frequencies` function to ensure it properly
     handles database retrieval and word frequency computation.
     """
-    analyzer = comment_analyzer.CommentAnalyzer(sample_comments)
+    analyzer = CommentAnalyzer(sample_comments)
     analyzer.clean_comments()
 
     # Mock reading an existing table and handling the exception
@@ -112,7 +112,7 @@ def test_generate_word_frequencies_time(sample_comments, mock_engine):
     it captures context correctly and computes frequencies based on that
     context.
     """
-    analyzer = comment_analyzer.CommentAnalyzer(sample_comments)
+    analyzer = CommentAnalyzer(sample_comments)
     analyzer.clean_comments()
     # Assuming there is a method that cleans comments
 
