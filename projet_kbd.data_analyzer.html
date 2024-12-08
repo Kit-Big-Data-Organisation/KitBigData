@@ -75,7 +75,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.data"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_average_steps_rating"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyse_average_steps_rating()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_cuisine_nutritions"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyse_cuisine_nutritions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyse_interactions_ratings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_user_intractions"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyse_user_intractions()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyze_cuisines"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyze_cuisines()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyze_oils"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyze_oils()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.calculate_rating_evolution"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.calculate_rating_evolution()</span></code></a></li>
@@ -164,6 +167,24 @@ databases.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_average_steps_rating">
+<span class="sig-name descname"><span class="pre">analyse_average_steps_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_average_steps_rating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_average_steps_rating" title="Link to this definition"></a></dt>
+<dd><p>Analyze the average number of steps and average rating per year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the average number of steps and average
+rating per year.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_cuisine_nutritions">
 <span class="sig-name descname"><span class="pre">analyse_cuisine_nutritions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_cuisine_nutritions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_cuisine_nutritions" title="Link to this definition"></a></dt>
 <dd><p>Analyze the median nutrition values for each cuisine and save the
@@ -174,6 +195,42 @@ results in the database.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A DataFrame with the median nutrition values for each cuisine.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings">
+<span class="sig-name descname"><span class="pre">analyse_interactions_ratings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_interactions_ratings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings" title="Link to this definition"></a></dt>
+<dd><p>Analyze the average rating, number of ratings, and mean preparation
+time for each recipe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with aggregated interactions and ratings data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_user_intractions">
+<span class="sig-name descname"><span class="pre">analyse_user_intractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_user_intractions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_user_intractions" title="Link to this definition"></a></dt>
+<dd><p>Analyze user interactions over time since the submission of recipes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the number of interactions and”
+“average rating grouped by days since submission.”</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>

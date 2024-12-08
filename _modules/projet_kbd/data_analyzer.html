@@ -188,23 +188,23 @@
 
         <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2011</span><span class="p">):</span>
             <span class="n">oil_types</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;olive oil&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;vegetable oil&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;canola oil&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;sesame oil&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;peanut oil&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;cooking oil&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;salad oil&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;oil&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;corn oil&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s1">&#39;extra virgin olive oil&#39;</span> <span class="p">:</span> <span class="mi">0</span>
+                <span class="s2">&quot;olive oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;vegetable oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;canola oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;sesame oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;peanut oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;cooking oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;salad oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;corn oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;extra virgin olive oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="p">}</span>
 
             <span class="n">df_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">]</span>
             <span class="n">number_id</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
 
             <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df_year</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-                <span class="n">ingredients_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ingredients&#39;</span><span class="p">])</span>
+                <span class="n">ingredients_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">oil_type</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">oil_type</span> <span class="ow">in</span> <span class="n">ingredients_set</span><span class="p">:</span>
                         <span class="n">oil_types</span><span class="p">[</span><span class="n">oil_type</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -213,8 +213,13 @@
                 <span class="n">oil</span><span class="p">:</span> <span class="n">count</span> <span class="o">/</span> <span class="n">number_id</span> <span class="k">for</span> <span class="n">oil</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
             <span class="p">}</span>
 
+            <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">oil</span><span class="p">:</span> <span class="n">count</span> <span class="o">/</span> <span class="n">number_id</span> <span class="k">for</span> <span class="n">oil</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+
         <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">oils</span> <span class="ow">in</span> <span class="n">year_oil</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oils</span><span class="p">:</span>
+                <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
                 <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
         <span class="n">df_oils</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">year_oil</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
@@ -898,8 +903,155 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Failed to save category counts to the database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-
+        
         <span class="k">return</span> <span class="n">category_df</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyse_interactions_ratings">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyse_interactions_ratings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the average rating, number of ratings, and mean preparation</span>
+<span class="sd">        time for each recipe.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with aggregated interactions and ratings data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Aggregating interaction and rating data.&quot;</span><span class="p">)</span>
+            <span class="n">aggregated</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+                    <span class="n">avg_rating</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                    <span class="n">num_ratings</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">),</span>
+                    <span class="n">mean_minutes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;minutes&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data aggregation completed successfully.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">aggregated</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error while aggregating interactions and ratings: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyse_average_steps_rating">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyse_average_steps_rating">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyse_average_steps_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the average number of steps and average rating per year.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the average number of steps and average</span>
+<span class="sd">            rating per year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Converting &#39;submitted&#39; column to datetime and&quot;</span>
+                <span class="s2">&quot;extracting the year.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Grouping data by year to calculate average steps and ratings.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">grouped</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+                    <span class="n">avg_steps</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;n_steps&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                    <span class="n">avg_rating</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Average steps and ratings calculated successfully.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">grouped</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required columns in the data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An unexpected error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Return an empty DataFrame in case of an error</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyse_user_intractions">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyse_user_intractions">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyse_user_intractions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze user interactions over time since the submission of recipes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the number of interactions and&quot;</span>
+<span class="sd">            &quot;average rating grouped by days since submission.&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Converting &#39;submitted&#39; and &#39;date&#39; columns to datetime format.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Calculating the number of days since submission for &quot;</span>
+                <span class="s2">&quot;each interaction.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;days_since_submission&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Filtering data to include only rows where &quot;</span>
+                <span class="s2">&quot;&#39;days_since_submission&#39; &gt; 0.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">filtered_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;days_since_submission&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Grouping data by &#39;days_since_submission&#39; to calculate&quot;</span>
+                <span class="s2">&quot;interactions and average ratings.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">aggregated</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">filtered_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;days_since_submission&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+                    <span class="n">num_interactions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">),</span>  <span class="c1"># Number of interactions</span>
+                    <span class="n">avg_rating</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>  <span class="c1"># Average rating</span>
+                <span class="p">)</span>
+                <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;User interactions analysis completed successfully.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">aggregated</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required columns in the data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An unexpected error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Return an empty DataFrame in case of an error</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="DataAnalyzer.word_count_over_time">

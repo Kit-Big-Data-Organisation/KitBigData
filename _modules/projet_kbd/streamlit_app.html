@@ -265,6 +265,33 @@
 
 
 
+<div class="viewcode-block" id="analyze_interactions_ratings">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_interactions_ratings">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyze_interactions_ratings</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_interactions_ratings</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyze_user_interactions">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_user_interactions">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyze_user_interactions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_user_interactions</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyse_average_steps_rating">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyse_average_steps_rating">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyse_average_steps_rating</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_average_steps_rating</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="run">
 <a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.run">[docs]</a>
 <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">path_file</span><span class="p">,</span> <span class="n">recipe_file</span><span class="p">,</span> <span class="n">interaction_file</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
@@ -312,11 +339,57 @@
             <span class="n">analyzer</span>
         <span class="p">)</span>  <span class="c1"># Fonction qui génère les figures Plotly</span>
 
-        <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">recipe_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">average_steps_rating</span> <span class="o">=</span> <span class="n">analyse_average_steps_rating</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">interaction_ratings</span> <span class="o">=</span> <span class="n">analyze_interactions_ratings</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">user_interactions</span> <span class="o">=</span> <span class="n">analyze_user_interactions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">interaction_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">recipe_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">interaction_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">average_steps_rating</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This graph shows the evolution of the average number of steps</span>
+<span class="sd">            per year, with associated ratings of the recepies over the years.</span>
+<span class="sd">            \n - The complexity of the recepies is increasing over the years.</span>
+<span class="sd">            \n - The ratings given to the recepies are decreasing over the</span>
+<span class="sd">            years.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">interaction_ratings</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This graph shows the relationship between the average rating</span>
+<span class="sd">            scores, the number of ratings and the cooking time :</span>
+<span class="sd">            \n - Recipes with high ratings (between 4 and 5) tend to have the</span>
+<span class="sd">            highest number of ratings. Recipes with low ratings (below 3)</span>
+<span class="sd">            generally have very few ratings.</span>
+<span class="sd">            \n - Longer cooking times are scattered across recipes with lower</span>
+<span class="sd">            popularity.</span>
+<span class="sd">            Recipes with shorter cooking times dominate the cluster of</span>
+<span class="sd">            highly rated and highly reviewed recipes, indicating that users</span>
+<span class="sd">            prefer quicker recipes.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">user_interactions</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This graph explores the relationship between time since</span>
+<span class="sd">            submission, average rating, and number of interactions with</span>
+<span class="sd">            recipes.</span>
+<span class="sd">            \n - Average ratings tend to decline slightly as time progresses,</span>
+<span class="sd">            indicating that recipes are generally rated lower as they age.</span>
+<span class="sd">            \n - A pattern is visible, with periodic peaks in the number of</span>
+<span class="sd">            interactions, some recipes become relevant again during specific</span>
+<span class="sd">            times of the year, such as holidays or seasonal celebrations.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Eating habits&quot;</span><span class="p">:</span>
 
