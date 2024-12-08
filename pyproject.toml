@@ -26,6 +26,7 @@ textblob = "^0.18.0.post0"
 gdown = "^5.2.0"
 sphinx-rtd-theme = "^3.0.2"
 sphinx-autodoc-typehints = "^2.5.0"
+coverage = "^7.6.9"
 
 [tool.poetry.dev-dependencies]
 black = "*"  # Auto-formatting, compatible with PEP8
