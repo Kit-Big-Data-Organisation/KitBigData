@@ -80,8 +80,8 @@
            <div itemprop="articleBody">
              
   <h1>Source code for projet_kbd.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
-
+<span></span><span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
 <span class="n">relevant_cuisines</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;asian&quot;</span><span class="p">,</span>
     <span class="s2">&quot;mexican&quot;</span><span class="p">,</span>
@@ -91,18 +91,6 @@
     <span class="s2">&quot;american&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
-<span class="n">oil_types</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;olive oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;vegetable oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;canola oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;sesame oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;peanut oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;cooking oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;salad oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;corn oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="s2">&quot;extra virgin olive oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-<span class="p">}</span>
 
 <span class="n">custom_palette</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;olive oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#8a3ab9&quot;</span><span class="p">,</span>
@@ -165,6 +153,35 @@
         <span class="k">return</span> <span class="s2">&quot;background-color: lightpink&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+    
+<div class="viewcode-block" id="create_top_tags_database">
+<a class="viewcode-back" href="../../projet_kbd.utils.html#projet_kbd.utils.create_top_tags_database">[docs]</a>
+<span class="k">def</span> <span class="nf">create_top_tags_database</span><span class="p">(</span><span class="n">DB_PATH</span> <span class="p">,</span> <span class="n">set_number_tags</span><span class="p">):</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DB_PATH</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        CREATE TABLE IF NOT EXISTS top_tags (</span>
+<span class="s2">            set_number INTEGER,</span>
+<span class="s2">            year INTEGER,</span>
+<span class="s2">            label TEXT,</span>
+<span class="s2">            size REAL</span>
+<span class="s2">        )</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">set_number</span><span class="p">,</span> <span class="n">top_tags_years</span> <span class="ow">in</span> <span class="n">set_number_tags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">top_tags_years</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">labels</span><span class="p">,</span> <span class="n">sizes</span> <span class="o">=</span> <span class="n">data</span>
+                <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">sizes</span><span class="p">):</span>
+                    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    INSERT INTO top_tags (set_number, year, label, size)</span>
+<span class="s2">                    VALUES (?, ?, ?, ?)</span>
+<span class="s2">                    &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">set_number</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 <span class="c1"># Helper function to render justified content</span>

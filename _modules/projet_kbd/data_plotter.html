@@ -177,7 +177,7 @@
 
 <div class="viewcode-block" id="DataPlotter.plot_pie_chart_tags">
 <a class="viewcode-back" href="../../projet_kbd.data_plotter.html#projet_kbd.data_plotter.DataPlotter.plot_pie_chart_tags">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_pie_chart_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_number</span> <span class="p">,</span><span class="n">db_path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">plot_pie_chart_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">set_number</span> <span class="p">,</span><span class="n">engine</span> <span class="p">,</span><span class="n">db_path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate pie charts for the top tags per year from the database.</span>
 
@@ -207,7 +207,7 @@
         <span class="n">table_exists</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">table_exists</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating &#39;top_tags&#39; table...&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_analyzer</span><span class="o">.</span><span class="n">get_top_tag_per_year</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_analyzer</span><span class="o">.</span><span class="n">get_top_tag_per_year</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">db_path</span><span class="p">)</span>
       
         <span class="c1"># Query data for the specified set_number</span>
         <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
