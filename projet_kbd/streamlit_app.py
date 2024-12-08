@@ -1,11 +1,13 @@
 import pandas as pd
 import streamlit as st
 import utils
+import analysis_text
 from comment_analyzer import CommentAnalyzer
 from data_analyzer import DataAnalyzer
 from data_loader import Dataloader
 from data_plotter import DataPlotter
 from streamlit_option_menu import option_menu
+from main import DB_PATH
 
 
 @st.cache_data
@@ -23,6 +25,7 @@ def load_and_analyze_data(path_file, recipe_file, interaction_file, _engine):
     data = data_loader.processed_recipe_interaction(interactions_loader)
     analyzer = DataAnalyzer(data)
     analyzer.clean_from_outliers()
+
     analyzer.data.to_sql(
         name="recipe_interaction", con=_engine, if_exists="replace"
     )
@@ -38,9 +41,9 @@ def create_plots(analyzer):
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def create_charts(analyzer, set_number):
+def create_charts(analyzer, set_number , _DB_PATH):
     plotter = DataPlotter(analyzer)
-    return plotter.plot_pie_chart_tags(set_number)
+    return plotter.plot_pie_chart_tags(set_number, _DB_PATH)
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
@@ -74,7 +77,7 @@ def analyze_cuisine_calories(analyzer, _engine):
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def analyze_cuisine_minutes(analyzer, _engine):
+def analyze_cuisine_time(analyzer, _engine):
     plotter = DataPlotter(analyzer)
     return plotter.plot_cuisine_time_analysis(_engine)
 
@@ -104,21 +107,15 @@ def create_categories_quick_recipe_chart(analyzer, _engine):
 
 
 @st.cache_data
-def create_wordcloud_plot(_analyzer, _engine):
-    comment_analyzer = CommentAnalyzer(_analyzer.data[["review"]].dropna())
-    comment_analyzer.clean_comments()
-    word_frequencies = comment_analyzer.generate_word_frequencies(_engine)
-    return DataPlotter.plot_wordcloud(word_frequencies)
+def create_wordcloud_plot(_analyzer, _Comment_analyzer, _engine):
+    plotter = DataPlotter(_analyzer , _Comment_analyzer)
+    return plotter.plot_wordcloud(_engine)
 
 
 @st.cache_data
-def create_time_wordcloud_plot(_analyzer, _engine):
-    comment_analyzer = CommentAnalyzer(_analyzer.data[["review"]].dropna())
-    comment_analyzer.clean_comments()
-    word_frequencies_time = (
-        comment_analyzer.generate_word_frequencies_associated_to_time(_engine)
-    )
-    return DataPlotter.plot_time_wordcloud(word_frequencies_time)
+def create_time_wordcloud_plot(_analyzer, _Comment_analyzer ,_engine):
+    plotter = DataPlotter(_analyzer , _Comment_analyzer)
+    return plotter.plot_time_wordcloud(_engine)
 
 
 def run(path_file, recipe_file, interaction_file, engine):
@@ -128,12 +125,15 @@ def run(path_file, recipe_file, interaction_file, engine):
     analyzer = load_and_analyze_data(
         path_file, recipe_file, interaction_file, engine
     )
+    comment_analyzer = CommentAnalyzer(analyzer.data)
+
+
     with st.sidebar:
         selected = option_menu(
             "Dashboard",
             [
                 "Presentation",
-                "Nutrition Analysis",
+                "Eating habits",
                 "Cuisine Analysis",
                 "Sociological Insight",
                 "Free Visualisation",
@@ -141,24 +141,25 @@ def run(path_file, recipe_file, interaction_file, engine):
             menu_icon="cast",
         )
 
+
+    st.markdown("""
+            <style>
+                .justified {
+                    text-align: justify;
+                    text-justify: inter-word;
+                }
+            </style>
+            """, unsafe_allow_html=True)
+    
     if selected == "Presentation":
 
+            
         st.write("## Presentation")
 
         # Texte indiquant la période d'analyse
-        st.write(
-            """
-            Based on the graphs above, we observe that both the number of
-            recipes and the number of interactions peak between
-            2002 and 2010.
-            \nBefore 2002, the data is sparse, with significantly fewer
-            recipes and interactions recorded.
-            \nAfter 2010, there is a noticeable decline in both metrics. To
-            ensure a meaningful analysis, we will focus on the period between
-            2002 and 2010, where the data is most abundant and representative
-            of user engagement.
-            """
-        )
+
+        utils.render_justified_text(analysis_text.presentation)
+
 
         # Création des colonnes et affichage des graphiques
         col = st.columns([0.5, 0.5])
@@ -172,48 +173,74 @@ def run(path_file, recipe_file, interaction_file, engine):
         with col[1]:
             st.plotly_chart(interaction_fig, use_container_width=True)
 
-    elif selected == "Nutrition Analysis":
+    elif selected == "Eating habits":
 
-        st.write("## Nutrition Analysis")
-
-        col = st.columns([0.5, 0.5])
+        st.write("## Eating habits")
+        utils.render_justified_text(analysis_text.eating_habit_presentation)
         oils_analysis = create_oils_stacked_histograms(analyzer, engine)
-        with col[0]:
-            st.plotly_chart(oils_analysis)
+        st.plotly_chart(oils_analysis)
+        utils.render_justified_text(analysis_text.oil_analysis)
 
     elif selected == "Cuisine Analysis":
 
-        col = st.columns([0.3, 0.7])
+        st.markdown("## Cuisine Analysis")
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
-        with col[0]:
-            st.markdown("#### Cuisine Analysis")
-            cuisine_analysis = create_cuisine_charts(analyzer, engine)
-            st.plotly_chart(cuisine_analysis, use_container_width=True)
+        utils.render_justified_text(analysis_text.cuisine_presentation)
+   
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
-        with col[1]:
-            st.markdown("#### Cuisine Evolution")
-            cuisine_evolution = create_cuisine_evolution_charts(
-                analyzer, engine
-            )
-            st.plotly_chart(cuisine_evolution, use_container_width=True)
-            st.markdown("#### Cuisine nutrition analysis")
-            cuisine_calories = analyze_cuisine_calories(analyzer, engine)
-            st.plotly_chart(cuisine_calories, use_container_width=True)
+        st.markdown("#### Distribution of Cuisine Types")
+        cuisine_analysis = create_cuisine_charts(analyzer, engine)
+        st.plotly_chart(cuisine_analysis, use_container_width=True)
+        
+        utils.render_justified_text(analysis_text.cuisine_distribtuion)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
-            cuisine_minutes = analyze_cuisine_minutes(analyzer, engine)
-            st.plotly_chart(cuisine_minutes, use_container_width=True)
 
-            cuisine_nutritions = analyze_cuisine_nutritions(analyzer, engine)
-            st.plotly_chart(cuisine_nutritions, use_container_width=True)
+        st.markdown("#### Cuisine Evolution over the years")
+        cuisine_evolution = create_cuisine_evolution_charts(
+            analyzer, engine
+        )
+        st.plotly_chart(cuisine_evolution, use_container_width=True)
 
-            st.markdown("#### Top ingredients")
-            top_ingredients_cuisine = create_top_ingredients_table(
-                analyzer, engine
-            )
-            styled_df = top_ingredients_cuisine.style.applymap(
-                utils.highlight_cells
-            )
-            st.dataframe(styled_df, hide_index=True, use_container_width=True)
+        utils.render_justified_text(analysis_text.cuisine_evolution)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        st.markdown("#### Cuisine Calories analysis")
+
+        cuisine_calories = analyze_cuisine_calories(analyzer, engine)
+        st.plotly_chart(cuisine_calories, use_container_width=False)
+        utils.render_justified_text(analysis_text.cuisine_calories)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+
+        st.markdown("#### Cuisine time analysis")
+        cuisine_time = analyze_cuisine_time(analyzer, engine)
+        st.plotly_chart(cuisine_time, use_container_width=False)
+        utils.render_justified_text(analysis_text.cuisine_time_analysis)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+
+        st.markdown("#### Nutritional content by Cuisine in PDV")
+        utils.render_justified_text(analysis_text.cuisine_nutritions)
+        cuisine_nutritions = analyze_cuisine_nutritions(analyzer, engine)
+        st.plotly_chart(cuisine_nutritions, use_container_width=False)
+        utils.render_justified_text(analysis_text.cuisine_nutritions)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        
+        st.markdown("#### Top ingredients")
+        top_ingredients_cuisine = create_top_ingredients_table(
+            analyzer, engine
+        )
+        styled_df = top_ingredients_cuisine.style.map(
+            utils.highlight_cells
+        )
+        st.dataframe(styled_df, hide_index=True, use_container_width=True)
+        utils.render_justified_text(analysis_text.cuisine_top_ingredients)
+        
+
 
     elif selected == "Sociological Insight":
 
@@ -301,7 +328,7 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         # Analyse des commentaires (Word Cloud général)
         st.write("### Word Cloud: Frequent Terms in Comments 📝")
-        wordcloud_fig = create_wordcloud_plot(analyzer, engine)
+        wordcloud_fig = create_wordcloud_plot(analyzer, comment_analyzer , engine)
         st.pyplot(wordcloud_fig)
         st.write(
             """
@@ -313,7 +340,7 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         # Analyse des termes associés à "time"
         st.write("### Word Cloud: Context Around 'Time' ⏱️")
-        time_wordcloud_fig = create_time_wordcloud_plot(analyzer, engine)
+        time_wordcloud_fig = create_time_wordcloud_plot(analyzer,comment_analyzer, engine)
         st.pyplot(time_wordcloud_fig)
         st.write(
             """
@@ -335,7 +362,7 @@ def run(path_file, recipe_file, interaction_file, engine):
                 9,
                 0,
             )
-            tags_chart = create_charts(analyzer, set_number)
+            tags_chart = create_charts(analyzer, set_number , DB_PATH)
             with st.container():
                 for i in range(0, 8, 2):
                     cols = st.columns(2)

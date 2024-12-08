@@ -1,3 +1,5 @@
+import streamlit as st
+
 relevant_cuisines = [
     "asian",
     "mexican",
@@ -76,3 +78,7 @@ def highlight_cells(val):
         return "background-color: lightpink"
     else:
         return ""
+
+# Helper function to render justified content
+def render_justified_text(content):
+    st.markdown(f"<div class='justified'>{content}</div>", unsafe_allow_html=True)

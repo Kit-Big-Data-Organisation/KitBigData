@@ -52,7 +52,7 @@ class CommentAnalyzer:
         This method modifies the `comments` attribute in place.
         """
         self.comments["cleaned"] = (
-            self.comments["review"]
+            self.comments["review"].dropna()
             .str.lower()
             .str.replace(r"[^\w\s]", "", regex=True)
             .str.strip()

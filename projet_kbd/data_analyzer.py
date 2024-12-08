@@ -18,8 +18,8 @@ import os
 from collections import Counter
 import pandas as pd
 import utils
-from projet_kbd.logger_config import logger
-
+from logger_config import logger
+from main import DB_PATH
 
 class DataAnalyzer:
     """
@@ -98,19 +98,7 @@ class DataAnalyzer:
 
         year_oil = {}
         for year in range(2002, 2011):
-            oil_types = {
-                'olive oil': 0,
-                'vegetable oil': 0,
-                'canola oil': 0,
-                'sesame oil': 0,
-                'peanut oil': 0,
-                'cooking oil': 0,
-                'salad oil': 0,
-                'oil' : 0,
-                'corn oil' : 0,
-                'extra virgin olive oil' : 0
-            }
-            
+            oil_types = utils.oil_types
             df_year = self.data[self.data['year'] == year]
             number_id = df_year['id'].nunique()
             
@@ -210,9 +198,9 @@ class DataAnalyzer:
 
         return top_commun_year
 
-    def get_top_tag_per_year(self) -> dict:
+    def get_top_tag_per_year(self , DB_PATH):
         """
-        Extract the top tags for each year in the dataset.
+        Extract the top tags for each year in the dataset and store them in the top tag database.
 
         Returns
         -------
@@ -220,31 +208,32 @@ class DataAnalyzer:
             A dictionary containing the top tags for each year from 2002 to
             2010.
         """
-        file_path = "top_tags.json"
+        try:
+            data = pd.read_sql_table("top_tags", con=DB_PATH)
+            if not data.empty:
+                logger.info("Table Top tags found in the database.")
+                return 
+        except Exception as e:
+            logger.warning(f"Failed to load data from the database: {e}")
+        
+        set_number_tags = {}
+        for set_number in range(0, 10):
+            top_tags_years = {}
+            for year in range(2002, 2011):
+                tag_year = self.get_top_tags(year)
+                start_idx = set_number * 10
+                end_idx = start_idx + 10 + 1
+                labels = [k for (k, _) in tag_year[year]][
+                    start_idx:end_idx
+                ]
+                sizes = [v for (_, v) in tag_year[year]][start_idx:end_idx]
+                top_tags_years[year] = [labels, sizes]
 
-        if os.path.exists(file_path):
-            with open(file_path, "r") as file:
-                set_number_tags = json.load(file)
-        else:
-            set_number_tags = {}
-            for set_number in range(0, 10):
-                top_tags_years = {}
-                for year in range(2002, 2011):
-                    tag_year = self.get_top_tags(year)
-                    start_idx = set_number * 10
-                    end_idx = start_idx + 10 + 1
-                    labels = [k for (k, _) in tag_year[year]][
-                        start_idx:end_idx
-                    ]
-                    sizes = [v for (_, v) in tag_year[year]][start_idx:end_idx]
-                    top_tags_years[year] = [labels, sizes]
+            set_number_tags[set_number] = top_tags_years
 
-                set_number_tags[set_number] = top_tags_years
-
-            with open(file_path, "w") as file:
-                json.dump(set_number_tags, file)
-
-        return set_number_tags
+        utils.create_top_tags_database(DB_PATH , set_number_tags)
+    
+   
 
     def analyze_cuisines(self, engine):
         """
@@ -310,6 +299,7 @@ class DataAnalyzer:
         """
         try:
             data = pd.read_sql_table("cuisine_evolution_dataframe", con=engine)
+            print('cuisine evolution dataframe', data)
             if not data.empty:
                 return data
         except Exception as e:
@@ -333,7 +323,7 @@ class DataAnalyzer:
             * 100
         )
         cuisine_df.to_sql(
-            name="cuisine_evolution_dataframe", con=engine, if_exists="replace"
+            name="cuisine_evolution_dataframe", con=engine, if_exists="replace",index=True, index_label='Year'
         )
 
         return cuisine_df
