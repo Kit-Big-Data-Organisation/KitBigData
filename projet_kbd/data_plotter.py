@@ -23,6 +23,7 @@ from plotly.subplots import make_subplots
 from wordcloud import WordCloud
 import sqlite3
 
+
 class DataPlotter:
     """
     A class for creating visualizations based on recipe data analysis.
@@ -32,7 +33,7 @@ class DataPlotter:
     data_analyzer : object
         An instance of the DataAnalyzer class for accessing analyzed data.
     """
-    def __init__(self, data_analyzer , comment_analyzer = None):
+    def __init__(self, data_analyzer , comment_analyzer=None):
         """
         Initialize the DataPlotter object.
 
@@ -86,7 +87,7 @@ class DataPlotter:
         logger.info("Plot for recipes per year generated successfully.")
         return fig
 
-    def plot_pie_chart_tags(self, set_number ,engine ,db_path):
+    def plot_pie_chart_tags(self, set_number, engine, db_path):
         """
         Generate pie charts for the top tags per year from the database.
 
@@ -111,13 +112,14 @@ class DataPlotter:
 
         # Check if the table exists
         cursor.execute(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='top_tags';"
+            "SELECT name FROM sqlite_master WHERE type='table' "
+            "AND name='top_tags';"
         )
         table_exists = cursor.fetchone() is not None
         if not table_exists:
             logger.info("Creating 'top_tags' table...")
             self.data_analyzer.get_top_tag_per_year(engine, db_path)
-      
+
         # Query data for the specified set_number
         query = """
         SELECT year, label, size
