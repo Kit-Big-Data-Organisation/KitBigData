@@ -84,9 +84,6 @@ def validate_data_files(data_dir):
 
 
 if __name__ == "__main__":
-    """
-    Main entry point of the script.
-    """
     try:
         # Ensure the database and data files are downloaded and validated
         for file_name, (url, dir) in DATA_FILES.items():
