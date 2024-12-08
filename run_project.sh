@@ -12,6 +12,9 @@ else
     echo "Poetry is already installed."
 fi
 
+echo "Ensuring the lock file is up to date..."
+poetry lock --no-update
+
 echo "Installing project dependencies..."
 poetry install
 
