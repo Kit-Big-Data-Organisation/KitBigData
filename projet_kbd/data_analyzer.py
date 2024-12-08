@@ -19,7 +19,6 @@ import utils
 from comment_analyzer import CommentAnalyzer
 from logger_config import logger
 
-
 class DataAnalyzer:
     """
     A class for analyzing and processing recipe data.
@@ -85,15 +84,19 @@ class DataAnalyzer:
         """
 
         try:
-            data = pd.read_sql_table('oils_dataframe', con=engine)
+            data = pd.read_sql_table("oils_dataframe", con=engine)
+            data = pd.read_sql_table("oils_dataframe", con=engine)
             if not data.empty:
-                print('data found')
+                print("data found")
+                print("data found")
                 return data
         except Exception as e:
             print(f"Failed to load data from database: {e}")
 
-        self.data.drop_duplicates(subset=['id'], inplace=True)
-        self.data['ingredients'] = self.data['ingredients'].apply(eval)
+        self.data.drop_duplicates(subset=["id"], inplace=True)
+        self.data["ingredients"] = self.data["ingredients"].apply(eval)
+        self.data.drop_duplicates(subset=["id"], inplace=True)
+        self.data["ingredients"] = self.data["ingredients"].apply(eval)
 
         year_oil = {}
 
@@ -111,8 +114,8 @@ class DataAnalyzer:
                 "extra virgin olive oil": 0,
             }
 
-            df_year = self.data[self.data['year'] == year]
-            number_id = df_year['id'].nunique()
+            df_year = self.data[self.data["year"] == year]
+            number_id = df_year["id"].nunique()
 
             # Skip if no unique IDs are found for the year
             if number_id == 0:
@@ -139,16 +142,15 @@ class DataAnalyzer:
                 for oil in oils:
                     year_oil[year][oil] = oils[oil] / total
 
-        df_oils = pd.DataFrame(year_oil).T.reset_index().rename(
-            columns={'index': 'Year'}
+        df_oils = (
+            pd.DataFrame(year_oil)
+            .T.reset_index()
+            .rename(columns={"index": "Year"})
         )
         df_oils = df_oils.melt(
-            id_vars=['Year'],
-            var_name='Oil Type',
-            value_name='Proportion')
-        df_oils.to_sql(name='oils_dataframe',
-                       con=engine,
-                       if_exists='replace')
+            id_vars=["Year"], var_name="Oil Type", value_name="Proportion"
+        )
+        df_oils.to_sql(name="oils_dataframe", con=engine, if_exists="replace")
 
         return df_oils
 
@@ -230,7 +232,7 @@ class DataAnalyzer:
 
         return top_commun_year
 
-    def get_top_tag_per_year(self , engine , DB_PATH):
+    def get_top_tag_per_year(self, engine, DB_PATH):
         """
         Extract the top tags for each year in the dataset and store them in
         the top tag database.
@@ -256,15 +258,13 @@ class DataAnalyzer:
                 tag_year = self.get_top_tags(year)
                 start_idx = set_number * 10
                 end_idx = start_idx + 10 + 1
-                labels = [k for (k, _) in tag_year[year]][
-                    start_idx:end_idx
-                ]
+                labels = [k for (k, _) in tag_year[year]][start_idx:end_idx]
                 sizes = [v for (_, v) in tag_year[year]][start_idx:end_idx]
                 top_tags_years[year] = [labels, sizes]
 
             set_number_tags[set_number] = top_tags_years
         logger.info("Creating table top tags ...")
-        utils.create_top_tags_database(DB_PATH , set_number_tags)
+        utils.create_top_tags_database(DB_PATH, set_number_tags)
 
     def analyze_cuisines(self, engine):
         """
@@ -330,7 +330,7 @@ class DataAnalyzer:
         """
         try:
             data = pd.read_sql_table("cuisine_evolution_dataframe", con=engine)
-            print('cuisine evolution dataframe', data)
+            print("cuisine evolution dataframe", data)
             if not data.empty:
                 return data
         except Exception as e:
@@ -358,7 +358,7 @@ class DataAnalyzer:
             con=engine,
             if_exists="replace",
             index=True,
-            index_label='Year'
+            index_label="Year",
         )
 
         return cuisine_df
@@ -961,7 +961,7 @@ class DataAnalyzer:
         """
 
         # Assure that comments are cleaned first
-        if 'cleaned' not in self.data.columns:
+        if "cleaned" not in self.data.columns:
             comment_analyzer = CommentAnalyzer(self.data)
             comment_analyzer.clean_comments()
         print(self.data.head(1))
@@ -978,15 +978,12 @@ class DataAnalyzer:
                 return 0
 
         # Appliquer la fonction de comptage en capturant les erreurs
-        self.data['word_count'] = self.data['cleaned'].apply(count_word)
+        self.data["word_count"] = self.data["cleaned"].apply(count_word)
 
-        if 'year' in self.data.columns:
-            filtered_data = self.data[self.data['year'].between(2002, 2010)]
+        if "year" in self.data.columns:
+            filtered_data = self.data[self.data["year"].between(2002, 2010)]
             word_counts = (
-                filtered_data
-                .groupby('year')['word_count']
-                .sum()
-                .reset_index()
+                filtered_data.groupby("year")["word_count"].sum().reset_index()
             )
             return word_counts
         else:
@@ -1010,9 +1007,9 @@ class DataAnalyzer:
             A DataFrame with years and the percentage of co-occurrences per
             year.
         """
-        print(self.data['ingredients'].iloc[0])
+        print(self.data["ingredients"].iloc[0])
         # Assure that comments are cleaned first
-        if 'cleaned' not in self.data.columns:
+        if "cleaned" not in self.data.columns:
             comment_analyzer = CommentAnalyzer(self.data)
             comment_analyzer.clean_comments()
         print(self.data.head(1))
@@ -1023,30 +1020,26 @@ class DataAnalyzer:
             return all(word in comment for word in words)
 
         # Apply the counting function
-        self.data['co_occurrence'] = (
-            self
-            .data['cleaned']
-            .apply(count_co_occurrences)
+        self.data["co_occurrence"] = self.data["cleaned"].apply(
+            count_co_occurrences
         )
 
-        if 'year' in self.data.columns:
+        if "year" in self.data.columns:
             # Calculate the total comments per year
-            total_comments_per_year = self.data.groupby('year').size()
+            total_comments_per_year = self.data.groupby("year").size()
             # Filter the data between specific years if needed
-            filtered_data = self.data[self.data['year'].between(2002, 2010)]
+            filtered_data = self.data[self.data["year"].between(2002, 2010)]
             # Calculate the number of co-occurrences per year
-            co_occurrences_per_year = (
-                filtered_data
-                .groupby('year')['co_occurrence']
-                .sum()
-            )
+            co_occurrences_per_year = filtered_data.groupby("year")[
+                "co_occurrence"
+            ].sum()
             # Calculate the percentage of co-occurrences
             result = (
                 co_occurrences_per_year
                 / total_comments_per_year.loc[co_occurrences_per_year.index]
                 * 100
             ).reset_index()
-            result.columns = ['year', 'Co-occurrence Percentage']
+            result.columns = ["year", "Co-occurrence Percentage"]
             return result
         else:
             print("Column 'year' not found.")
@@ -1079,31 +1072,26 @@ class DataAnalyzer:
             return all(word in ingredients_list for word in words)
 
         # Apply the counting function
-        self.data['co_occurrence'] = (
-            self
-            .data['ingredients']
-            .apply(count_co_occurrences)
+        self.data["co_occurrence"] = self.data["ingredients"].apply(
+            count_co_occurrences
         )
 
-        if 'year' in self.data.columns:
+        if "year" in self.data.columns:
             # Calculate the total entries per year
-            total_entries_per_year = self.data.groupby('year').size()
+            total_entries_per_year = self.data.groupby("year").size()
             # Filter the data between specific years if needed
-            filtered_data = self.data[self.data['year'].between(2002, 2010)]
+            filtered_data = self.data[self.data["year"].between(2002, 2010)]
             # Calculate the number of co-occurrences per year
-            co_occurrences_per_year = (
-                filtered_data
-                .groupby('year')['co_occurrence']
-                .sum()
-            )
+            co_occurrences_per_year = filtered_data.groupby("year")[
+                "co_occurrence"
+            ].sum()
             # Calculate the percentage of co-occurrences
             result = (
                 co_occurrences_per_year
-                / total_entries_per_year
-                .loc[co_occurrences_per_year.index]
+                / total_entries_per_year.loc[co_occurrences_per_year.index]
                 * 100
             ).reset_index()
-            result.columns = ['year', 'Co-occurrence Percentage']
+            result.columns = ["year", "Co-occurrence Percentage"]
             return result
         else:
             print("Column 'year' not found.")
@@ -1134,40 +1122,37 @@ class DataAnalyzer:
                     "2010."
                 )
                 filtered_data = data[
-                    (data['year'] >= 2002) & (data['year'] <= 2010)
+                    (data["year"] >= 2002) & (data["year"] <= 2010)
                 ]
                 if not filtered_data.empty:
                     return filtered_data
                 else:
                     logger.info(
                         "No data found in the specified year range",
-                        "proceeding, with calculation."
+                        "proceeding, with calculation.",
                     )
         except Exception as e:
             logger.error(f"Failed to load data from database: {e}")
 
         # Convert the 'date' column to datetime if not already done
-        if self.data['date'].dtype != 'datetime64[ns]':
-            self.data['date'] = pd.to_datetime(
-                self.data['date'], format='%Y-%m-%d'
+        if self.data["date"].dtype != "datetime64[ns]":
+            self.data["date"] = pd.to_datetime(
+                self.data["date"], format="%Y-%m-%d"
             )
 
         # Extract the year from the 'date' column
-        self.data['year'] = self.data['date'].dt.year
+        self.data["year"] = self.data["date"].dt.year
 
         # Filter data for years 2002 to 2010
         filtered_data = self.data[
-            (self.data['year'] >= 2002) & (self.data['year'] <= 2010)
+            (self.data["year"] >= 2002) & (self.data["year"] <= 2010)
         ]
 
         # Calculate the average rating for each year in the range
         rating_evolution = (
-            filtered_data
-            .groupby('year')['rating']
-            .mean()
-            .reset_index()
+            filtered_data.groupby("year")["rating"].mean().reset_index()
         )
-        rating_evolution.columns = ['year', 'average_rating']
+        rating_evolution.columns = ["year", "average_rating"]
 
         logger.info(
             "Rating evolution calculation for specified years completed."
@@ -1184,9 +1169,7 @@ class DataAnalyzer:
             )
             logger.info("Data successfully saved to the database.")
         except Exception as e:
-            logger.error(
-                f"Failed to save data to the database: {e}"
-            )
+            logger.error(f"Failed to save data to the database: {e}")
 
         return rating_evolution
 
@@ -1211,39 +1194,37 @@ class DataAnalyzer:
                 logger.info("Sentiment analysis over time found in database.")
                 # Filter the data for the years 2002 to 2010
                 stored_data = stored_data[
-                    (stored_data['Year'] >= 2002)
-                    & (stored_data['Year'] <= 2010)
+                    (stored_data["Year"] >= 2002)
+                    & (stored_data["Year"] <= 2010)
                 ]
                 return stored_data
         except Exception as e:
             logger.warning(f"Table not found or error loading data: {e}")
 
-        if 'date' not in self.data.columns:
+        if "date" not in self.data.columns:
             logger.error("Date column missing from DataFrame.")
             return None
 
         # Ensure 'date' is in datetime format
-        self.data['date'] = pd.to_datetime(self.data['date'])
-        self.data['year'] = self.data['date'].dt.year
+        self.data["date"] = pd.to_datetime(self.data["date"])
+        self.data["year"] = self.data["date"].dt.year
 
         # Perform sentiment analysis if not already done
-        if 'polarity' not in self.data.columns:
+        if "polarity" not in self.data.columns:
             comment_analyzer = CommentAnalyzer(self.data)
             comment_analyzer.clean_comments()
             comment_analyzer.sentiment_analysis()
 
         # Group by the 'year' column and calculate the average polarity
         sentiment_by_year = (
-            self.data.groupby('year')['polarity']
-            .mean()
-            .reset_index()
+            self.data.groupby("year")["polarity"].mean().reset_index()
         )
-        sentiment_by_year.columns = ['Year', 'Average Sentiment']
+        sentiment_by_year.columns = ["Year", "Average Sentiment"]
 
         # Filter for the years 2002 to 2010
         sentiment_by_year = sentiment_by_year[
-            (sentiment_by_year['Year'] >= 2002)
-            & (sentiment_by_year['Year'] <= 2010)
+            (sentiment_by_year["Year"] >= 2002)
+            & (sentiment_by_year["Year"] <= 2010)
         ]
 
         logger.info("Sentiment analysis over time (2002-2010) completed.")

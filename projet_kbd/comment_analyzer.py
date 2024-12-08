@@ -56,15 +56,15 @@ class CommentAnalyzer:
                 .fillna("")  # Remplace les valeurs NaN par des chaînes vides
                 .astype(str)  # Toutes les entrées sont des chaînes de car.
                 .apply(  # Applique une fonction à chaque élément
-                    lambda x: re.sub(r'[^\w\s]', '', x.lower()).strip()
+                    lambda x: re.sub(r"[^\w\s]", "", x.lower()).strip()
                 )
             )
             # Afficher les entrées qui ne sont pas des chaînes après le
             # nettoyage
             problematic_entries = self.comments[
-                self
-                .comments["cleaned"]
-                .apply(lambda x: not isinstance(x, str))
+                self.comments["cleaned"].apply(
+                    lambda x: not isinstance(x, str)
+                )
             ]
             if not problematic_entries.empty:
                 logger.warn("Problematic entries:", problematic_entries)
@@ -311,4 +311,69 @@ class CommentAnalyzer:
 
         return word_frequencies
 
-    
+    def sentiment_analysis_over_time(self, engine, period='Y'):
+        """
+        Calculate the average sentiment polarity of comments over specified
+        time periods.
+
+        Parameters
+        ----------
+        period : str, optional
+            The time period to group by ('Y' for year, 'M' for month, etc.),
+            default is 'Y'.
+
+        Returns
+        -------
+        pd.DataFrame
+            A DataFrame with time period and average sentiment polarity.
+
+        Notes
+        -----
+        Assumes the DataFrame has a 'date' column in a recognizable datetime
+        format.
+        """
+        # Check if the table is in the database
+        try:
+            stored_data = pd.read_sql_table("sentiment_by_period", con=engine)
+            if not stored_data.empty:
+                logger.info("Sentiment analysis over time found in database.")
+                return stored_data
+        except Exception as e:
+            logger.warning(f"Table not found or error loading data: {e}")
+
+        if 'date' not in self.comments.columns:
+            logger.error("Date column missing from DataFrame.")
+            return None
+
+        # Ensure 'date' is in datetime format
+        self.comments['date'] = pd.to_datetime(self.comments['date'])
+
+        # Perform sentiment analysis if not already done
+        if 'polarity' not in self.comments.columns:
+            self.sentiment_analysis()
+
+        # Group by the specified period and calculate the average polarity
+        self.comments['period'] = self.comments['date'].dt.to_period(period)
+        sentiment_by_period = (
+            self.comments.groupby('period')['polarity']
+            .mean()
+            .reset_index()
+        )
+
+        sentiment_by_period.columns = ['Period', 'Average Sentiment']
+
+        logger.info("Sentiment analysis over time completed.")
+
+        # Save the results to the database
+        try:
+            sentiment_by_period.to_sql(
+                name="sentiment_by_period",
+                con=engine,
+                if_exists="replace",
+                index=False,
+            )
+            logger.info("Sentiment analysis over time saved successfully.")
+        except Exception as e:
+            logger.error(f"Failed to save sentiment analysis over time: {e}")
+
+        return sentiment_by_period

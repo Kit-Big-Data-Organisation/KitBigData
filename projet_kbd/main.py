@@ -11,8 +11,15 @@ import sqlalchemy
 from data_downloader import download_data
 from logger_config import logger
 import streamlit_app
-from config import DB_PATH , DATA_DIR , RECIPES_FILE , INTERACTIONS_FILE
 
+# Define base directory (KitBigData)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Paths to database and data files
+DB_PATH = os.path.join(BASE_DIR, "projet_kbd", "database", "streamlit.db")
+DATA_DIR = os.path.join(BASE_DIR, "Data")
+RECIPES_FILE = "RAW_recipes.csv"
+INTERACTIONS_FILE = "RAW_interactions.csv"
 
 DATA_FILES = {
     "RAW_recipes.csv": ("https://drive.google.com/uc?id=1mrct6Jo7PjwHnFpNZ3JKc2g1dvGaeC0w", DATA_DIR),
@@ -26,12 +33,10 @@ engine = sqlalchemy.create_engine(f"sqlite:///{DB_PATH}")
 
 def create_database_if_not_exists(db_path):
     """
-    Creates an empty SQLite database if it does not already exist.
+    Creates the SQLite database file if it does not already exist.
 
-    Parameters:
-    ----------
-    db_path : str
-        The path to the SQLite database file.
+    Args:
+        db_path (str): The path to the SQLite database file.
     """
     if not os.path.exists(db_path):
         # Ensure the directory exists
@@ -48,16 +53,11 @@ def create_database_if_not_exists(db_path):
 def validate_data_files(data_dir):
     """
     Ensures that the required data files exist after the download step.
+    Raises an exception if any file is missing.
 
-    Parameters:
-    ----------
-    data_dir : str
-        The directory where the data files are stored.
-
-    Raises:
-    -------
-    FileNotFoundError
-        If any of the required files are missing.
+    Args:
+        data_dir (str): The directory where the data files are expected to be
+        located.
     """
     required_files = [RECIPES_FILE, INTERACTIONS_FILE]
     for file_name in required_files:
@@ -72,7 +72,7 @@ if __name__ == "__main__":
         # Ensure the database and data files are downloaded and validated
         for file_name, (url, dir) in DATA_FILES.items():
             download_data(file_name, url, dir)
-        
+
         validate_data_files(DATA_DIR)
 
         logger.info("Starting the Streamlit application...")

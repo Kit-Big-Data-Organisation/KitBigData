@@ -541,19 +541,22 @@ def run(path_file, recipe_file, interaction_file, engine):
                 "Cuisine Analysis",
                 "Sociological Insight",
                 "Interaction with the reviews",
-                "Free Visualisation"
+                "Free Visualisation",
             ],
             menu_icon="cast",
         )
 
-    st.markdown("""
+    st.markdown(
+        """
             <style>
                 .justified {
                     text-align: justify;
                     text-justify: inter-word;
                 }
             </style>
-            """, unsafe_allow_html=True)
+            """,
+        unsafe_allow_html=True,
+    )
     if selected == "Presentation":
 
         st.write("## Presentation")
@@ -576,49 +579,26 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         st.plotly_chart(interaction_fig, use_container_width=True)
 
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        utils.render_justified_text(analysis_text.average_steps_rating)
+
         st.plotly_chart(average_steps_rating, use_container_width=True)
 
-        st.write(
-            """
-            This graph shows the evolution of the average number of steps
-            per year, with associated ratings of the recepies over the years.
-            \n - The complexity of the recepies is increasing over the years.
-            \n - The ratings given to the recepies are decreasing over the
-            years.
-            """
-        )
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        utils.render_justified_text(analysis_text.interaction_ratings)
 
         st.plotly_chart(interaction_ratings, use_container_width=True)
 
-        st.write(
-            """
-            This graph shows the relationship between the average rating
-            scores, the number of ratings and the cooking time :
-            \n - Recipes with high ratings (between 4 and 5) tend to have the
-            highest number of ratings. Recipes with low ratings (below 3)
-            generally have very few ratings.
-            \n - Longer cooking times are scattered across recipes with lower
-            popularity.
-            Recipes with shorter cooking times dominate the cluster of
-            highly rated and highly reviewed recipes, indicating that users
-            prefer quicker recipes.
-            """
-        )
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+        st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
+
+        utils.render_justified_text(analysis_text.user_interactions)
 
         st.plotly_chart(user_interactions, use_container_width=True)
-
-        st.write(
-            """
-            This graph explores the relationship between time since
-            submission, average rating, and number of interactions with
-            recipes.
-            \n - Average ratings tend to decline slightly as time progresses,
-            indicating that recipes are generally rated lower as they age.
-            \n - A pattern is visible, with periodic peaks in the number of
-            interactions, some recipes become relevant again during specific
-            times of the year, such as holidays or seasonal celebrations.
-            """
-        )
 
     elif selected == "Eating habits":
 
@@ -645,9 +625,7 @@ def run(path_file, recipe_file, interaction_file, engine):
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
         st.markdown("#### Cuisine Evolution over the years")
-        cuisine_evolution = create_cuisine_evolution_charts(
-            analyzer, engine
-        )
+        cuisine_evolution = create_cuisine_evolution_charts(analyzer, engine)
         st.plotly_chart(cuisine_evolution, use_container_width=True)
 
         utils.render_justified_text(analysis_text.cuisine_evolution)
@@ -676,9 +654,7 @@ def run(path_file, recipe_file, interaction_file, engine):
         top_ingredients_cuisine = create_top_ingredients_table(
             analyzer, engine
         )
-        styled_df = top_ingredients_cuisine.style.map(
-            utils.highlight_cells
-        )
+        styled_df = top_ingredients_cuisine.style.map(utils.highlight_cells)
         st.dataframe(styled_df, hide_index=True, use_container_width=True)
         utils.render_justified_text(analysis_text.cuisine_top_ingredients)
 
@@ -730,9 +706,7 @@ def run(path_file, recipe_file, interaction_file, engine):
         # Analyse des commentaires (Word Cloud général)
         st.write("### Word Cloud: Frequent Terms in Comments 📝")
         wordcloud_fig = create_wordcloud_plot(
-            analyzer,
-            comment_analyzer,
-            engine
+            analyzer, comment_analyzer, engine
         )
         st.pyplot(wordcloud_fig)
         utils.render_justified_text(analysis_text.efficiency_focus_analysis)
@@ -740,15 +714,13 @@ def run(path_file, recipe_file, interaction_file, engine):
         # Analyse des termes associés à "time"
         st.write("### Word Cloud: Context Around 'Time' ⏱️")
         time_wordcloud_fig = create_time_wordcloud_plot(
-            analyzer,
-            comment_analyzer,
-            engine
+            analyzer, comment_analyzer, engine
         )
         st.pyplot(time_wordcloud_fig)
         utils.render_justified_text(analysis_text.time_efficiency_analysis)
 
     elif selected == "Interaction with the reviews":
-        st.title('📈 Rate Evolution and Sentiment Analysis Over Time')
+        st.title("📈 Rate Evolution and Sentiment Analysis Over Time")
 
         logger.info("Rate evolution...")
         rate_evolution = create_plot_rating_evolution(analyzer, engine)
@@ -763,44 +735,44 @@ def run(path_file, recipe_file, interaction_file, engine):
         utils.render_justified_text(analysis_text.word_frequency_analysis)
 
         words_input = st.text_input(
-            'Enter words to search for co-occurrence, separated by commas:',
-            ''
+            "Enter words to search for co-occurrence, separated by commas:", ""
         )
-        words = [
-            word.strip() for word in words_input.split(',')
-        ] if words_input else []
+        words = (
+            [word.strip() for word in words_input.split(",")]
+            if words_input
+            else []
+        )
 
         if words:
-            word_counts = (
-                DataAnalyzer
-                .word_co_occurrence_over_time(analyzer, words)
+            word_counts = DataAnalyzer.word_co_occurrence_over_time(
+                analyzer, words
             )
 
             if not word_counts.empty:
                 fig = px.line(
                     word_counts,
-                    x='year',
-                    y='Co-occurrence Percentage',
+                    x="year",
+                    y="Co-occurrence Percentage",
                     title=(
-                        'Proportion of Comments Containing the '
-                        'Specified Words Over Time'
+                        "Proportion of Comments Containing the "
+                        "Specified Words Over Time"
                     ),
                     labels={
-                        'year': 'Year',
-                        'Co-occurrence Percentage': (
-                            'Percentage of Comments (%)'
-                        )
-                    }
+                        "year": "Year",
+                        "Co-occurrence Percentage": (
+                            "Percentage of Comments (%)"
+                        ),
+                    },
                 )
                 fig.update_layout(
                     xaxis=dict(
-                        tickmode='linear',
-                        tickformat='d'  # Afficher les années sans virgules
+                        tickmode="linear",
+                        tickformat="d",  # Afficher les années sans virgules
                     ),
                     yaxis=dict(range=[0, 100]),
-                    yaxis_title='Percentage of Comments (%)',
-                    xaxis_title='Year',
-                    legend_title='Words'
+                    yaxis_title="Percentage of Comments (%)",
+                    xaxis_title="Year",
+                    legend_title="Words",
                 )
                 st.plotly_chart(fig, use_container_width=True)
             else:

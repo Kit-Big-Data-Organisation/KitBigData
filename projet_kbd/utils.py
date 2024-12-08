@@ -16,8 +16,27 @@ Constants:
         A dictionary mapping oil types to their respective color codes.
 
 """
+"""
+This module provides utility functions for various tasks including database
+operations, data highlighting, and text rendering.
+Functions:
+    determine_cuisine(tags):
+    highlight_cells(val):
+        Highlights specific cells in a dataframe figure based on the value.
+    create_top_tags_database(DB_PATH, set_number_tags):
+        Creates and populates a database table with top tags data.
+    render_justified_text(content):
+        Renders text content with justified alignment in a Streamlit app.
+Constants:
+    relevant_cuisines (list of str):
+        A list of relevant cuisines.
+    custom_palette (dict):
+        A dictionary mapping oil types to their respective color codes.
+
+"""
 import sqlite3
 import streamlit as st
+
 relevant_cuisines = [
     "asian",
     "mexican",
@@ -50,12 +69,19 @@ def determine_cuisine(tags):
     ----------
     tags : list of str
         A list of tags associated with the recipe.
+    ----------
+    tags : list of str
+        A list of tags associated with the recipe.
 
     Returns:
     -------
     str
         The determined cuisine of the recipe.
+    -------
+    str
+        The determined cuisine of the recipe.
     """
+
 
     cuisines = {
         "asian": 0,
@@ -88,6 +114,19 @@ def highlight_cells(val):
     str
         The CSS style string for highlighting the cell.
     """
+    """
+    Highlights specific cells in a dataframe figure based on the value.
+
+    Parameters:
+    ----------
+    val : str
+        The value of the cell.
+
+    Returns:
+    -------
+    str
+        The CSS style string for highlighting the cell.
+    """
 
     if val == "parmesan cheese":
         return "background-color: red"
@@ -101,6 +140,8 @@ def highlight_cells(val):
         return "background-color: lightpink"
     else:
         return ""
+
+
 
 
 def create_top_tags_database(DB_PATH , set_number_tags):
@@ -142,6 +183,19 @@ def create_top_tags_database(DB_PATH , set_number_tags):
 
 # Helper function to render justified content
 def render_justified_text(content):
+    """
+    Renders text content with justified alignment in a Streamlit app.
+
+    Parameters:
+    ----------
+    content : str
+        The text content to be rendered.
+    """
+    st.markdown(
+        f"<div class='justified'>{content}</div>",
+        unsafe_allow_html=True
+    )
+
     """
     Renders text content with justified alignment in a Streamlit app.
 

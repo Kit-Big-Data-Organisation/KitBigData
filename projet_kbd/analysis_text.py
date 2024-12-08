@@ -2,12 +2,38 @@
 This module provides various textual analyses and presentations related to cuisine data from Food.com. It includes detailed descriptions and insights into the number of recipes, interactions, cuisine distribution, evolution, nutritional values, preparation times, and ingredient usage. The analyses cover trends from 2002 to 2010, highlighting shifts in cooking patterns, user engagement, and dietary preferences.
 """
 presentation = """
-Based on the graphs above, we observe that both the number of recipes and the number of interactions peak between <strong>2002</strong> and <strong>2010</strong>.<br><br>
+Based on the graphs below, we observe that both the number of recipes and the number of interactions peak between <strong>2002</strong> and <strong>2010</strong>.<br><br>
 <ul>
     <li><strong>Before 2002</strong>: The data is sparse, with significantly fewer recipes and interactions recorded.</li>
     <li><strong>After 2010</strong>: There is a noticeable decline in both metrics. To ensure a meaningful analysis, we will focus on the period between <strong>2002</strong> and <strong>2010</strong>, where the data is most abundant and representative of user engagement.</li>
 </ul>
 """
+
+average_steps_rating = """
+The graph below shows the evolution of the average number of steps per year, with associated ratings of the recepies over the years :
+<ul>
+    <li><strong> The complexity of the recepies is increasing over the years.</li>
+    <li><strong>The ratings given to the recepies are decreasing over the years.</li>
+</ul>
+"""
+
+interaction_ratings = """
+The graph below shows the relationship between the average rating scores, the number of ratings and the cooking time :
+<ul>
+    <li><strong> Recipes with high ratings (between 4 and 5) tend to have the highest number of ratings. Recipes with low ratings (below 3) generally have very few ratings.</li>
+    <li><strong>Longer cooking times are scattered across recipes with lower popularity.</li>
+    <li><strong>Recipes with shorter cooking times dominate the cluster of highly rated and highly reviewed recipes, indicating that users prefer quicker recipes.</li>
+</ul>
+"""
+
+user_interactions = """
+The two graphs below explore the relationship between time since submission, average rating, and number of interactions with recipes.
+<ul>
+<li><strong> In the first graph, a pattern is visible, with periodic peaks in the number of interactions, some recipes become relevant again during specific times of the year, such as holidays or seasonal celebrations.</li>
+<li><strong> From the second graph we can see that the average ratings tend to decline slightly as time progresses, indicating that recipes are generally rated lower as they age.</li>
+</ul>
+"""
+
 cuisine_presentation = """
 In this page, we conducted a cuisine analysis to explore the cuisines present in our dataset, their evolution on the website over the years, and to analyze their nutritional values, calorie content, average preparation times, and the top ingredients used in each cuisine.
 """
@@ -19,7 +45,7 @@ In contrast, African and Greek cuisines appear less frequently, which may sugges
 The category labeled 'others' includes a variety of lesser-known cuisines, highlighting the site's diverse culinary range.
 """
 
-cuisine_evolution ="""
+cuisine_evolution = """
 This chart tracks the evolution of different cuisines from 2002 to 2010, revealing diverse trends in culinary interest:<br><br>
 <ul>
     <li><strong>African Cuisine</strong>: Demonstrates a clear upward trend, reflecting a rising interest in African dishes, possibly due to increased cultural exposure and availability on the site.</li>
@@ -111,4 +137,3 @@ sentiment_trend_analysis = """
 word_frequency_analysis = """
 <p><strong>🔍 Explore the frequency of words in comments and observe their evolution over time.</strong> Enter words like <em>'good,'</em> <em>'bad,'</em> <em>'delicious,'</em> or <em>'tasty'</em> to discover how often these terms are mentioned and compare their usage trends over the years. This analysis can help identify patterns of positivity and negativity in user comments, complementing insights from sentiment analysis.</p>
 """
-

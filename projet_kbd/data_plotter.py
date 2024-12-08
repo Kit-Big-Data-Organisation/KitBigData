@@ -22,6 +22,7 @@ from logger_config import logger
 from plotly.subplots import make_subplots
 from wordcloud import WordCloud
 import sqlite3
+from scipy.stats import linregress
 
 
 class DataPlotter:
@@ -33,7 +34,8 @@ class DataPlotter:
     data_analyzer : object
         An instance of the DataAnalyzer class for accessing analyzed data.
     """
-    def __init__(self, data_analyzer , comment_analyzer=None):
+
+    def __init__(self, data_analyzer, comment_analyzer=None):
         """
         Initialize the DataPlotter object.
 
@@ -180,7 +182,7 @@ class DataPlotter:
             x="Year",
             y="Proportion",
             color="Oil Type",
-            color_discrete_map=custom_palette
+            color_discrete_map=custom_palette,
         )
 
         fig.update_layout(
@@ -248,7 +250,7 @@ class DataPlotter:
         )
 
         idx = 1
-        
+
         for cuisine in df_cuisine_evolution.columns:
 
             if cuisine != "Year":
@@ -257,7 +259,7 @@ class DataPlotter:
                 col = (idx - 1) % num_cols + 1
 
                 trace = go.Scatter(
-                    x=df_cuisine_evolution['Year'],
+                    x=df_cuisine_evolution["Year"],
                     y=df_cuisine_evolution[cuisine],
                     mode="lines",
                     name=cuisine,
@@ -292,7 +294,7 @@ class DataPlotter:
         """
         logger.info("Generating bar chart for top ingredients.")
         df_top_ingredients = self.data_analyzer.top_commun_ingredients(engine)
-        df_top_ingredients.drop(columns={'index'}, inplace=True)
+        df_top_ingredients.drop(columns={"index"}, inplace=True)
         logger.info("Top ingredients generated.")
         return df_top_ingredients[1:]
 
@@ -377,7 +379,7 @@ class DataPlotter:
         final_long = df_nutritions.reset_index(drop=True).melt(
             id_vars="cuisine", var_name="nutrient", value_name="value"
         )
-        print('final long')
+        print("final long")
         print(final_long)
         print(final_long.columns)
 
@@ -549,7 +551,7 @@ class DataPlotter:
 
     # Analyse des commentaires
 
-    def plot_wordcloud(self , engine):
+    def plot_wordcloud(self, engine):
         """
         Plot a Word Cloud based on word frequencies.
 
@@ -579,7 +581,7 @@ class DataPlotter:
         logger.info("Word Cloud plot generated successfully.")
         return fig
 
-    def plot_time_wordcloud(self , engine):
+    def plot_time_wordcloud(self, engine):
         """
         Plot a Word Cloud based on word frequencies.
 
@@ -596,8 +598,9 @@ class DataPlotter:
         comment_analyzer = self.comment_analyzer
         comment_analyzer.clean_comments()
         word_frequencies_time = (
-            comment_analyzer
-            .generate_word_frequencies_associated_to_time(engine)
+            comment_analyzer.generate_word_frequencies_associated_to_time(
+                engine
+            )
         )
         logger.info("Generating Word Cloud plot for time.")
         wordcloud = WordCloud(
@@ -718,6 +721,14 @@ class DataPlotter:
         try:
             # Analyze user interaction data
             aggregated = self.data_analyzer.analyse_user_intractions(engine)
+
+            logger.info("Calculating trendline for average rating.")
+            slope, intercept, _, _, _ = linregress(
+                aggregated["days_since_submission"], aggregated["avg_rating"]
+            )
+            trendline_y = (
+                slope * aggregated["days_since_submission"] + intercept
+            )
             logger.info(
                 "User interaction data analysis completed successfully."
             )
@@ -749,6 +760,20 @@ class DataPlotter:
                     mode="markers",
                     name="Average Rating",
                     marker=dict(color="orange", size=2),
+                    xaxis="x2",
+                    yaxis="y2",
+                )
+            )
+
+            logger.info("Adding trendline to the plot.")
+
+            fig.add_trace(
+                go.Scatter(
+                    x=aggregated["days_since_submission"],
+                    y=trendline_y,
+                    mode="lines",
+                    name="Trendline (Decline)",
+                    line=dict(color="red", width=3),
                     xaxis="x2",
                     yaxis="y2",
                 )
@@ -887,7 +912,7 @@ class DataPlotter:
                 rating_evolution_df,
                 x="year",
                 y="average_rating",
-                title='Evolution of Comment Ratings Over the Years',
+                title="Evolution of Comment Ratings Over the Years",
                 labels={"average_rating": "Average Rating", "year": "Year"},
                 markers=True,
             )
@@ -895,7 +920,7 @@ class DataPlotter:
                 xaxis_title="Year",
                 yaxis_title="Average Rating",
                 yaxis=dict(range=[4, 5]),
-                showlegend=False
+                showlegend=False,
             )
             fig.update_traces(line=dict(color="blue"))
             return fig
@@ -922,16 +947,19 @@ class DataPlotter:
         try:
             # Retrieve sentiment data
             sentiment_over_time_df = (
-                self
-                .data_analyzer
-                .sentiment_analysis_over_time(engine)
+                self.data_analyzer.sentiment_analysis_over_time(engine)
             )
             # Check if the DataFrame is not empty
-            if sentiment_over_time_df is not None and \
-               not sentiment_over_time_df.empty:
+            if (
+                sentiment_over_time_df is not None
+                and not sentiment_over_time_df.empty
+            ):
                 # Ensure the column names are correct
-                if 'Year' not in sentiment_over_time_df.columns or \
-                   'Average Sentiment' not in sentiment_over_time_df.columns:
+                if (
+                    "Year" not in sentiment_over_time_df.columns
+                    or "Average Sentiment"
+                    not in sentiment_over_time_df.columns
+                ):
                     logger.error(
                         "Required columns are missing in the DataFrame."
                     )
@@ -940,28 +968,28 @@ class DataPlotter:
                 # Plotting the sentiment analysis over time
                 fig = px.line(
                     sentiment_over_time_df,
-                    x='Year',
-                    y='Average Sentiment',
-                    title='Evolution of Average Sentiment Over Time',
+                    x="Year",
+                    y="Average Sentiment",
+                    title="Evolution of Average Sentiment Over Time",
                     labels={
                         "Year": "Year",
-                        "Average Sentiment": "Average Sentiment Polarity"
+                        "Average Sentiment": "Average Sentiment Polarity",
                     },
-                    markers=True
+                    markers=True,
                 )
                 fig.update_layout(
                     xaxis_title="Year",
                     yaxis_title="Average Sentiment Polarity",
                     yaxis=dict(range=[-1, 1]),
-                    xaxis=dict(tickmode='linear'),
-                    showlegend=False
+                    xaxis=dict(tickmode="linear"),
+                    showlegend=False,
                 )
 
                 # Add a horizontal line at y=0 to indicate neutral sentiment
                 fig.add_shape(
                     type="line",
-                    x0=sentiment_over_time_df['Year'].min(),
-                    x1=sentiment_over_time_df['Year'].max(),
+                    x0=sentiment_over_time_df["Year"].min(),
+                    x1=sentiment_over_time_df["Year"].max(),
                     y0=0,
                     y1=0,
                     line=dict(color="red", dash="dash"),
@@ -969,14 +997,14 @@ class DataPlotter:
 
                 # Add annotations to indicate positive and negative sentiment
                 fig.add_annotation(
-                    x=sentiment_over_time_df['Year'].mean(),
+                    x=sentiment_over_time_df["Year"].mean(),
                     y=0.5,
                     text="Positive Sentiment",
                     showarrow=False,
                     font=dict(size=12, color="green"),
                 )
                 fig.add_annotation(
-                    x=sentiment_over_time_df['Year'].mean(),
+                    x=sentiment_over_time_df["Year"].mean(),
                     y=-0.5,
                     text="Negative Sentiment",
                     showarrow=False,

@@ -24,6 +24,7 @@ import os
 import gdown
 from logger_config import logger
 
+
 def download_data(file_name, url, data_dir):
     """
     Download a file from a Google Drive link to a specified directory if it
@@ -56,4 +57,6 @@ def download_data(file_name, url, data_dir):
             logger.error(f"Failed to download {file_name}: {e}")
             raise
     else:
-        logger.info(f"{file_name} already exists in {file_path}. Skipping download.")
+        logger.info(
+            f"{file_name} already exists in {file_path}. Skipping download."
+        )
