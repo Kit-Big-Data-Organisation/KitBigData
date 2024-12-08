@@ -198,7 +198,7 @@ class DataAnalyzer:
 
         return top_commun_year
 
-    def get_top_tag_per_year(self , DB_PATH):
+    def get_top_tag_per_year(self , engine , DB_PATH):
         """
         Extract the top tags for each year in the dataset and store them in the top tag database.
 
@@ -209,7 +209,7 @@ class DataAnalyzer:
             2010.
         """
         try:
-            data = pd.read_sql_table("top_tags", con=DB_PATH)
+            data = pd.read_sql_table("top_tags", con=engine)
             if not data.empty:
                 logger.info("Table Top tags found in the database.")
                 return 
@@ -230,7 +230,7 @@ class DataAnalyzer:
                 top_tags_years[year] = [labels, sizes]
 
             set_number_tags[set_number] = top_tags_years
-
+        logger.info("Creating table top tags ...")
         utils.create_top_tags_database(DB_PATH , set_number_tags)
     
    

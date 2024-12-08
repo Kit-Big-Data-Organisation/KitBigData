@@ -41,9 +41,9 @@ def create_plots(analyzer):
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
-def create_charts(analyzer, set_number , _DB_PATH):
+def create_charts(analyzer, set_number , _engine,_DB_PATH):
     plotter = DataPlotter(analyzer)
-    return plotter.plot_pie_chart_tags(set_number, _DB_PATH)
+    return plotter.plot_pie_chart_tags(set_number, _engine, _DB_PATH)
 
 
 @st.cache_data(hash_funcs={DataAnalyzer: id})
@@ -125,7 +125,7 @@ def run(path_file, recipe_file, interaction_file, engine):
     analyzer = load_and_analyze_data(
         path_file, recipe_file, interaction_file, engine
     )
-    comment_analyzer = CommentAnalyzer(analyzer.data)
+    comment_analyzer = CommentAnalyzer(analyzer.data[["review"]].dropna())
 
 
     with st.sidebar:
@@ -362,7 +362,7 @@ def run(path_file, recipe_file, interaction_file, engine):
                 9,
                 0,
             )
-            tags_chart = create_charts(analyzer, set_number , DB_PATH)
+            tags_chart = create_charts(analyzer, set_number ,engine,  DB_PATH)
             with st.container():
                 for i in range(0, 8, 2):
                     cols = st.columns(2)
