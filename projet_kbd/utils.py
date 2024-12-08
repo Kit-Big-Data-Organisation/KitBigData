@@ -9,18 +9,6 @@ relevant_cuisines = [
     "american",
 ]
 
-oil_types = {
-    "olive oil": 0,
-    "vegetable oil": 0,
-    "canola oil": 0,
-    "sesame oil": 0,
-    "peanut oil": 0,
-    "cooking oil": 0,
-    "salad oil": 0,
-    "oil": 0,
-    "corn oil": 0,
-    "extra virgin olive oil": 0,
-}
 
 custom_palette = {
     "olive oil": "#8a3ab9",
