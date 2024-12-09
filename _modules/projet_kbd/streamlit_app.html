@@ -682,11 +682,11 @@
         <span class="n">selected</span> <span class="o">=</span> <span class="n">option_menu</span><span class="p">(</span>
             <span class="s2">&quot;Dashboard&quot;</span><span class="p">,</span>
             <span class="p">[</span>
-                <span class="s2">&quot;Presentation&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;General Analysis&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Eating habits&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Cuisine Analysis&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Sociological Insight&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;Interaction with the reviews&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Reviews Analysis&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Free Visualisation&quot;</span>
             <span class="p">],</span>
             <span class="n">menu_icon</span><span class="o">=</span><span class="s2">&quot;cast&quot;</span><span class="p">,</span>
@@ -700,9 +700,9 @@
 <span class="s2">                }</span>
 <span class="s2">            &lt;/style&gt;</span>
 <span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Presentation&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;General Analysis&quot;</span><span class="p">:</span>
 
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Presentation&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## 📊 General Analysis&quot;</span><span class="p">)</span>
 
         <span class="c1"># Texte indiquant la période d&#39;analyse</span>
 
@@ -746,7 +746,7 @@
 
     <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Eating habits&quot;</span><span class="p">:</span>
 
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Eating habits&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## 🍽️ Eating habits&quot;</span><span class="p">)</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">eating_habit_presentation</span><span class="p">)</span>
         <span class="n">oils_analysis</span> <span class="o">=</span> <span class="n">create_oils_stacked_histograms</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">oils_analysis</span><span class="p">)</span>
@@ -754,7 +754,7 @@
 
     <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Cuisine Analysis&quot;</span><span class="p">:</span>
 
-        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;## Cuisine Analysis&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;## 🍲 Cuisine Analysis&quot;</span><span class="p">)</span>
         <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_presentation</span><span class="p">)</span>
@@ -808,7 +808,7 @@
 
     <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Sociological Insight&quot;</span><span class="p">:</span>
 
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;### 🌟 Sociological Insight&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## 🌟 Sociological Insight&quot;</span><span class="p">)</span>
 
         <span class="n">col</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
         <span class="n">quick_recipe_fig</span> <span class="o">=</span> <span class="n">create_proportion_quick_recipe_charts</span><span class="p">(</span>
@@ -871,8 +871,9 @@
         <span class="n">st</span><span class="o">.</span><span class="n">pyplot</span><span class="p">(</span><span class="n">time_wordcloud_fig</span><span class="p">)</span>
         <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">time_efficiency_analysis</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Interaction with the reviews&quot;</span><span class="p">:</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;📈 Rate Evolution and Sentiment Analysis Over Time&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Reviews Analysis&quot;</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## 💬 Reviews Analysis&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;### 📈 Rate Evolution and Sentiment Analysis Over Time&#39;</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rate evolution...&quot;</span><span class="p">)</span>
         <span class="n">rate_evolution</span> <span class="o">=</span> <span class="n">create_plot_rating_evolution</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
@@ -932,7 +933,7 @@
                     <span class="s2">&quot;No co-occurrence data found for the specified words.&quot;</span>
                 <span class="p">)</span>
     <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Free Visualisation&quot;</span><span class="p">:</span>
-        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Tags Analysis&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## 🏷️ Tags Analysis&quot;</span><span class="p">)</span>
 
         <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
