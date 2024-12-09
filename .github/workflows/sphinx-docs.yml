@@ -7,7 +7,7 @@ on:
       - main  # Branche à surveiller pour déclencher l'action
   pull_request:
     branches:
-      - main                  # Branche cible des pull requests
+      - main # Branche cible des pull requests tests
 
 jobs:
   build:
