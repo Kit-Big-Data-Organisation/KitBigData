@@ -3,7 +3,7 @@ name: Build and Deploy Sphinx Documentation
 on:
   push:
     branches:
-      - documentation_sphinc # Branche à surveiller pour déclencher l'action
+      - documentation_sphinc # Branche à surveiller pour déclencher l'action 
       - main  # Branche à surveiller pour déclencher l'action
   pull_request:
     branches:
