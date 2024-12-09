@@ -77,6 +77,29 @@ def sample_data_oils():
     )
 
 
+@pytest.fixture
+def sample_data_word_count_over_time():
+    """Provides sample data including necessary columns and mock comments."""
+    return pd.DataFrame({
+        "year": [2005, 2006, 2007, 2008],
+        "comments": [
+            "This is a test comment test",
+            "Another test comment",
+            "More comments here",
+            "Final comment test"
+        ]
+    })
+
+
+@pytest.fixture
+def sample_data_rating_evolution():
+    """Generate sample data for testing."""
+    return pd.DataFrame({
+        "date": pd.date_range(start="2001-01-01", periods=10, freq='Y'),
+        "rating": [3, 4, 5, 3, 4, 2, 5, 3, 4, 5]
+    })
+
+
 @patch("projet_kbd.data_analyzer.pd.read_sql_table")
 def test_analyze_oils_data_found_in_database(mock_read_sql_table):
     """
@@ -320,7 +343,9 @@ def test_get_top_tags():
 @patch("projet_kbd.data_analyzer.pd.read_sql_table")
 @patch("projet_kbd.data_analyzer.DataAnalyzer.get_top_tags")
 def test_get_top_tag_per_year(
-    mock_get_top_tags, mock_read_sql_table, mock_create_db
+    mock_get_top_tags,
+    mock_read_sql_table,
+    mock_create_db
 ):
     """
     Test the `get_top_tag_per_year` method.
@@ -358,6 +383,7 @@ def test_get_top_tag_per_year(
 
     # Initialize the analyzer
     analyzer = DataAnalyzer(data=pd.DataFrame())
+    analyzer = DataAnalyzer(data=pd.DataFrame())
 
     # Call the method with mock engine and database path
     engine = MagicMock()
@@ -371,6 +397,9 @@ def test_get_top_tag_per_year(
 
     # Simulate no data found in the database
     mock_read_sql_table.side_effect = Exception("No table found")
+    mock_get_top_tags.side_effect = lambda year: {
+        year: Counter({"tag1": 10, "tag2": 5, "tag3": 3}).most_common(10)
+    }
     mock_get_top_tags.side_effect = lambda year: {
         year: Counter({"tag1": 10, "tag2": 5, "tag3": 3}).most_common(10)
     }
@@ -459,13 +488,19 @@ def test_analyze_cuisines(mock_to_sql, mock_read_sql_table):
 
     # Verify the proportions are calculated correctly
     pd.testing.assert_frame_equal(
-        result.sort_values(by="Cuisine").reset_index(drop=True),
-        expected_result.sort_values(by="Cuisine").reset_index(drop=True),
+        result
+        .sort_values(by="Cuisine")
+        .reset_index(drop=True),
+        expected_result
+        .sort_values(by="Cuisine")
+        .reset_index(drop=True)
     )
 
     # Ensure the result is saved to the database
     mock_to_sql.assert_called_once_with(
-        name="cuisine_data", con=engine, if_exists="replace"
+        name="cuisine_data",
+        con=engine,
+        if_exists="replace"
     )
 
 
@@ -473,7 +508,7 @@ def test_analyze_cuisines(mock_to_sql, mock_read_sql_table):
 @patch("projet_kbd.data_analyzer.pd.DataFrame.to_sql")
 @patch(
     "projet_kbd.data_analyzer.utils.relevant_cuisines",
-    ["Italian", "American", "Mexican", "Greek"],
+    ["Italian", "American", "Mexican", "Greek"]
 )
 def test_top_commun_ingredients(mock_to_sql, mock_read_sql_table):
     """
@@ -774,6 +809,9 @@ def test_analyse_cuisine_nutritions(mock_to_sql, mock_read_sql_table):
     pd.set_option("display.expand_frame_repr", False)
 
     # Validate it returns the existing database data
+    mock_read_sql_table.assert_called_once_with(
+        "cuisines_nutritions", con=engine
+    )
     mock_read_sql_table.assert_called_once_with(
         "cuisines_nutritions", con=engine
     )
@@ -1163,3 +1201,60 @@ def test_analyse_user_interactions(
 
     # Assert that the DataFrame matches expected results
     pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+
+@patch('projet_kbd.comment_analyzer.CommentAnalyzer')
+def test_word_count_with_missing_year_column(
+    MockCommentAnalyzer, sample_data_word_count_over_time
+):
+    """Test to ensure proper handling when the 'year' column is missing."""
+    # Modify data to exclude 'year' column
+    sample_data_word_count_over_time.drop(columns=['year'], inplace=True)
+    sample_data_word_count_over_time['cleaned'] = (
+        sample_data_word_count_over_time['comments'].str.lower()
+    )
+
+    analyzer = DataAnalyzer(data=sample_data_word_count_over_time)
+
+    # Call the function and check for expected failure
+    result = analyzer.word_count_over_time('test')
+
+    assert result.empty, (
+        "The result should be empty due to missing 'year' column"
+    )
+    print("Column 'year' not found.")
+
+
+@pytest.fixture
+def sample_data_evolution():
+    return pd.DataFrame({
+        'date': pd.date_range(start='2001-01-01', end='2010-12-31', freq='A'),
+        'rating': [5, 4, 3, 2, 5, 4, 3, 5, 4, 3]  # Sample ratings
+    })
+
+
+@patch("sqlite3.connect")
+@patch("projet_kbd.data_analyzer.logger")
+@patch("projet_kbd.data_analyzer.pd.read_sql_table")
+def test_calculate_rating_evolution(
+    mock_connect, mock_logger, mock_read_sql_table,
+    sample_data_evolution, mock_engine
+):
+    """Test the calculate_rating_evolution function."""
+
+    # Configure the mock to return the sample data
+    mock_read_sql_table.return_value = sample_data_evolution
+
+    # Instantiate the DataAnalyzer
+    analyzer = DataAnalyzer(sample_data_evolution)
+
+    # Call the function
+    result = analyzer.calculate_rating_evolution(mock_engine)
+
+    # Expected Result
+    expected_result = pd.DataFrame({
+        "year": [2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010],
+        "average_rating": [4.0, 3.0, 2.0, 5.0, 4.0, 3.0, 5.0, 4.0, 3.0]
+    })
+
+    pd.testing.assert_frame_equal(result, expected_result, check_dtype=False)
