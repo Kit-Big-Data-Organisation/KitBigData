@@ -1,0 +1,640 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projet_kbd.streamlit_app module &mdash; Projet Kit Big Data 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="projet_kbd.utils module" href="projet_kbd.utils.html" />
+    <link rel="prev" title="projet_kbd.main module" href="projet_kbd.main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Projet Kit Big Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="projet_kbd.html">projet_kbd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.config.html">projet_kbd.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.streamlit_app module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.analyse_average_steps_rating"><code class="docutils literal notranslate"><span class="pre">analyse_average_steps_rating()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_cuisine_calories"><code class="docutils literal notranslate"><span class="pre">analyze_cuisine_calories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_cuisine_nutritions"><code class="docutils literal notranslate"><span class="pre">analyze_cuisine_nutritions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_cuisine_time"><code class="docutils literal notranslate"><span class="pre">analyze_cuisine_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_interactions_ratings"><code class="docutils literal notranslate"><span class="pre">analyze_interactions_ratings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_user_interactions"><code class="docutils literal notranslate"><span class="pre">analyze_user_interactions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_categories_quick_recipe_chart"><code class="docutils literal notranslate"><span class="pre">create_categories_quick_recipe_chart()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_charts"><code class="docutils literal notranslate"><span class="pre">create_charts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_cuisine_charts"><code class="docutils literal notranslate"><span class="pre">create_cuisine_charts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_cuisine_evolution_charts"><code class="docutils literal notranslate"><span class="pre">create_cuisine_evolution_charts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_oils_stacked_histograms"><code class="docutils literal notranslate"><span class="pre">create_oils_stacked_histograms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_plot_rating_evolution"><code class="docutils literal notranslate"><span class="pre">create_plot_rating_evolution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_plot_sentiment_evolution"><code class="docutils literal notranslate"><span class="pre">create_plot_sentiment_evolution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_plots"><code class="docutils literal notranslate"><span class="pre">create_plots()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_proportion_quick_recipe_charts"><code class="docutils literal notranslate"><span class="pre">create_proportion_quick_recipe_charts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_rate_interactions_quick_recipe_charts"><code class="docutils literal notranslate"><span class="pre">create_rate_interactions_quick_recipe_charts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_time_wordcloud_plot"><code class="docutils literal notranslate"><span class="pre">create_time_wordcloud_plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_top_ingredients_table"><code class="docutils literal notranslate"><span class="pre">create_top_ingredients_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.create_wordcloud_plot"><code class="docutils literal notranslate"><span class="pre">create_wordcloud_plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.load_and_analyze_data"><code class="docutils literal notranslate"><span class="pre">load_and_analyze_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.streamlit_app.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="projet_kbd.html#module-projet_kbd">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.streamlit_app module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.analyse_average_steps_rating"><code class="docutils literal notranslate"><span class="pre">analyse_average_steps_rating()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_cuisine_calories"><code class="docutils literal notranslate"><span class="pre">analyze_cuisine_calories()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_cuisine_nutritions"><code class="docutils literal notranslate"><span class="pre">analyze_cuisine_nutritions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_cuisine_time"><code class="docutils literal notranslate"><span class="pre">analyze_cuisine_time()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_interactions_ratings"><code class="docutils literal notranslate"><span class="pre">analyze_interactions_ratings()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.analyze_user_interactions"><code class="docutils literal notranslate"><span class="pre">analyze_user_interactions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_categories_quick_recipe_chart"><code class="docutils literal notranslate"><span class="pre">create_categories_quick_recipe_chart()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_charts"><code class="docutils literal notranslate"><span class="pre">create_charts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_cuisine_charts"><code class="docutils literal notranslate"><span class="pre">create_cuisine_charts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_cuisine_evolution_charts"><code class="docutils literal notranslate"><span class="pre">create_cuisine_evolution_charts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_oils_stacked_histograms"><code class="docutils literal notranslate"><span class="pre">create_oils_stacked_histograms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_plot_rating_evolution"><code class="docutils literal notranslate"><span class="pre">create_plot_rating_evolution()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_plot_sentiment_evolution"><code class="docutils literal notranslate"><span class="pre">create_plot_sentiment_evolution()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_plots"><code class="docutils literal notranslate"><span class="pre">create_plots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_proportion_quick_recipe_charts"><code class="docutils literal notranslate"><span class="pre">create_proportion_quick_recipe_charts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_rate_interactions_quick_recipe_charts"><code class="docutils literal notranslate"><span class="pre">create_rate_interactions_quick_recipe_charts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_time_wordcloud_plot"><code class="docutils literal notranslate"><span class="pre">create_time_wordcloud_plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_top_ingredients_table"><code class="docutils literal notranslate"><span class="pre">create_top_ingredients_table()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.create_wordcloud_plot"><code class="docutils literal notranslate"><span class="pre">create_wordcloud_plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.load_and_analyze_data"><code class="docutils literal notranslate"><span class="pre">load_and_analyze_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.streamlit_app.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Projet Kit Big Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="projet_kbd.html">projet_kbd package</a></li>
+      <li class="breadcrumb-item active">projet_kbd.streamlit_app module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/projet_kbd.streamlit_app.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-projet_kbd.streamlit_app">
+<span id="projet-kbd-streamlit-app-module"></span><h1>projet_kbd.streamlit_app module<a class="headerlink" href="#module-projet_kbd.streamlit_app" title="Link to this heading"></a></h1>
+<p>This module integrates functionalities to analyze and visualize culinary
+trends using pandas, streamlit, and plotly.</p>
+<p>Features:
+- Data loading and preprocessing with custom utilities.
+- Advanced analysis via the DataAnalyzer class, ensuring quality insights.
+- Interactive visualizations with Plotly, managed by DataPlotter, to explore</p>
+<blockquote>
+<div><p>trends in recipes and interactions.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Streamlit’s caching integration enhances performance by minimizing data
+reloads and reprocessing.</p></li>
+<li><p>The streamlit_option_menu allows navigable dashboard creation for various
+analytical views.</p></li>
+<li><p>CommentAnalyzer extracts sentiments and key terms from user reviews.</p></li>
+</ul>
+<p>The structure supports expansion and integration of more data sources and
+analytical techniques, aiming to provide a comprehensive sociological tool
+for exploring eating habits and culinary preferences.</p>
+<p>Dependencies:
+- pandas: For data manipulation.
+- streamlit: For the interactive web application.
+- plotly.express: For interactive and dynamic visual charts.
+- SQLAlchemy: For database interactions.
+- Custom modules like utils, analysis_text, and logger_config enhance</p>
+<blockquote>
+<div><p>functionality and user experience.</p>
+</div></blockquote>
+<p>Intended for a web application environment, this script provides an interactive
+dashboard for exploring culinary data.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.analyse_average_steps_rating">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">analyse_average_steps_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#analyse_average_steps_rating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.analyse_average_steps_rating" title="Link to this definition"></a></dt>
+<dd><p>Analyzes the average steps rating and returns the plotly figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.
+_engine : sqlalchemy.engine.Engine
+SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the average steps rating analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.analyze_cuisine_calories">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">analyze_cuisine_calories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#analyze_cuisine_calories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.analyze_cuisine_calories" title="Link to this definition"></a></dt>
+<dd><p>Analyzes the calories by cuisine and returns the plotly figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the calories by cuisine analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.analyze_cuisine_nutritions">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">analyze_cuisine_nutritions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#analyze_cuisine_nutritions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.analyze_cuisine_nutritions" title="Link to this definition"></a></dt>
+<dd><p>Analyzes the nutritional content by cuisine and returns the plotly figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the nutritional content by cuisine analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.analyze_cuisine_time">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">analyze_cuisine_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#analyze_cuisine_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.analyze_cuisine_time" title="Link to this definition"></a></dt>
+<dd><p>Analyzes the time by cuisine and returns the plotly figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the time by cuisine analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.analyze_interactions_ratings">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">analyze_interactions_ratings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#analyze_interactions_ratings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.analyze_interactions_ratings" title="Link to this definition"></a></dt>
+<dd><p>Analyzes the interactions ratings and returns the plotly figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.
+_engine : sqlalchemy.engine.Engine
+SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the interactions ratings analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.analyze_user_interactions">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">analyze_user_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#analyze_user_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.analyze_user_interactions" title="Link to this definition"></a></dt>
+<dd><p>Analyzes the user interactions and returns the plotly figure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.
+_engine : sqlalchemy.engine.Engine
+SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the user interactions analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_categories_quick_recipe_chart">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_categories_quick_recipe_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_categories_quick_recipe_chart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_categories_quick_recipe_chart" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figure for the distribution of quick recipe
+categories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the distribution of quick recipe categories.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_charts">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_charts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_DB_PATH</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_charts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_charts" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figures for the tags distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p></li>
+<li><p><strong>set_number</strong> (<em>int</em>) – The set of top 10 tags to display (0 for 1-10, 1 for 11-20, etc.).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of plotly figures showing the distribution of tags.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_cuisine_charts">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_cuisine_charts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_cuisine_charts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_cuisine_charts" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figure for the cuisine analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the cuisine analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_cuisine_evolution_charts">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_cuisine_evolution_charts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_cuisine_evolution_charts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_cuisine_evolution_charts" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figure for the cuisine evolution analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the cuisine evolution analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_oils_stacked_histograms">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_oils_stacked_histograms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_oils_stacked_histograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_oils_stacked_histograms" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figure for the oil analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the oil analysis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_plot_rating_evolution">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_plot_rating_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_plot_rating_evolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_plot_rating_evolution" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figure for the rating evolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>_analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.
+_engine : sqlalchemy.engine.Engine
+SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the rating evolution.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_plot_sentiment_evolution">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_plot_sentiment_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_plot_sentiment_evolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_plot_sentiment_evolution" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figure for the sentiment evolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>_analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.
+_engine : sqlalchemy.engine.Engine
+SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the sentiment evolution.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_plots">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_plots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_plots" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figures for the number of recipes and
+interactions per year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – <p>An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A plotly figure showing the number of recipes per year.
+plotly.graph_objs.Figure
+A plotly figure showing the number of interactions per year.</p>
+</dd>
+<dt class="field-even">rtype<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_proportion_quick_recipe_charts">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_proportion_quick_recipe_charts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_proportion_quick_recipe_charts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_proportion_quick_recipe_charts" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figure for the proportion of quick recipes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the proportion of quick recipes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_rate_interactions_quick_recipe_charts">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_rate_interactions_quick_recipe_charts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_rate_interactions_quick_recipe_charts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_rate_interactions_quick_recipe_charts" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the plotly figure for the rate of interactions for
+quick recipes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure showing the rate of interactions for quick recipes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objs.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_time_wordcloud_plot">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_time_wordcloud_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_Comment_analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_time_wordcloud_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_time_wordcloud_plot" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the wordcloud plot for the comments containing the
+word “time”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>_analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.
+_Comment_analyzer : CommentAnalyzer
+An instance of the CommentAnalyzer class containing the cleaned
+comments.
+_engine : sqlalchemy.engine.Engine
+SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A matplotlib figure showing the wordcloud plot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.figure.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_top_ingredients_table">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_top_ingredients_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_top_ingredients_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_top_ingredients_table" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the top ingredients table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame showing the top ingredients.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.create_wordcloud_plot">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">create_wordcloud_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_Comment_analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#create_wordcloud_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.create_wordcloud_plot" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns the wordcloud plot for the comments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>_analyzer</strong> (<a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer"><em>DataAnalyzer</em></a>) – An instance of the DataAnalyzer class containing the recipe and
+interaction data.
+_Comment_analyzer : CommentAnalyzer
+An instance of the CommentAnalyzer class containing the cleaned
+comments.
+_engine : sqlalchemy.engine.Engine
+SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A matplotlib figure showing the wordcloud plot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.figure.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.load_and_analyze_data">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">load_and_analyze_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recipe_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#load_and_analyze_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.load_and_analyze_data" title="Link to this definition"></a></dt>
+<dd><p>Loads and analyzes recipe interaction data from a database or files if
+not available in the database.</p>
+<p>This function first tries to load the recipe interaction data from a
+database using a provided SQL engine. If data exists, it returns a
+DataAnalyzer object initialized with this data. If no data is found, it
+processes data from specified files, cleans it from outliers, and saves
+the cleaned data back to the database. The function caches its results
+to avoid redundant data processing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_file</strong> (<em>str</em>) – The file path where the data files are located.</p></li>
+<li><p><strong>recipe_file</strong> (<em>str</em>) – The filename for the recipe data.</p></li>
+<li><p><strong>interaction_file</strong> (<em>str</em>) – The filename for the interaction data.</p></li>
+<li><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the DataAnalyzer class initialized with the loaded
+and processed data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer">DataAnalyzer</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the data fails to load from the database or files, an error
+    message is printed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.streamlit_app.run">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.streamlit_app.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recipe_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interaction_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/streamlit_app.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.streamlit_app.run" title="Link to this definition"></a></dt>
+<dd><p>Main function to run the Streamlit application.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_file</strong> (<em>str</em>) – The file path where the data files are located.</p></li>
+<li><p><strong>recipe_file</strong> (<em>str</em>) – The filename for the recipe data.</p></li>
+<li><p><strong>interaction_file</strong> (<em>str</em>) – The filename for the interaction data.</p></li>
+<li><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="projet_kbd.main.html" class="btn btn-neutral float-left" title="projet_kbd.main module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="projet_kbd.utils.html" class="btn btn-neutral float-right" title="projet_kbd.utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

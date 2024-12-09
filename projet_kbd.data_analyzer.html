@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projet_kbd.data_analyzer module &mdash; Projet Kit Big Data 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="projet_kbd.data_downloader module" href="projet_kbd.data_downloader.html" />
+    <link rel="prev" title="projet_kbd.config module" href="projet_kbd.config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Projet Kit Big Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="projet_kbd.html">projet_kbd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.config.html">projet_kbd.config module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.data_analyzer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data-analyzer-module">Data Analyzer Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="projet_kbd.html#module-projet_kbd">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.data_analyzer module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-analyzer-module">Data Analyzer Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.data"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_average_steps_rating"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyse_average_steps_rating()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_cuisine_nutritions"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyse_cuisine_nutritions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyse_interactions_ratings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_user_intractions"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyse_user_intractions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyze_cuisines"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyze_cuisines()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.analyze_oils"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.analyze_oils()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.calculate_rating_evolution"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.calculate_rating_evolution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.clean_from_outliers"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.clean_from_outliers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.cuisine_evolution"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.cuisine_evolution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.get_categories_quick_recipe"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.get_categories_quick_recipe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.get_quick_recipe_interaction_rate"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.get_quick_recipe_interaction_rate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.get_tags"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.get_tags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.get_top_tag_per_year"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.get_top_tag_per_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.get_top_tags"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.get_top_tags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.group_interactions_year"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.group_interactions_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.group_recipes_year"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.group_recipes_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.proportion_quick_recipe"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.proportion_quick_recipe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.sentiment_analysis_over_time"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.sentiment_analysis_over_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.top_commun_ingredients"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.top_commun_ingredients()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.word_co_occurrence_over_time"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.word_co_occurrence_over_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer.word_count_over_time"><code class="docutils literal notranslate"><span class="pre">DataAnalyzer.word_count_over_time()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Projet Kit Big Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="projet_kbd.html">projet_kbd package</a></li>
+      <li class="breadcrumb-item active">projet_kbd.data_analyzer module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/projet_kbd.data_analyzer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-projet_kbd.data_analyzer">
+<span id="projet-kbd-data-analyzer-module"></span><h1>projet_kbd.data_analyzer module<a class="headerlink" href="#module-projet_kbd.data_analyzer" title="Link to this heading"></a></h1>
+<section id="data-analyzer-module">
+<h2>Data Analyzer Module<a class="headerlink" href="#data-analyzer-module" title="Link to this heading"></a></h2>
+<p>This module provides functionalities for analyzing and processing recipe
+data, including cleaning data, generating insights, and interacting with
+databases.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>DataAnalyzer:</dt><dd><p>Main class for data processing and analysis.</p>
+</dd>
+</dl>
+</section>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">projet_kbd.data_analyzer.</span></span><span class="sig-name descname"><span class="pre">DataAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for analyzing and processing recipe data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.data" title="Link to this definition"></a></dt>
+<dd><p>The DataFrame containing recipe data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_average_steps_rating">
+<span class="sig-name descname"><span class="pre">analyse_average_steps_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_average_steps_rating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_average_steps_rating" title="Link to this definition"></a></dt>
+<dd><p>Analyze the average number of steps and average rating per year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the average number of steps and average
+rating per year.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_cuisine_nutritions">
+<span class="sig-name descname"><span class="pre">analyse_cuisine_nutritions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_cuisine_nutritions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_cuisine_nutritions" title="Link to this definition"></a></dt>
+<dd><p>Analyze the median nutrition values for each cuisine and save the
+results in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the median nutrition values for each cuisine.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings">
+<span class="sig-name descname"><span class="pre">analyse_interactions_ratings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_interactions_ratings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings" title="Link to this definition"></a></dt>
+<dd><p>Loads and analyzes recipe interaction data from a database or files if
+not available in the database.</p>
+<p>This function first tries to load the recipe interaction data from a
+database using a provided SQL engine. If data exists, it returns a
+DataAnalyzer object initialized with this data. If no data is found, it
+processes data from specified files, cleans it from outliers, and saves
+the cleaned data back to the database. The function caches its results
+to avoid redundant data processing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_file</strong> (<em>str</em>) – The file path where the data files are located.</p></li>
+<li><p><strong>recipe_file</strong> (<em>str</em>) – The filename for the recipe data.</p></li>
+<li><p><strong>interaction_file</strong> (<em>str</em>) – The filename for the interaction data.</p></li>
+<li><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the DataAnalyzer class initialized with the loaded
+and processed data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#projet_kbd.data_analyzer.DataAnalyzer" title="projet_kbd.data_analyzer.DataAnalyzer">DataAnalyzer</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the data fails to load from the database or files, an error
+    message is printed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyse_user_intractions">
+<span class="sig-name descname"><span class="pre">analyse_user_intractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyse_user_intractions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyse_user_intractions" title="Link to this definition"></a></dt>
+<dd><p>Analyze user interactions over time since the submission of recipes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the number of interactions and”
+“average rating grouped by days since submission.”</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyze_cuisines">
+<span class="sig-name descname"><span class="pre">analyze_cuisines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyze_cuisines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyze_cuisines" title="Link to this definition"></a></dt>
+<dd><p>Analyze the proportions of cuisines in the dataset and save the results
+in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with cuisine proportions.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.analyze_oils">
+<span class="sig-name descname"><span class="pre">analyze_oils</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.analyze_oils"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.analyze_oils" title="Link to this definition"></a></dt>
+<dd><p>Analyze the proportions of oil types used in recipes over the years.</p>
+<p>If the data is not found in the database, it calculates proportions
+for each oil type by year and saves the results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with oil type proportions for each year.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.calculate_rating_evolution">
+<span class="sig-name descname"><span class="pre">calculate_rating_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.calculate_rating_evolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.calculate_rating_evolution" title="Link to this definition"></a></dt>
+<dd><p>Calculate the evolution of comment ratings over the years, focusing on
+the years 2002 to 2010.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A DataFrame with two columns: ‘year’ and ‘average_rating’,
+showing the mean rating for each year within the specified range.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function assumes that there is a ‘date’ column in the DataFrame
+containing the dates of the comments in ‘YYYY-MM-DD’ format, and a
+‘rating’ column containing the ratings.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.clean_from_outliers">
+<span class="sig-name descname"><span class="pre">clean_from_outliers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.clean_from_outliers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.clean_from_outliers" title="Link to this definition"></a></dt>
+<dd><p>Remove outliers from numerical features based on the interquartile
+range (IQR).</p>
+<p>Numerical features cleaned:
+- <cite>minutes</cite>: The time required to prepare a recipe.
+- <cite>cal</cite>: The calorie count of a recipe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The DataFrame with outliers removed.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.cuisine_evolution">
+<span class="sig-name descname"><span class="pre">cuisine_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.cuisine_evolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.cuisine_evolution" title="Link to this definition"></a></dt>
+<dd><p>Analyze the evolution of cuisine proportions over the years and save
+the results in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – <p>SQLAlchemy engine for database interactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A DataFrame with cuisine proportions for each year.</p>
+</dd>
+<dt class="field-even">rtype<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.get_categories_quick_recipe">
+<span class="sig-name descname"><span class="pre">get_categories_quick_recipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.get_categories_quick_recipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.get_categories_quick_recipe" title="Link to this definition"></a></dt>
+<dd><p>Calculate the categories of quick recipes (30 minutes or less) and save
+the results in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the categories of quick recipes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.get_quick_recipe_interaction_rate">
+<span class="sig-name descname"><span class="pre">get_quick_recipe_interaction_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.get_quick_recipe_interaction_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.get_quick_recipe_interaction_rate" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rate of interactions for quick recipes (30 minutes or
+less) over the years and save the results in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the rate of interactions for quick recipes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.get_tags">
+<span class="sig-name descname"><span class="pre">get_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Counter</span></span></span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.get_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.get_tags" title="Link to this definition"></a></dt>
+<dd><p>Extract all tags used in recipes for a given year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>year</strong> (<em>int</em>) – The year to filter recipes by.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Counter object containing the frequency of each tag.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Counter</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.get_top_tag_per_year">
+<span class="sig-name descname"><span class="pre">get_top_tag_per_year</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DB_PATH</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.get_top_tag_per_year"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.get_top_tag_per_year" title="Link to this definition"></a></dt>
+<dd><p>Extract the top tags for each year in the dataset and store them in
+the top tag database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary containing the top tags for each year from 2002 to
+2010.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.get_top_tags">
+<span class="sig-name descname"><span class="pre">get_top_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.get_top_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.get_top_tags" title="Link to this definition"></a></dt>
+<dd><p>Get the top 100 tags for a specific year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>year</strong> (<em>int</em>) – The year to filter recipes by.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary where the year is the key and the top tags are the
+values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.group_interactions_year">
+<span class="sig-name descname"><span class="pre">group_interactions_year</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.group_interactions_year"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.group_interactions_year" title="Link to this definition"></a></dt>
+<dd><p>Count the number of interactions (reviews) grouped by year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the indices (years) and the values (review
+counts).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.group_recipes_year">
+<span class="sig-name descname"><span class="pre">group_recipes_year</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.group_recipes_year"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.group_recipes_year" title="Link to this definition"></a></dt>
+<dd><p>Count the number of unique recipes grouped by year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the indices (years) and the values (recipe
+counts).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.proportion_quick_recipe">
+<span class="sig-name descname"><span class="pre">proportion_quick_recipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.proportion_quick_recipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.proportion_quick_recipe" title="Link to this definition"></a></dt>
+<dd><p>Calculate the proportion of quick recipes (30 minutes or less) over the
+years and save the results in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the proportion of quick recipes for each year.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.sentiment_analysis_over_time">
+<span class="sig-name descname"><span class="pre">sentiment_analysis_over_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.sentiment_analysis_over_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.sentiment_analysis_over_time" title="Link to this definition"></a></dt>
+<dd><p>Calculate the average sentiment polarity of comments, grouped by year
+(2002-2010).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – Database engine used for the connection.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with years (2002-2010) and average sentiment polarity.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.top_commun_ingredients">
+<span class="sig-name descname"><span class="pre">top_commun_ingredients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.top_commun_ingredients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.top_commun_ingredients" title="Link to this definition"></a></dt>
+<dd><p>Analyze the top common ingredients for each cuisine and save the
+results
+in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with the top common ingredients for each cuisine.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.word_co_occurrence_over_time">
+<span class="sig-name descname"><span class="pre">word_co_occurrence_over_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">words</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.word_co_occurrence_over_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.word_co_occurrence_over_time" title="Link to this definition"></a></dt>
+<dd><p>Count co-occurrences of specific words in comments over time
+and calculate the percentage of comments that contain all the
+specified words each year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>words</strong> (<em>list</em><em> of </em><em>str</em>) – The words to search for co-occurrences.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with years and the percentage of co-occurrences per
+year.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_analyzer.DataAnalyzer.word_count_over_time">
+<span class="sig-name descname"><span class="pre">word_count_over_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_analyzer.html#DataAnalyzer.word_count_over_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_analyzer.DataAnalyzer.word_count_over_time" title="Link to this definition"></a></dt>
+<dd><p>Count occurrences of a specific word in comments over time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>word</strong> (<em>str</em>) – The word to search for in the comments.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A DataFrame with years and the count of the word in that year.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="projet_kbd.config.html" class="btn btn-neutral float-left" title="projet_kbd.config module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="projet_kbd.data_downloader.html" class="btn btn-neutral float-right" title="projet_kbd.data_downloader module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

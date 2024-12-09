@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projet_kbd.utils &mdash; Projet Kit Big Data 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Projet Kit Big Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.html">projet_kbd package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.utils.html">projet_kbd.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Projet Kit Big Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">projet_kbd.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for projet_kbd.utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides utility functions for various tasks including database</span>
+<span class="sd">operations, data highlighting, and text rendering.</span>
+<span class="sd">Functions:</span>
+<span class="sd">    determine_cuisine(tags):</span>
+<span class="sd">    highlight_cells(val):</span>
+<span class="sd">        Highlights specific cells in a dataframe figure based on the value.</span>
+<span class="sd">    create_top_tags_database(DB_PATH, set_number_tags):</span>
+<span class="sd">        Creates and populates a database table with top tags data.</span>
+<span class="sd">    render_justified_text(content):</span>
+<span class="sd">        Renders text content with justified alignment in a Streamlit app.</span>
+<span class="sd">Constants:</span>
+<span class="sd">    relevant_cuisines (list of str):</span>
+<span class="sd">        A list of relevant cuisines.</span>
+<span class="sd">    custom_palette (dict):</span>
+<span class="sd">        A dictionary mapping oil types to their respective color codes.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="n">relevant_cuisines</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;asian&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mexican&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;italian&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;african&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;greek&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;american&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="n">custom_palette</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;olive oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#8a3ab9&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;vegetable oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#bc2a8d&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;canola oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#e95950&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sesame oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#fccc63&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;peanut oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#4c68d7&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cooking oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#30cfd0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;salad oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#6a67ce&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#48cfad&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;corn oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#a8e063&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;extra virgin olive oil&quot;</span><span class="p">:</span> <span class="s2">&quot;#fd9644&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="determine_cuisine">
+<a class="viewcode-back" href="../../projet_kbd.utils.html#projet_kbd.utils.determine_cuisine">[docs]</a>
+<span class="k">def</span> <span class="nf">determine_cuisine</span><span class="p">(</span><span class="n">tags</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines the cuisine of a recipe based on tags.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tags : list of str</span>
+<span class="sd">        A list of tags associated with the recipe.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        The determined cuisine of the recipe.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cuisines</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;asian&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;mexican&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;italian&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;african&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;american&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;french&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;greek&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;indian&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">cuisine</span> <span class="ow">in</span> <span class="n">cuisines</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">cuisine</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cuisine</span>
+    <span class="k">return</span> <span class="s2">&quot;other&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="highlight_cells">
+<a class="viewcode-back" href="../../projet_kbd.utils.html#projet_kbd.utils.highlight_cells">[docs]</a>
+<span class="k">def</span> <span class="nf">highlight_cells</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Highlights specific cells in a dataframe figure based on the value.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    val : str</span>
+<span class="sd">        The value of the cell.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        The CSS style string for highlighting the cell.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="s2">&quot;parmesan cheese&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;background-color: red&quot;</span>
+    <span class="k">elif</span> <span class="n">val</span> <span class="o">==</span> <span class="s2">&quot;olive oil&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;background-color: lightgreen&quot;</span>
+    <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;chili powder&quot;</span><span class="p">,</span> <span class="s2">&quot;flour tortillas&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s2">&quot;background-color: orange&quot;</span>
+    <span class="k">elif</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;feta cheese&quot;</span><span class="p">,</span> <span class="s2">&quot;dried oregano&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s2">&quot;background-color: lightblue&quot;</span>
+    <span class="k">elif</span> <span class="n">val</span> <span class="o">==</span> <span class="s2">&quot;soy sauce&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;background-color: lightpink&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="create_top_tags_database">
+<a class="viewcode-back" href="../../projet_kbd.utils.html#projet_kbd.utils.create_top_tags_database">[docs]</a>
+<span class="k">def</span> <span class="nf">create_top_tags_database</span><span class="p">(</span><span class="n">DB_PATH</span> <span class="p">,</span> <span class="n">set_number_tags</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and populates a database table with top tags data.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    DB_PATH : str</span>
+<span class="sd">        The path to the SQLite database file.</span>
+<span class="sd">    set_number_tags : dict</span>
+<span class="sd">        A dictionary containing top tags data for each set number and year.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">DB_PATH</span><span class="p">)</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    CREATE TABLE IF NOT EXISTS top_tags (</span>
+<span class="s2">        set_number INTEGER,</span>
+<span class="s2">        year INTEGER,</span>
+<span class="s2">        label TEXT,</span>
+<span class="s2">        size REAL</span>
+<span class="s2">    )</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">set_number</span><span class="p">,</span> <span class="n">top_tags_years</span> <span class="ow">in</span> <span class="n">set_number_tags</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">top_tags_years</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">labels</span><span class="p">,</span> <span class="n">sizes</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">sizes</span><span class="p">):</span>
+                <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                INSERT INTO top_tags (set_number, year, label, size)</span>
+<span class="s2">                VALUES (?, ?, ?, ?)</span>
+<span class="s2">                &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">set_number</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>
+
+    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+
+<span class="c1"># Helper function to render justified content</span>
+<div class="viewcode-block" id="render_justified_text">
+<a class="viewcode-back" href="../../projet_kbd.utils.html#projet_kbd.utils.render_justified_text">[docs]</a>
+<span class="k">def</span> <span class="nf">render_justified_text</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Renders text content with justified alignment in a Streamlit app.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    content : str</span>
+<span class="sd">        The text content to be rendered.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&lt;div class=&#39;justified&#39;&gt;</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2">&lt;/div&gt;&quot;</span><span class="p">,</span>
+        <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

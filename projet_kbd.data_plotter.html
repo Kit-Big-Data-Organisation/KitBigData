@@ -1,0 +1,553 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projet_kbd.data_plotter module &mdash; Projet Kit Big Data 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="projet_kbd.logger_config module" href="projet_kbd.logger_config.html" />
+    <link rel="prev" title="projet_kbd.data_loader module" href="projet_kbd.data_loader.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Projet Kit Big Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="projet_kbd.html">projet_kbd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.config.html">projet_kbd.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.data_plotter module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data-plotter-module">Data Plotter Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter"><code class="docutils literal notranslate"><span class="pre">DataPlotter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="projet_kbd.html#module-projet_kbd">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.data_plotter module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-plotter-module">Data Plotter Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter"><code class="docutils literal notranslate"><span class="pre">DataPlotter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.data_analyzer"><code class="docutils literal notranslate"><span class="pre">DataPlotter.data_analyzer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_average_steps_rating"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_average_steps_rating()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_calories_analysis"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_calories_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_categories_quick_recipe"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_categories_quick_recipe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_cuisine_nutritions"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_cuisine_nutritions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_cuisine_time_analysis"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_cuisine_time_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_cuisines_analysis"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_cuisines_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_cuisines_evolution"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_cuisines_evolution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_interactions_ratings"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_interactions_ratings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_nb_interactions_per_year"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_nb_interactions_per_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_nb_recipes_per_year"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_nb_recipes_per_year()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_oil_analysis"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_oil_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_pie_chart_tags"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_pie_chart_tags()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_quick_recipes_evolution"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_quick_recipes_evolution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_rate_interactions_quick_recipe"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_rate_interactions_quick_recipe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_rating_evolution"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_rating_evolution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_sentiment_over_time"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_sentiment_over_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_time_wordcloud"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_time_wordcloud()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_top_ingredients"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_top_ingredients()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_user_interactions"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_user_interactions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#projet_kbd.data_plotter.DataPlotter.plot_wordcloud"><code class="docutils literal notranslate"><span class="pre">DataPlotter.plot_wordcloud()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.utils.html">projet_kbd.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Projet Kit Big Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="projet_kbd.html">projet_kbd package</a></li>
+      <li class="breadcrumb-item active">projet_kbd.data_plotter module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/projet_kbd.data_plotter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-projet_kbd.data_plotter">
+<span id="projet-kbd-data-plotter-module"></span><h1>projet_kbd.data_plotter module<a class="headerlink" href="#module-projet_kbd.data_plotter" title="Link to this heading"></a></h1>
+<section id="data-plotter-module">
+<h2>Data Plotter Module<a class="headerlink" href="#data-plotter-module" title="Link to this heading"></a></h2>
+<p>This module provides functionality for visualizing recipe data, including:
+- Time-series plots for interactions and recipes.
+- Pie charts for tags and cuisines.
+- Bar plots for nutritional analysis and other metrics.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>DataPlotter:</dt><dd><p>A class to generate plots and visualizations from analyzed recipe data.</p>
+</dd>
+</dl>
+</section>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">projet_kbd.data_plotter.</span></span><span class="sig-name descname"><span class="pre">DataPlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_analyzer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment_analyzer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for creating visualizations based on recipe data analysis.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.data_analyzer">
+<span class="sig-name descname"><span class="pre">data_analyzer</span></span><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.data_analyzer" title="Link to this definition"></a></dt>
+<dd><p>An instance of the DataAnalyzer class for accessing analyzed data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_average_steps_rating">
+<span class="sig-name descname"><span class="pre">plot_average_steps_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_average_steps_rating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_average_steps_rating" title="Link to this definition"></a></dt>
+<dd><p>Plot the average number of steps and average ”
+“rating over time using a bar plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly bar figure object representing average”
+“ steps and average ratings.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_calories_analysis">
+<span class="sig-name descname"><span class="pre">plot_calories_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_calories_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_calories_analysis" title="Link to this definition"></a></dt>
+<dd><p>Generate a bar chart for the analysis of calories by cuisine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly bar chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_categories_quick_recipe">
+<span class="sig-name descname"><span class="pre">plot_categories_quick_recipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_categories_quick_recipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_categories_quick_recipe" title="Link to this definition"></a></dt>
+<dd><p>Plot the distribution of categories for quick recipes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly bar chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_cuisine_nutritions">
+<span class="sig-name descname"><span class="pre">plot_cuisine_nutritions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_cuisine_nutritions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_cuisine_nutritions" title="Link to this definition"></a></dt>
+<dd><p>Generate a bar chart for the nutritional content by cuisine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly bar chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_cuisine_time_analysis">
+<span class="sig-name descname"><span class="pre">plot_cuisine_time_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_cuisine_time_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_cuisine_time_analysis" title="Link to this definition"></a></dt>
+<dd><p>Generate a bar chart for the analysis of recipe times by cuisine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly bar chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_cuisines_analysis">
+<span class="sig-name descname"><span class="pre">plot_cuisines_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_cuisines_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_cuisines_analysis" title="Link to this definition"></a></dt>
+<dd><p>Generate a pie chart for the analysis of cuisine types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly pie chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_cuisines_evolution">
+<span class="sig-name descname"><span class="pre">plot_cuisines_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_cuisines_evolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_cuisines_evolution" title="Link to this definition"></a></dt>
+<dd><p>Generate a line chart for the evolution of cuisine proportions
+over time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly line chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_interactions_ratings">
+<span class="sig-name descname"><span class="pre">plot_interactions_ratings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_interactions_ratings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_interactions_ratings" title="Link to this definition"></a></dt>
+<dd><p>Plot a scatter plot showing the relationship between average rating and
+the number of ratings, with cooking time as a color scale.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly scatter plot figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_nb_interactions_per_year">
+<span class="sig-name descname"><span class="pre">plot_nb_interactions_per_year</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_nb_interactions_per_year"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_nb_interactions_per_year" title="Link to this definition"></a></dt>
+<dd><p>Plot the number of interactions per year as a line chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A Plotly figure object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_nb_recipes_per_year">
+<span class="sig-name descname"><span class="pre">plot_nb_recipes_per_year</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_nb_recipes_per_year"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_nb_recipes_per_year" title="Link to this definition"></a></dt>
+<dd><p>Plot the number of recipes per year as a line chart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A Plotly figure object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_oil_analysis">
+<span class="sig-name descname"><span class="pre">plot_oil_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_oil_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_oil_analysis" title="Link to this definition"></a></dt>
+<dd><p>Generate a bar chart for the analysis of oil types over the years.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly bar chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_pie_chart_tags">
+<span class="sig-name descname"><span class="pre">plot_pie_chart_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_pie_chart_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_pie_chart_tags" title="Link to this definition"></a></dt>
+<dd><p>Generate pie charts for the top tags per year from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db_path</strong> (<em>str</em>) – Path to the SQLite database.</p></li>
+<li><p><strong>set_number</strong> (<em>int</em>) – The tag set number to plot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of Plotly pie chart figures.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_quick_recipes_evolution">
+<span class="sig-name descname"><span class="pre">plot_quick_recipes_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_quick_recipes_evolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_quick_recipes_evolution" title="Link to this definition"></a></dt>
+<dd><p>Plot the evolution of the proportion of quick recipes over the years.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly line chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_rate_interactions_quick_recipe">
+<span class="sig-name descname"><span class="pre">plot_rate_interactions_quick_recipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_rate_interactions_quick_recipe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_rate_interactions_quick_recipe" title="Link to this definition"></a></dt>
+<dd><p>Plot the rate of interactions for quick-tagged recipes over the years.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly line chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_rating_evolution">
+<span class="sig-name descname"><span class="pre">plot_rating_evolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_rating_evolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_rating_evolution" title="Link to this definition"></a></dt>
+<dd><p>Plot the evolution of comment ratings over the years using a Plotly
+line graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly line chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_sentiment_over_time">
+<span class="sig-name descname"><span class="pre">plot_sentiment_over_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_sentiment_over_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_sentiment_over_time" title="Link to this definition"></a></dt>
+<dd><p>Visualize the average sentiment polarity of comments over the years.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – Database engine used for the connection.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly figure object displaying the sentiment over time.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_time_wordcloud">
+<span class="sig-name descname"><span class="pre">plot_time_wordcloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_time_wordcloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_time_wordcloud" title="Link to this definition"></a></dt>
+<dd><p>Plot a Word Cloud based on word frequencies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>word_frequencies_time</strong> (<em>dict</em>) – A dictionary containing word frequencies.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Matplotlib figure object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.figure.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_top_ingredients">
+<span class="sig-name descname"><span class="pre">plot_top_ingredients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_top_ingredients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_top_ingredients" title="Link to this definition"></a></dt>
+<dd><p>Generate a bar chart for the top ingredients used in recipes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly bar chart figure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_user_interactions">
+<span class="sig-name descname"><span class="pre">plot_user_interactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_user_interactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_user_interactions" title="Link to this definition"></a></dt>
+<dd><p>Plot user interaction data including number of ”
+“interactions and average rating over time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>engine</strong> (<em>sqlalchemy.engine.Engine</em>) – SQLAlchemy engine for database interactions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Plotly figure object with user interactions and
+average ratings plotted.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plotly.graph_objects.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="projet_kbd.data_plotter.DataPlotter.plot_wordcloud">
+<span class="sig-name descname"><span class="pre">plot_wordcloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/data_plotter.html#DataPlotter.plot_wordcloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.data_plotter.DataPlotter.plot_wordcloud" title="Link to this definition"></a></dt>
+<dd><p>Plot a Word Cloud based on word frequencies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word_frequencies</strong> (<em>dict</em>) – A dictionary containing word frequencies.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em>, </em><em>optional</em>) – The title of the Word Cloud plot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Matplotlib figure object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.figure.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="projet_kbd.data_loader.html" class="btn btn-neutral float-left" title="projet_kbd.data_loader module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="projet_kbd.logger_config.html" class="btn btn-neutral float-right" title="projet_kbd.logger_config module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

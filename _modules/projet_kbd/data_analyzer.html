@@ -1,0 +1,1386 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projet_kbd.data_analyzer &mdash; Projet Kit Big Data 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Projet Kit Big Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.html">projet_kbd package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.utils.html">projet_kbd.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Projet Kit Big Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">projet_kbd.data_analyzer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for projet_kbd.data_analyzer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Data Analyzer Module</span>
+<span class="sd">====================</span>
+
+<span class="sd">This module provides functionalities for analyzing and processing recipe</span>
+<span class="sd">data, including cleaning data, generating insights, and interacting with</span>
+<span class="sd">databases.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">DataAnalyzer:</span>
+<span class="sd">    Main class for data processing and analysis.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">utils</span>
+<span class="kn">from</span> <span class="nn">comment_analyzer</span> <span class="kn">import</span> <span class="n">CommentAnalyzer</span>
+<span class="kn">from</span> <span class="nn">logger_config</span> <span class="kn">import</span> <span class="n">logger</span>
+
+
+<div class="viewcode-block" id="DataAnalyzer">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer">[docs]</a>
+<span class="k">class</span> <span class="nc">DataAnalyzer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for analyzing and processing recipe data.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : pd.DataFrame</span>
+<span class="sd">        The DataFrame containing recipe data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the DataAnalyzer with a DataFrame.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : pd.DataFrame</span>
+<span class="sd">            The DataFrame containing recipe data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+
+<div class="viewcode-block" id="DataAnalyzer.clean_from_outliers">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.clean_from_outliers">[docs]</a>
+    <span class="k">def</span> <span class="nf">clean_from_outliers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove outliers from numerical features based on the interquartile</span>
+<span class="sd">        range (IQR).</span>
+
+<span class="sd">        Numerical features cleaned:</span>
+<span class="sd">        - `minutes`: The time required to prepare a recipe.</span>
+<span class="sd">        - `cal`: The calorie count of a recipe.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            The DataFrame with outliers removed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">numerical_features</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;minutes&quot;</span><span class="p">,</span> <span class="s2">&quot;cal&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">numerical_features</span><span class="p">:</span>
+            <span class="n">IQR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">colmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
+            <span class="n">colmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">IQR</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">colmax</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">colmin</span><span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyze_oils">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyze_oils">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyze_oils</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the proportions of oil types used in recipes over the years.</span>
+
+<span class="sd">        If the data is not found in the database, it calculates proportions</span>
+<span class="sd">        for each oil type by year and saves the results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with oil type proportions for each year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s1">&#39;oils_dataframe&#39;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;data found&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ingredients&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ingredients&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">eval</span><span class="p">)</span>
+
+        <span class="n">year_oil</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2011</span><span class="p">):</span>
+            <span class="n">oil_types</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;olive oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;vegetable oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;canola oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;sesame oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;peanut oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;cooking oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;salad oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;corn oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;extra virgin olive oil&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="n">df_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">]</span>
+            <span class="n">number_id</span> <span class="o">=</span> <span class="n">df_year</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+
+            <span class="c1"># Skip if no unique IDs are found for the year</span>
+            <span class="k">if</span> <span class="n">number_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">oil</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df_year</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">ingredients_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">oil_type</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">oil_type</span> <span class="ow">in</span> <span class="n">ingredients_set</span><span class="p">:</span>
+                        <span class="n">oil_types</span><span class="p">[</span><span class="n">oil_type</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">oil</span><span class="p">:</span> <span class="n">count</span> <span class="o">/</span> <span class="n">number_id</span> <span class="k">for</span> <span class="n">oil</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+
+            <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">oil</span><span class="p">:</span> <span class="n">count</span> <span class="o">/</span> <span class="n">number_id</span> <span class="k">for</span> <span class="n">oil</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">oil_types</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">year</span><span class="p">,</span> <span class="n">oils</span> <span class="ow">in</span> <span class="n">year_oil</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">oils</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Avoid division by zero in normalization</span>
+                <span class="k">for</span> <span class="n">oil</span> <span class="ow">in</span> <span class="n">oils</span><span class="p">:</span>
+                    <span class="n">year_oil</span><span class="p">[</span><span class="n">year</span><span class="p">][</span><span class="n">oil</span><span class="p">]</span> <span class="o">=</span> <span class="n">oils</span><span class="p">[</span><span class="n">oil</span><span class="p">]</span> <span class="o">/</span> <span class="n">total</span>
+
+        <span class="n">df_oils</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">year_oil</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="s1">&#39;Year&#39;</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">df_oils</span> <span class="o">=</span> <span class="n">df_oils</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
+            <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">],</span>
+            <span class="n">var_name</span><span class="o">=</span><span class="s1">&#39;Oil Type&#39;</span><span class="p">,</span>
+            <span class="n">value_name</span><span class="o">=</span><span class="s1">&#39;Proportion&#39;</span><span class="p">)</span>
+        <span class="n">df_oils</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;oils_dataframe&#39;</span><span class="p">,</span>
+                       <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+                       <span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df_oils</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.group_interactions_year">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.group_interactions_year">[docs]</a>
+    <span class="k">def</span> <span class="nf">group_interactions_year</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Count the number of interactions (reviews) grouped by year.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            A tuple containing the indices (years) and the values (review</span>
+<span class="sd">            counts).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grouped_interactions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)[</span><span class="s2">&quot;review&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">indices</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">grouped_interactions</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+            <span class="n">grouped_interactions</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">indices</span><span class="p">,</span> <span class="n">values</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.group_recipes_year">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.group_recipes_year">[docs]</a>
+    <span class="k">def</span> <span class="nf">group_recipes_year</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Count the number of unique recipes grouped by year.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            A tuple containing the indices (years) and the values (recipe</span>
+<span class="sd">            counts).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grouped_recipes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="n">indices</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">grouped_recipes</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">grouped_recipes</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="k">return</span> <span class="n">indices</span><span class="p">,</span> <span class="n">values</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.get_tags">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.get_tags">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract all tags used in recipes for a given year.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        year : int</span>
+<span class="sd">            The year to filter recipes by.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Counter</span>
+<span class="sd">            A Counter object containing the frequency of each tag.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">]</span>
+        <span class="n">tags_df</span> <span class="o">=</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tags_df</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="n">tags</span> <span class="o">+=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tags</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.get_top_tags">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.get_top_tags">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_top_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the top 100 tags for a specific year.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        year : int</span>
+<span class="sd">            The year to filter recipes by.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary where the year is the key and the top tags are the</span>
+<span class="sd">            values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">top_commun_year</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">tag_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tags</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+        <span class="n">top_commun_year</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag_year</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">top_commun_year</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.get_top_tag_per_year">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.get_top_tag_per_year">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_top_tag_per_year</span><span class="p">(</span><span class="bp">self</span> <span class="p">,</span> <span class="n">engine</span> <span class="p">,</span> <span class="n">DB_PATH</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract the top tags for each year in the dataset and store them in</span>
+<span class="sd">        the top tag database.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary containing the top tags for each year from 2002 to</span>
+<span class="sd">            2010.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;top_tags&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Table Top tags found in the database.&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from the database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">set_number_tags</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">set_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+            <span class="n">top_tags_years</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2011</span><span class="p">):</span>
+                <span class="n">tag_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_top_tags</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+                <span class="n">start_idx</span> <span class="o">=</span> <span class="n">set_number</span> <span class="o">*</span> <span class="mi">10</span>
+                <span class="n">end_idx</span> <span class="o">=</span> <span class="n">start_idx</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tag_year</span><span class="p">[</span><span class="n">year</span><span class="p">]][</span>
+                    <span class="n">start_idx</span><span class="p">:</span><span class="n">end_idx</span>
+                <span class="p">]</span>
+                <span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tag_year</span><span class="p">[</span><span class="n">year</span><span class="p">]][</span><span class="n">start_idx</span><span class="p">:</span><span class="n">end_idx</span><span class="p">]</span>
+                <span class="n">top_tags_years</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">,</span> <span class="n">sizes</span><span class="p">]</span>
+
+            <span class="n">set_number_tags</span><span class="p">[</span><span class="n">set_number</span><span class="p">]</span> <span class="o">=</span> <span class="n">top_tags_years</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating table top tags ...&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">create_top_tags_database</span><span class="p">(</span><span class="n">DB_PATH</span> <span class="p">,</span> <span class="n">set_number_tags</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyze_cuisines">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyze_cuisines">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyze_cuisines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the proportions of cuisines in the dataset and save the results</span>
+<span class="sd">        in the database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with cuisine proportions.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;cuisine_data&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+        <span class="n">id_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+
+        <span class="n">year_ingredients</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">cuisine</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cuisine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">cuisine</span> <span class="o">!=</span> <span class="s2">&quot;other&quot;</span><span class="p">:</span>
+                <span class="n">df_cuisine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cuisine&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cuisine</span><span class="p">]</span>
+                <span class="n">proportion</span> <span class="o">=</span> <span class="n">df_cuisine</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">id_count</span>
+                <span class="k">if</span> <span class="n">proportion</span> <span class="o">&lt;=</span> <span class="mf">0.008</span><span class="p">:</span>
+                    <span class="n">year_ingredients</span><span class="p">[</span><span class="s2">&quot;others&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">year_ingredients</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;others&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">proportion</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">year_ingredients</span><span class="p">[</span><span class="n">cuisine</span><span class="p">]</span> <span class="o">=</span> <span class="n">proportion</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">year_ingredients</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">sizes</span> <span class="o">=</span> <span class="n">year_ingredients</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+        <span class="n">cuisine_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Cuisine&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span> <span class="s2">&quot;Proportion&quot;</span><span class="p">:</span> <span class="n">sizes</span><span class="p">})</span>
+
+        <span class="n">cuisine_df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;cuisine_data&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cuisine_df</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.cuisine_evolution">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.cuisine_evolution">[docs]</a>
+    <span class="k">def</span> <span class="nf">cuisine_evolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the evolution of cuisine proportions over the years and save</span>
+<span class="sd">        the results in the database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            pd.DataFrame</span>
+<span class="sd">                A DataFrame with cuisine proportions for each year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;cuisine_evolution_dataframe&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;cuisine evolution dataframe&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">df_filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cuisine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">relevant_cuisines</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">cuisine_counts</span> <span class="o">=</span> <span class="n">df_filtered</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;cuisine&quot;</span><span class="p">])[</span>
+            <span class="s2">&quot;id&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="n">year_counts</span> <span class="o">=</span> <span class="n">df_filtered</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;year&quot;</span><span class="p">])[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="n">proportion</span> <span class="o">=</span> <span class="n">cuisine_counts</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">year_counts</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">)</span>
+        <span class="n">proportion_df</span> <span class="o">=</span> <span class="n">proportion</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">proportion_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="s2">&quot;Cuisine&quot;</span><span class="p">,</span> <span class="s2">&quot;Proportion&quot;</span><span class="p">]</span>
+        <span class="n">cuisine_df</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">proportion_df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
+                <span class="n">index</span><span class="o">=</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Cuisine&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;Proportion&quot;</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2011</span><span class="p">))</span>
+            <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="o">*</span> <span class="mi">100</span>
+        <span class="p">)</span>
+        <span class="n">cuisine_df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cuisine_evolution_dataframe&quot;</span><span class="p">,</span>
+            <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+            <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">index_label</span><span class="o">=</span><span class="s1">&#39;Year&#39;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cuisine_df</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.top_commun_ingredients">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.top_commun_ingredients">[docs]</a>
+    <span class="k">def</span> <span class="nf">top_commun_ingredients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the top common ingredients for each cuisine and save the</span>
+<span class="sd">        results</span>
+<span class="sd">        in the database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the top common ingredients for each cuisine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;cuisine_top_ingredients&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">eval</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cuisine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">relevant_cuisines</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">df_cuisine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;cuisine&quot;</span><span class="p">)</span>
+        <span class="n">ingredients_counts</span> <span class="o">=</span> <span class="n">df_cuisine</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Counter</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">ingredients_counts</span> <span class="o">=</span> <span class="n">ingredients_counts</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">top_ingredients</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ingredients_counts</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span>
+            <span class="s2">&quot;cuisine&quot;</span>
+        <span class="p">)</span>
+        <span class="n">ingredients_expanded</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">top_ingredients</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">ingredients_expanded</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;Top ingredient </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ingredients_expanded</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="p">]</span>
+        <span class="n">final_ingredients</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">top_ingredients</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ingredients&quot;</span><span class="p">]),</span>
+                <span class="n">ingredients_expanded</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;string&quot;</span><span class="p">)</span>
+        <span class="n">final_ingredients</span><span class="o">.</span><span class="n">drop</span>
+        <span class="n">final_ingredients</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cuisine_top_ingredients&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">final_ingredients</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyse_cuisine_nutritions">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyse_cuisine_nutritions">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyse_cuisine_nutritions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the median nutrition values for each cuisine and save the</span>
+<span class="sd">        results in the database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the median nutrition values for each cuisine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;cuisines_nutritions&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cuisine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">relevant_cuisines</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">cuisines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;cuisine&quot;</span><span class="p">)</span>
+        <span class="n">cuisines_nutritions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">cuisines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;other&quot;</span><span class="p">:</span>
+                <span class="n">nutrition_medians</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span>
+                    <span class="p">[</span>
+                        <span class="s2">&quot;sugar&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;protein&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;carbs&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;totalFat&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;satFat&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;sodium&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;cal&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;minutes&quot;</span><span class="p">,</span>
+                    <span class="p">]</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+                <span class="n">nutrition_medians</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">nutrition_medians</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+                <span class="n">nutrition_medians</span><span class="p">[</span><span class="s2">&quot;cuisine&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+                <span class="n">cuisines_nutritions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">cuisines_nutritions</span><span class="p">,</span> <span class="n">nutrition_medians</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+                <span class="p">)</span>
+
+        <span class="n">cuisines_nutritions</span> <span class="o">=</span> <span class="n">cuisines_nutritions</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;cuisine&quot;</span><span class="p">)</span>
+        <span class="n">cuisines_nutritions</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cuisines_nutritions&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cuisines_nutritions</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.proportion_quick_recipe">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.proportion_quick_recipe">[docs]</a>
+    <span class="k">def</span> <span class="nf">proportion_quick_recipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the proportion of quick recipes (30 minutes or less) over the</span>
+<span class="sd">        years and save the results in the database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the proportion of quick recipes for each year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span>
+                <span class="s2">&quot;quick_recipe_proportion_table&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data found in the database.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">data</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;No data found in the table, calculating proportions.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">contains_any_tag</span><span class="p">(</span><span class="n">tag_string</span><span class="p">,</span> <span class="n">target_tags</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Safely evaluate the string to a list</span>
+                <span class="n">tags_list</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">tag_string</span><span class="p">)</span>
+                <span class="c1"># Check if any target tag is in the list of tags</span>
+                <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">target_tags</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags_list</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">SyntaxError</span><span class="p">):</span>
+                <span class="c1"># In case of any error during evaluation, return False</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Suppression des doublons basée sur &#39;id&#39;</span>
+        <span class="n">unique_recipes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="c1"># Filter the data to include only years 2002 to 2010</span>
+        <span class="n">unique_recipes</span> <span class="o">=</span> <span class="n">unique_recipes</span><span class="p">[</span>
+            <span class="n">unique_recipes</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2010</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Duplicates removed from data and data between 2002 and 2010.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Définition des tags cibles et pertinents</span>
+        <span class="n">target_tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;30-minutes-or-less&quot;</span><span class="p">,</span> <span class="s2">&quot;15-minutes-or-less&quot;</span><span class="p">]</span>
+        <span class="n">all_relevant_tags</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;30-minutes-or-less&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;15-minutes-or-less&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;4-hours-or-less&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;60-minutes-or-less&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tags for filtering set.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Filtrer les recettes contenant au moins un des tags cibles</span>
+        <span class="c1"># Filtrer les recettes avec au moins un des target_tags</span>
+        <span class="n">df_target</span> <span class="o">=</span> <span class="n">unique_recipes</span><span class="p">[</span>
+            <span class="n">unique_recipes</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">tags</span><span class="p">:</span> <span class="n">contains_any_tag</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">target_tags</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">df_relevant</span> <span class="o">=</span> <span class="n">unique_recipes</span><span class="p">[</span>
+            <span class="n">unique_recipes</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">tags</span><span class="p">:</span> <span class="n">contains_any_tag</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">all_relevant_tags</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Recipes filtered based on tags.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Compter les recettes par année pour chaque groupe</span>
+        <span class="n">target_counts</span> <span class="o">=</span> <span class="n">df_target</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+        <span class="n">relevant_counts</span> <span class="o">=</span> <span class="n">df_relevant</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Recipes counted by year.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Calculer la proportion en pourcentage</span>
+        <span class="n">proportions</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_counts</span> <span class="o">/</span> <span class="n">relevant_counts</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="n">proportions_df</span> <span class="o">=</span> <span class="n">proportions</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">proportions_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="s2">&quot;Proportion&quot;</span><span class="p">]</span>
+        <span class="n">proportions_df</span> <span class="o">=</span> <span class="n">proportions_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Proportions calculated.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Sauvegarde des données dans la base de données</span>
+        <span class="n">proportions_df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;quick_recipe_proportion_table&quot;</span><span class="p">,</span>
+            <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+            <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data saved to the database.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">proportions_df</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.get_quick_recipe_interaction_rate">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.get_quick_recipe_interaction_rate">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_quick_recipe_interaction_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the rate of interactions for quick recipes (30 minutes or</span>
+<span class="sd">        less) over the years and save the results in the database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the rate of interactions for quick recipes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">existing_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span>
+                <span class="s2">&quot;rate_interactions_for_quick_recipe&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">existing_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data found in the database.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">existing_data</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<span class="w">                    </span><span class="sd">&quot;&quot;&quot; No data found in the table, calculation of the number</span>
+<span class="sd">                    of interaction for quick recipe per year.</span>
+<span class="sd">                    &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">contains_any_tag</span><span class="p">(</span><span class="n">tag_string</span><span class="p">,</span> <span class="n">target_tags</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Safely evaluate the string to a list</span>
+                <span class="n">tags_list</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">tag_string</span><span class="p">)</span>
+                <span class="c1"># Check if any target tag is in the list of tags</span>
+                <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">target_tags</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags_list</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">SyntaxError</span><span class="p">):</span>
+                <span class="c1"># In case of any error during evaluation, return False</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Quick tags à filtrer</span>
+        <span class="n">quick_tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;30-minutes-or-less&quot;</span><span class="p">,</span> <span class="s2">&quot;15-minutes-or-less&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Filtrer les recettes avec des quick tags</span>
+        <span class="n">quick_recipes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">contains_any_tag</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">quick_tags</span><span class="p">))</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Compter les interactions totales par année</span>
+        <span class="n">total_interactions_by_year</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Total_Interactions&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Compter les interactions pour les quicks recipe par année</span>
+        <span class="n">quick_interactions_by_year</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">quick_recipes</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Quick_Tag_Interactions&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Fusionner les interactions totales et celles avec quick tags</span>
+        <span class="n">rate_quick_recipe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">quick_interactions_by_year</span><span class="p">,</span>
+            <span class="n">total_interactions_by_year</span><span class="p">,</span>
+            <span class="n">on</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">,</span>
+            <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Calculer la proportion des interactions des quick tags</span>
+        <span class="n">rate_quick_recipe</span><span class="p">[</span><span class="s2">&quot;Proportion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">rate_quick_recipe</span><span class="p">[</span><span class="s2">&quot;Quick_Tag_Interactions&quot;</span><span class="p">]</span>
+            <span class="o">/</span> <span class="n">rate_quick_recipe</span><span class="p">[</span><span class="s2">&quot;Total_Interactions&quot;</span><span class="p">]</span>
+        <span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="c1"># Filter the data to include only years 2002 to 2010</span>
+        <span class="n">rate_quick_recipe</span> <span class="o">=</span> <span class="n">rate_quick_recipe</span><span class="p">[</span>
+            <span class="n">rate_quick_recipe</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2010</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Sauvegarde des données dans la base de données</span>
+        <span class="n">rate_quick_recipe</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rate_interactions_for_quick_recipe&quot;</span><span class="p">,</span>
+            <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+            <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data saved to the database.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rate_quick_recipe</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.get_categories_quick_recipe">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.get_categories_quick_recipe">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_categories_quick_recipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the categories of quick recipes (30 minutes or less) and save</span>
+<span class="sd">        the results in the database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the categories of quick recipes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Starting the process to calculate quick recipe categories.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Tenter de charger les données existantes depuis la base de données</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;categories_quick_recipe&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Data found in the database. Returning existing data.&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">data</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;No data found in the table, proceeding with calculation.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">contains_any_tag</span><span class="p">(</span><span class="n">tag_string</span><span class="p">,</span> <span class="n">target_tags</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Safely evaluate the string to a list</span>
+                <span class="n">tags_list</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">tag_string</span><span class="p">)</span>
+                <span class="c1"># Check if any target tag is in the list of tags</span>
+                <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">tag</span> <span class="ow">in</span> <span class="n">target_tags</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags_list</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error evaluating tags: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># In case of any error during evaluation, return False</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Suppression des doublons basée sur &#39;id&#39;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Removing duplicates based on &#39;id&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">unique_recipes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Number of unique recipes after</span>
+<span class="s2">            removing duplicates: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_recipes</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Filtrer les données entre 2002 et 2010</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Filtering recipes between the years 2002 and 2010.&quot;</span><span class="p">)</span>
+        <span class="n">unique_recipes</span> <span class="o">=</span> <span class="n">unique_recipes</span><span class="p">[</span>
+            <span class="n">unique_recipes</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2010</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Number of recipes after</span>
+<span class="s2">            filtering by year: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_recipes</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Définition des tags cibles et pertinents</span>
+        <span class="n">target_tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;30-minutes-or-less&quot;</span><span class="p">,</span> <span class="s2">&quot;15-minutes-or-less&quot;</span><span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Filtering recipes containing target tags: </span><span class="si">{</span><span class="n">target_tags</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Filtrer les recettes contenant au moins un des tags cibles</span>
+        <span class="n">quick_recipes</span> <span class="o">=</span> <span class="n">unique_recipes</span><span class="p">[</span>
+            <span class="n">unique_recipes</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">tags</span><span class="p">:</span> <span class="n">contains_any_tag</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="n">target_tags</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Number of quick recipes identified: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">quick_recipes</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Extraire les tags associés aux types de plats</span>
+        <span class="n">main_categories</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;main-dish&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;desserts&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;appetizers&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;soups-stews&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;salads&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;side-dishes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;snacks&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Extracting categories from quick recipes: </span><span class="si">{</span><span class="n">main_categories</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">category_count</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">category</span><span class="p">:</span> <span class="n">quick_recipes</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">main_categories</span>
+        <span class="p">}</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Category counts calculated: </span><span class="si">{</span><span class="n">category_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">category_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">category_count</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Category&quot;</span><span class="p">,</span> <span class="s2">&quot;Count&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Sauvegarde des données dans la base de données</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saving category counts to the database.&quot;</span><span class="p">)</span>
+            <span class="n">category_df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;categories_quick_recipe&quot;</span><span class="p">,</span>
+                <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+                <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data successfully saved to the database.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Failed to save category counts to the database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">category_df</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyse_interactions_ratings">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyse_interactions_ratings">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyse_interactions_ratings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads and analyzes recipe interaction data from a database or files if</span>
+<span class="sd">        not available in the database.</span>
+
+<span class="sd">        This function first tries to load the recipe interaction data from a</span>
+<span class="sd">        database using a provided SQL engine. If data exists, it returns a</span>
+<span class="sd">        DataAnalyzer object initialized with this data. If no data is found, it</span>
+<span class="sd">        processes data from specified files, cleans it from outliers, and saves</span>
+<span class="sd">        the cleaned data back to the database. The function caches its results</span>
+<span class="sd">        to avoid redundant data processing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_file : str</span>
+<span class="sd">            The file path where the data files are located.</span>
+<span class="sd">        recipe_file : str</span>
+<span class="sd">            The filename for the recipe data.</span>
+<span class="sd">        interaction_file : str</span>
+<span class="sd">            The filename for the interaction data.</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataAnalyzer</span>
+<span class="sd">            An instance of the DataAnalyzer class initialized with the loaded</span>
+<span class="sd">            and processed data.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        Exception</span>
+<span class="sd">            If the data fails to load from the database or files, an error</span>
+<span class="sd">            message is printed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Aggregating interaction and rating data.&quot;</span><span class="p">)</span>
+            <span class="n">aggregated</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+                    <span class="n">avg_rating</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                    <span class="n">num_ratings</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">),</span>
+                    <span class="n">mean_minutes</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;minutes&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data aggregation completed successfully.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">aggregated</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error while aggregating interactions and ratings: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyse_average_steps_rating">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyse_average_steps_rating">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyse_average_steps_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the average number of steps and average rating per year.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the average number of steps and average</span>
+<span class="sd">            rating per year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Converting &#39;submitted&#39; column to datetime and&quot;</span>
+                <span class="s2">&quot;extracting the year.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Grouping data by year to calculate average steps and ratings.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">grouped</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+                    <span class="n">avg_steps</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;n_steps&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                    <span class="n">avg_rating</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Average steps and ratings calculated successfully.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">grouped</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required columns in the data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An unexpected error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Return an empty DataFrame in case of an error</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.analyse_user_intractions">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.analyse_user_intractions">[docs]</a>
+    <span class="k">def</span> <span class="nf">analyse_user_intractions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze user interactions over time since the submission of recipes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with the number of interactions and&quot;</span>
+<span class="sd">            &quot;average rating grouped by days since submission.&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Converting &#39;submitted&#39; and &#39;date&#39; columns to datetime format.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Calculating the number of days since submission for &quot;</span>
+                <span class="s2">&quot;each interaction.&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;days_since_submission&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;submitted&quot;</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Filtering data to include only rows where &quot;</span>
+                <span class="s2">&quot;&#39;days_since_submission&#39; &gt; 0.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">filtered_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;days_since_submission&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Grouping data by &#39;days_since_submission&#39; to calculate&quot;</span>
+                <span class="s2">&quot;interactions and average ratings.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">aggregated</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">filtered_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;days_since_submission&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+                    <span class="n">num_interactions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">),</span>  <span class="c1"># Number of interactions</span>
+                    <span class="n">avg_rating</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rating&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>  <span class="c1"># Average rating</span>
+                <span class="p">)</span>
+                <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;User interactions analysis completed successfully.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">aggregated</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required columns in the data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;An unexpected error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Return an empty DataFrame in case of an error</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.word_count_over_time">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.word_count_over_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">word_count_over_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Count occurrences of a specific word in comments over time.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        word : str</span>
+<span class="sd">            The word to search for in the comments.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with years and the count of the word in that year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Assure that comments are cleaned first</span>
+        <span class="k">if</span> <span class="s1">&#39;cleaned&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="n">CommentAnalyzer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">clean_comments</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;COLUMNS1 =  &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+        <span class="c1"># Ajout d&#39;une fonction de vérification pour isoler les entrées</span>
+        <span class="c1"># problématiques</span>
+        <span class="k">def</span> <span class="nf">count_word</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="c1"># Afficher l&#39;entrée qui a causé l&#39;erreur</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Problematic entry (expected str, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="c1"># Appliquer la fonction de comptage en capturant les erreurs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;cleaned&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">count_word</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;year&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">filtered_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2010</span><span class="p">)]</span>
+            <span class="n">word_counts</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">filtered_data</span>
+                <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">)[</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">word_counts</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Column &#39;year&#39; not found.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.word_co_occurrence_over_time">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.word_co_occurrence_over_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">word_co_occurrence_over_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">words</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Count co-occurrences of specific words in comments over time</span>
+<span class="sd">        and calculate the percentage of comments that contain all the</span>
+<span class="sd">        specified words each year.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        words : list of str</span>
+<span class="sd">            The words to search for co-occurrences.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with years and the percentage of co-occurrences per</span>
+<span class="sd">            year.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ingredients&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># Assure that comments are cleaned first</span>
+        <span class="k">if</span> <span class="s1">&#39;cleaned&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="n">CommentAnalyzer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">clean_comments</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;COLUMNS1 =  &quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+        <span class="c1"># Function to count co-occurrences</span>
+        <span class="k">def</span> <span class="nf">count_co_occurrences</span><span class="p">(</span><span class="n">comment</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">word</span> <span class="ow">in</span> <span class="n">comment</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
+
+        <span class="c1"># Apply the counting function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;co_occurrence&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span>
+            <span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;cleaned&#39;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">count_co_occurrences</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;year&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="c1"># Calculate the total comments per year</span>
+            <span class="n">total_comments_per_year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="c1"># Filter the data between specific years if needed</span>
+            <span class="n">filtered_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">2010</span><span class="p">)]</span>
+            <span class="c1"># Calculate the number of co-occurrences per year</span>
+            <span class="n">co_occurrences_per_year</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">filtered_data</span>
+                <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">)[</span><span class="s1">&#39;co_occurrence&#39;</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="c1"># Calculate the percentage of co-occurrences</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">co_occurrences_per_year</span>
+                <span class="o">/</span> <span class="n">total_comments_per_year</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">co_occurrences_per_year</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+                <span class="o">*</span> <span class="mi">100</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;Co-occurrence Percentage&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Column &#39;year&#39; not found.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.calculate_rating_evolution">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.calculate_rating_evolution">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_rating_evolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the evolution of comment ratings over the years, focusing on</span>
+<span class="sd">        the years 2002 to 2010.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with two columns: &#39;year&#39; and &#39;average_rating&#39;,</span>
+<span class="sd">            showing the mean rating for each year within the specified range.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This function assumes that there is a &#39;date&#39; column in the DataFrame</span>
+<span class="sd">        containing the dates of the comments in &#39;YYYY-MM-DD&#39; format, and a</span>
+<span class="sd">        &#39;rating&#39; column containing the ratings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;rating_evolution&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Data found in the database. Filtering for years 2002 to &quot;</span>
+                    <span class="s2">&quot;2010.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">filtered_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span>
+                    <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2002</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2010</span><span class="p">)</span>
+                <span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">filtered_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">filtered_data</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s2">&quot;No data found in the specified year range&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;proceeding, with calculation.&quot;</span>
+                    <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Convert the &#39;date&#39; column to datetime if not already done</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="s1">&#39;datetime64[ns]&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Extract the year from the &#39;date&#39; column</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+
+        <span class="c1"># Filter data for years 2002 to 2010</span>
+        <span class="n">filtered_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2002</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2010</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Calculate the average rating for each year in the range</span>
+        <span class="n">rating_evolution</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">filtered_data</span>
+            <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">)[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">rating_evolution</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;average_rating&#39;</span><span class="p">]</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;Rating evolution calculation for specified years completed.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Save the data to the database</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saving rating evolution to the database.&quot;</span><span class="p">)</span>
+            <span class="n">rating_evolution</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rating_evolution&quot;</span><span class="p">,</span>
+                <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+                <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data successfully saved to the database.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Failed to save data to the database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rating_evolution</span></div>
+
+
+<div class="viewcode-block" id="DataAnalyzer.sentiment_analysis_over_time">
+<a class="viewcode-back" href="../../projet_kbd.data_analyzer.html#projet_kbd.data_analyzer.DataAnalyzer.sentiment_analysis_over_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">sentiment_analysis_over_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the average sentiment polarity of comments, grouped by year</span>
+<span class="sd">        (2002-2010).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            Database engine used for the connection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame with years (2002-2010) and average sentiment polarity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stored_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;sentiment_by_year&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stored_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sentiment analysis over time found in database.&quot;</span><span class="p">)</span>
+                <span class="c1"># Filter the data for the years 2002 to 2010</span>
+                <span class="n">stored_data</span> <span class="o">=</span> <span class="n">stored_data</span><span class="p">[</span>
+                    <span class="p">(</span><span class="n">stored_data</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2002</span><span class="p">)</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">stored_data</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2010</span><span class="p">)</span>
+                <span class="p">]</span>
+                <span class="k">return</span> <span class="n">stored_data</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Table not found or error loading data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Date column missing from DataFrame.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># Ensure &#39;date&#39; is in datetime format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+
+        <span class="c1"># Perform sentiment analysis if not already done</span>
+        <span class="k">if</span> <span class="s1">&#39;polarity&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="n">CommentAnalyzer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">clean_comments</span><span class="p">()</span>
+            <span class="n">comment_analyzer</span><span class="o">.</span><span class="n">sentiment_analysis</span><span class="p">()</span>
+
+        <span class="c1"># Group by the &#39;year&#39; column and calculate the average polarity</span>
+        <span class="n">sentiment_by_year</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">)[</span><span class="s1">&#39;polarity&#39;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">sentiment_by_year</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Average Sentiment&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Filter for the years 2002 to 2010</span>
+        <span class="n">sentiment_by_year</span> <span class="o">=</span> <span class="n">sentiment_by_year</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">sentiment_by_year</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2002</span><span class="p">)</span>
+            <span class="o">&amp;</span> <span class="p">(</span><span class="n">sentiment_by_year</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2010</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sentiment analysis over time (2002-2010) completed.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save the results to the database</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sentiment_by_year</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;sentiment_by_year&quot;</span><span class="p">,</span>
+                <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+                <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sentiment analysis over time saved successfully.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to save sentiment analysis over time: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sentiment_by_year</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projet_kbd.utils module &mdash; Projet Kit Big Data 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="projet_kbd.streamlit_app module" href="projet_kbd.streamlit_app.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Projet Kit Big Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="projet_kbd.html">projet_kbd package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="projet_kbd.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.config.html">projet_kbd.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">projet_kbd.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.utils.create_top_tags_database"><code class="docutils literal notranslate"><span class="pre">create_top_tags_database()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.utils.determine_cuisine"><code class="docutils literal notranslate"><span class="pre">determine_cuisine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.utils.highlight_cells"><code class="docutils literal notranslate"><span class="pre">highlight_cells()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#projet_kbd.utils.render_justified_text"><code class="docutils literal notranslate"><span class="pre">render_justified_text()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="projet_kbd.html#module-projet_kbd">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">projet_kbd.utils module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.utils.create_top_tags_database"><code class="docutils literal notranslate"><span class="pre">create_top_tags_database()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.utils.determine_cuisine"><code class="docutils literal notranslate"><span class="pre">determine_cuisine()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.utils.highlight_cells"><code class="docutils literal notranslate"><span class="pre">highlight_cells()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projet_kbd.utils.render_justified_text"><code class="docutils literal notranslate"><span class="pre">render_justified_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Projet Kit Big Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="projet_kbd.html">projet_kbd package</a></li>
+      <li class="breadcrumb-item active">projet_kbd.utils module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/projet_kbd.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-projet_kbd.utils">
+<span id="projet-kbd-utils-module"></span><h1>projet_kbd.utils module<a class="headerlink" href="#module-projet_kbd.utils" title="Link to this heading"></a></h1>
+<p>This module provides utility functions for various tasks including database
+operations, data highlighting, and text rendering.
+Functions:</p>
+<blockquote>
+<div><p>determine_cuisine(tags):
+highlight_cells(val):</p>
+<blockquote>
+<div><p>Highlights specific cells in a dataframe figure based on the value.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>create_top_tags_database(DB_PATH, set_number_tags):</dt><dd><p>Creates and populates a database table with top tags data.</p>
+</dd>
+<dt>render_justified_text(content):</dt><dd><p>Renders text content with justified alignment in a Streamlit app.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>Constants:</dt><dd><dl class="simple">
+<dt>relevant_cuisines (list of str):</dt><dd><p>A list of relevant cuisines.</p>
+</dd>
+<dt>custom_palette (dict):</dt><dd><p>A dictionary mapping oil types to their respective color codes.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.utils.create_top_tags_database">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">create_top_tags_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">DB_PATH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_number_tags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#create_top_tags_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.create_top_tags_database" title="Link to this definition"></a></dt>
+<dd><p>Creates and populates a database table with top tags data.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>DB_PATH<span class="classifier">str</span></dt><dd><p>The path to the SQLite database file.</p>
+</dd>
+<dt>set_number_tags<span class="classifier">dict</span></dt><dd><p>A dictionary containing top tags data for each set number and year.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.utils.determine_cuisine">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">determine_cuisine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#determine_cuisine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.determine_cuisine" title="Link to this definition"></a></dt>
+<dd><p>Determines the cuisine of a recipe based on tags.</p>
+<section id="id1">
+<h2>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>tags<span class="classifier">list of str</span></dt><dd><p>A list of tags associated with the recipe.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>str</dt><dd><p>The determined cuisine of the recipe.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.utils.highlight_cells">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">highlight_cells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#highlight_cells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.highlight_cells" title="Link to this definition"></a></dt>
+<dd><p>Highlights specific cells in a dataframe figure based on the value.</p>
+<section id="id2">
+<h2>Parameters:<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>val<span class="classifier">str</span></dt><dd><p>The value of the cell.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h2>Returns:<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>str</dt><dd><p>The CSS style string for highlighting the cell.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="projet_kbd.utils.render_justified_text">
+<span class="sig-prename descclassname"><span class="pre">projet_kbd.utils.</span></span><span class="sig-name descname"><span class="pre">render_justified_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/projet_kbd/utils.html#render_justified_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#projet_kbd.utils.render_justified_text" title="Link to this definition"></a></dt>
+<dd><p>Renders text content with justified alignment in a Streamlit app.</p>
+<section id="id4">
+<h2>Parameters:<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>content<span class="classifier">str</span></dt><dd><p>The text content to be rendered.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="projet_kbd.streamlit_app.html" class="btn btn-neutral float-left" title="projet_kbd.streamlit_app module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,992 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projet_kbd.streamlit_app &mdash; Projet Kit Big Data 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Projet Kit Big Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.html">projet_kbd package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.utils.html">projet_kbd.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Projet Kit Big Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">projet_kbd.streamlit_app</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for projet_kbd.streamlit_app</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module integrates functionalities to analyze and visualize culinary</span>
+<span class="sd">trends using pandas, streamlit, and plotly.</span>
+
+<span class="sd">Features:</span>
+<span class="sd">- Data loading and preprocessing with custom utilities.</span>
+<span class="sd">- Advanced analysis via the DataAnalyzer class, ensuring quality insights.</span>
+<span class="sd">- Interactive visualizations with Plotly, managed by DataPlotter, to explore</span>
+<span class="sd">  trends in recipes and interactions.</span>
+<span class="sd">- Streamlit&#39;s caching integration enhances performance by minimizing data</span>
+<span class="sd">  reloads and reprocessing.</span>
+<span class="sd">- The streamlit_option_menu allows navigable dashboard creation for various</span>
+<span class="sd">  analytical views.</span>
+<span class="sd">- CommentAnalyzer extracts sentiments and key terms from user reviews.</span>
+
+<span class="sd">The structure supports expansion and integration of more data sources and</span>
+<span class="sd">analytical techniques, aiming to provide a comprehensive sociological tool</span>
+<span class="sd">for exploring eating habits and culinary preferences.</span>
+
+<span class="sd">Dependencies:</span>
+<span class="sd">- pandas: For data manipulation.</span>
+<span class="sd">- streamlit: For the interactive web application.</span>
+<span class="sd">- plotly.express: For interactive and dynamic visual charts.</span>
+<span class="sd">- SQLAlchemy: For database interactions.</span>
+<span class="sd">- Custom modules like utils, analysis_text, and logger_config enhance</span>
+<span class="sd">  functionality and user experience.</span>
+
+<span class="sd">Intended for a web application environment, this script provides an interactive</span>
+<span class="sd">dashboard for exploring culinary data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">streamlit</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">import</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">analysis_text</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">from</span> <span class="nn">comment_analyzer</span> <span class="kn">import</span> <span class="n">CommentAnalyzer</span>
+<span class="kn">from</span> <span class="nn">data_analyzer</span> <span class="kn">import</span> <span class="n">DataAnalyzer</span>
+<span class="kn">from</span> <span class="nn">data_loader</span> <span class="kn">import</span> <span class="n">Dataloader</span>
+<span class="kn">from</span> <span class="nn">data_plotter</span> <span class="kn">import</span> <span class="n">DataPlotter</span>
+<span class="kn">from</span> <span class="nn">logger_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">streamlit_option_menu</span> <span class="kn">import</span> <span class="n">option_menu</span>
+<span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">DB_PATH</span>
+
+
+<div class="viewcode-block" id="load_and_analyze_data">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.load_and_analyze_data">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
+<span class="k">def</span> <span class="nf">load_and_analyze_data</span><span class="p">(</span><span class="n">path_file</span><span class="p">,</span> <span class="n">recipe_file</span><span class="p">,</span> <span class="n">interaction_file</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads and analyzes recipe interaction data from a database or files if</span>
+<span class="sd">    not available in the database.</span>
+
+<span class="sd">    This function first tries to load the recipe interaction data from a</span>
+<span class="sd">    database using a provided SQL engine. If data exists, it returns a</span>
+<span class="sd">    DataAnalyzer object initialized with this data. If no data is found, it</span>
+<span class="sd">    processes data from specified files, cleans it from outliers, and saves</span>
+<span class="sd">    the cleaned data back to the database. The function caches its results</span>
+<span class="sd">    to avoid redundant data processing.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_file : str</span>
+<span class="sd">        The file path where the data files are located.</span>
+<span class="sd">    recipe_file : str</span>
+<span class="sd">        The filename for the recipe data.</span>
+<span class="sd">    interaction_file : str</span>
+<span class="sd">        The filename for the interaction data.</span>
+<span class="sd">    engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class initialized with the loaded</span>
+<span class="sd">        and processed data.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    Exception</span>
+<span class="sd">        If the data fails to load from the database or files, an error</span>
+<span class="sd">        message is printed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;recipe_interaction&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">_engine</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;data found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">DataAnalyzer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load data from database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">data_loader</span> <span class="o">=</span> <span class="n">Dataloader</span><span class="p">(</span><span class="n">path_file</span><span class="p">,</span> <span class="n">recipe_file</span><span class="p">)</span>
+    <span class="n">interactions_loader</span> <span class="o">=</span> <span class="n">Dataloader</span><span class="p">(</span><span class="n">path_file</span><span class="p">,</span> <span class="n">interaction_file</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data_loader</span><span class="o">.</span><span class="n">processed_recipe_interaction</span><span class="p">(</span><span class="n">interactions_loader</span><span class="p">)</span>
+    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">DataAnalyzer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">analyzer</span><span class="o">.</span><span class="n">clean_from_outliers</span><span class="p">()</span>
+
+    <span class="n">analyzer</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;recipe_interaction&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">_engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">analyzer</span></div>
+
+
+
+<div class="viewcode-block" id="create_plots">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_plots">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_plots</span><span class="p">(</span><span class="n">analyzer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figures for the number of recipes and</span>
+<span class="sd">    interactions per year.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        plotly.graph_objs.Figure</span>
+<span class="sd">            A plotly figure showing the number of recipes per year.</span>
+<span class="sd">            plotly.graph_objs.Figure</span>
+<span class="sd">            A plotly figure showing the number of interactions per year.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="n">recipe_fig</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_nb_recipes_per_year</span><span class="p">()</span>
+    <span class="n">interaction_fig</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_nb_interactions_per_year</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">recipe_fig</span><span class="p">,</span> <span class="n">interaction_fig</span></div>
+
+
+
+<div class="viewcode-block" id="create_charts">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_charts">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">set_number</span><span class="p">,</span> <span class="n">_engine</span><span class="p">,</span> <span class="n">_DB_PATH</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figures for the tags distribution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">    set_number : int</span>
+<span class="sd">        The set of top 10 tags to display (0 for 1-10, 1 for 11-20, etc.).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        A list of plotly figures showing the distribution of tags.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_pie_chart_tags</span><span class="p">(</span><span class="n">set_number</span><span class="p">,</span> <span class="n">_engine</span><span class="p">,</span> <span class="n">_DB_PATH</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_oils_stacked_histograms">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_oils_stacked_histograms">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_oils_stacked_histograms</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the oil analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the oil analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_oil_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_cuisine_charts">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_cuisine_charts">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_cuisine_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the cuisine analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the cuisine analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisines_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_cuisine_evolution_charts">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_cuisine_evolution_charts">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_cuisine_evolution_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the cuisine evolution analysis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the cuisine evolution analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisines_evolution</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_top_ingredients_table">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_top_ingredients_table">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_top_ingredients_table</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the top ingredients table.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        A DataFrame showing the top ingredients.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_top_ingredients</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyze_cuisine_calories">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_cuisine_calories">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyze_cuisine_calories</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the calories by cuisine and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the calories by cuisine analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_calories_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyze_cuisine_time">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_cuisine_time">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyze_cuisine_time</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the time by cuisine and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the time by cuisine analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisine_time_analysis</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyze_cuisine_nutritions">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_cuisine_nutritions">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyze_cuisine_nutritions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the nutritional content by cuisine and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the nutritional content by cuisine analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_cuisine_nutritions</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_proportion_quick_recipe_charts">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_proportion_quick_recipe_charts">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_proportion_quick_recipe_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the proportion of quick recipes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the proportion of quick recipes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_quick_recipes_evolution</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_rate_interactions_quick_recipe_charts">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_rate_interactions_quick_recipe_charts">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_rate_interactions_quick_recipe_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the rate of interactions for</span>
+<span class="sd">    quick recipes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the rate of interactions for quick recipes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_rate_interactions_quick_recipe</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_categories_quick_recipe_chart">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_categories_quick_recipe_chart">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_categories_quick_recipe_chart</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the distribution of quick recipe</span>
+<span class="sd">    categories.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the distribution of quick recipe categories.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_categories_quick_recipe</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_wordcloud_plot">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_wordcloud_plot">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
+<span class="k">def</span> <span class="nf">create_wordcloud_plot</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the wordcloud plot for the comments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _Comment_analyzer : CommentAnalyzer</span>
+<span class="sd">        An instance of the CommentAnalyzer class containing the cleaned</span>
+<span class="sd">        comments.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.figure.Figure</span>
+<span class="sd">        A matplotlib figure showing the wordcloud plot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span> <span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_wordcloud</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_time_wordcloud_plot">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_time_wordcloud_plot">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span>
+<span class="k">def</span> <span class="nf">create_time_wordcloud_plot</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the wordcloud plot for the comments containing the</span>
+<span class="sd">    word &quot;time&quot;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _Comment_analyzer : CommentAnalyzer</span>
+<span class="sd">        An instance of the CommentAnalyzer class containing the cleaned</span>
+<span class="sd">        comments.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.figure.Figure</span>
+<span class="sd">        A matplotlib figure showing the wordcloud plot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span> <span class="p">,</span> <span class="n">_Comment_analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_time_wordcloud</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_plot_rating_evolution">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_plot_rating_evolution">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_plot_rating_evolution</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the rating evolution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the rating evolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_rating_evolution</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_plot_sentiment_evolution">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.create_plot_sentiment_evolution">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">create_plot_sentiment_evolution</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates and returns the plotly figure for the sentiment evolution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    _analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the sentiment evolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">_analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_sentiment_over_time</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyze_interactions_ratings">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_interactions_ratings">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyze_interactions_ratings</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the interactions ratings and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the interactions ratings analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_interactions_ratings</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyze_user_interactions">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyze_user_interactions">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyze_user_interactions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the user interactions and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the user interactions analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_user_interactions</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyse_average_steps_rating">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.analyse_average_steps_rating">[docs]</a>
+<span class="nd">@st</span><span class="o">.</span><span class="n">cache_data</span><span class="p">(</span><span class="n">hash_funcs</span><span class="o">=</span><span class="p">{</span><span class="n">DataAnalyzer</span><span class="p">:</span> <span class="nb">id</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">analyse_average_steps_rating</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">_engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyzes the average steps rating and returns the plotly figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    analyzer : DataAnalyzer</span>
+<span class="sd">        An instance of the DataAnalyzer class containing the recipe and</span>
+<span class="sd">        interaction data.</span>
+<span class="sd">        _engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    plotly.graph_objs.Figure</span>
+<span class="sd">        A plotly figure showing the average steps rating analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">DataPlotter</span><span class="p">(</span><span class="n">analyzer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plotter</span><span class="o">.</span><span class="n">plot_average_steps_rating</span><span class="p">(</span><span class="n">_engine</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="run">
+<a class="viewcode-back" href="../../projet_kbd.streamlit_app.html#projet_kbd.streamlit_app.run">[docs]</a>
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">path_file</span><span class="p">,</span> <span class="n">recipe_file</span><span class="p">,</span> <span class="n">interaction_file</span><span class="p">,</span> <span class="n">engine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main function to run the Streamlit application.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_file : str</span>
+<span class="sd">        The file path where the data files are located.</span>
+<span class="sd">    recipe_file : str</span>
+<span class="sd">        The filename for the recipe data.</span>
+<span class="sd">    interaction_file : str</span>
+<span class="sd">        The filename for the interaction data.</span>
+<span class="sd">    engine : sqlalchemy.engine.Engine</span>
+<span class="sd">        SQLAlchemy engine for database interactions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">st</span><span class="o">.</span><span class="n">set_page_config</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;wide&quot;</span><span class="p">)</span>
+
+    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">load_and_analyze_data</span><span class="p">(</span>
+        <span class="n">path_file</span><span class="p">,</span> <span class="n">recipe_file</span><span class="p">,</span> <span class="n">interaction_file</span><span class="p">,</span> <span class="n">engine</span>
+    <span class="p">)</span>
+    <span class="n">comment_analyzer</span> <span class="o">=</span> <span class="n">CommentAnalyzer</span><span class="p">(</span><span class="n">analyzer</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s2">&quot;review&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
+
+    <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">sidebar</span><span class="p">:</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">option_menu</span><span class="p">(</span>
+            <span class="s2">&quot;Dashboard&quot;</span><span class="p">,</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;Presentation&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Eating habits&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Cuisine Analysis&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Sociological Insight&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Interaction with the reviews&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Free Visualisation&quot;</span>
+            <span class="p">],</span>
+            <span class="n">menu_icon</span><span class="o">=</span><span class="s2">&quot;cast&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            &lt;style&gt;</span>
+<span class="s2">                .justified {</span>
+<span class="s2">                    text-align: justify;</span>
+<span class="s2">                    text-justify: inter-word;</span>
+<span class="s2">                }</span>
+<span class="s2">            &lt;/style&gt;</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Presentation&quot;</span><span class="p">:</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Presentation&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Texte indiquant la période d&#39;analyse</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">presentation</span><span class="p">)</span>
+
+        <span class="c1"># Création des colonnes et affichage des graphiques</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+        <span class="n">recipe_fig</span><span class="p">,</span> <span class="n">interaction_fig</span> <span class="o">=</span> <span class="n">create_plots</span><span class="p">(</span>
+            <span class="n">analyzer</span>
+        <span class="p">)</span>  <span class="c1"># Fonction qui génère les figures Plotly</span>
+
+        <span class="n">average_steps_rating</span> <span class="o">=</span> <span class="n">analyse_average_steps_rating</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">interaction_ratings</span> <span class="o">=</span> <span class="n">analyze_interactions_ratings</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">user_interactions</span> <span class="o">=</span> <span class="n">analyze_user_interactions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">recipe_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">interaction_fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">average_steps_rating</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">average_steps_rating</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">interaction_ratings</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">interaction_ratings</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">user_interactions</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">user_interactions</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Eating habits&quot;</span><span class="p">:</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Eating habits&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">eating_habit_presentation</span><span class="p">)</span>
+        <span class="n">oils_analysis</span> <span class="o">=</span> <span class="n">create_oils_stacked_histograms</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">oils_analysis</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">oil_analysis</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Cuisine Analysis&quot;</span><span class="p">:</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;## Cuisine Analysis&quot;</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_presentation</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Distribution of Cuisine Types&quot;</span><span class="p">)</span>
+        <span class="n">cuisine_analysis</span> <span class="o">=</span> <span class="n">create_cuisine_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_analysis</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_distribtuion</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine Evolution over the years&quot;</span><span class="p">)</span>
+        <span class="n">cuisine_evolution</span> <span class="o">=</span> <span class="n">create_cuisine_evolution_charts</span><span class="p">(</span>
+            <span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_evolution</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_evolution</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine Calories analysis&quot;</span><span class="p">)</span>
+
+        <span class="n">cuisine_calories</span> <span class="o">=</span> <span class="n">analyze_cuisine_calories</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_calories</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_calories</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Cuisine time analysis&quot;</span><span class="p">)</span>
+        <span class="n">cuisine_time</span> <span class="o">=</span> <span class="n">analyze_cuisine_time</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_time</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_time_analysis</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Nutritional content by Cuisine in PDV&quot;</span><span class="p">)</span>
+        <span class="n">cuisine_nutritions</span> <span class="o">=</span> <span class="n">analyze_cuisine_nutritions</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">cuisine_nutritions</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_nutritions</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;#### Top ingredients&quot;</span><span class="p">)</span>
+        <span class="n">top_ingredients_cuisine</span> <span class="o">=</span> <span class="n">create_top_ingredients_table</span><span class="p">(</span>
+            <span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span>
+        <span class="p">)</span>
+        <span class="n">styled_df</span> <span class="o">=</span> <span class="n">top_ingredients_cuisine</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">highlight_cells</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">dataframe</span><span class="p">(</span><span class="n">styled_df</span><span class="p">,</span> <span class="n">hide_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">cuisine_top_ingredients</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Sociological Insight&quot;</span><span class="p">:</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;### 🌟 Sociological Insight&quot;</span><span class="p">)</span>
+
+        <span class="n">col</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+        <span class="n">quick_recipe_fig</span> <span class="o">=</span> <span class="n">create_proportion_quick_recipe_charts</span><span class="p">(</span>
+            <span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span>
+        <span class="p">)</span>
+        <span class="n">interactions_quick_recipe_fig</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">create_rate_interactions_quick_recipe_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Affichage des graphiques dans les colonnes</span>
+        <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span>
+                <span class="n">quick_recipe_fig</span><span class="p">,</span>
+                <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Proportion of Quick Recipes (2002-2010)&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span>
+                <span class="n">interactions_quick_recipe_fig</span><span class="p">,</span>
+                <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Rate of Interactions for Quick Recipes (2002-2010)&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Ajouter une séparation pour une meilleure lisibilité</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Ajout de l&#39;analyse sociologique</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">quick_recipes_analysis</span><span class="p">)</span>
+
+        <span class="c1"># Analuse Quick recipe categories</span>
+        <span class="n">categories_quick_recipe_fig</span> <span class="o">=</span> <span class="n">create_categories_quick_recipe_chart</span><span class="p">(</span>
+            <span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span>
+            <span class="n">categories_quick_recipe_fig</span><span class="p">,</span>
+            <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;Distribution of Quick Recipe Categories (2002-2010)&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">main_dishes_analysis</span><span class="p">)</span>
+
+        <span class="c1"># Analyse des commentaires (Word Cloud général)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;### Word Cloud: Frequent Terms in Comments 📝&quot;</span><span class="p">)</span>
+        <span class="n">wordcloud_fig</span> <span class="o">=</span> <span class="n">create_wordcloud_plot</span><span class="p">(</span>
+            <span class="n">analyzer</span><span class="p">,</span>
+            <span class="n">comment_analyzer</span><span class="p">,</span>
+            <span class="n">engine</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">pyplot</span><span class="p">(</span><span class="n">wordcloud_fig</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">efficiency_focus_analysis</span><span class="p">)</span>
+
+        <span class="c1"># Analyse des termes associés à &quot;time&quot;</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;### Word Cloud: Context Around &#39;Time&#39; ⏱️&quot;</span><span class="p">)</span>
+        <span class="n">time_wordcloud_fig</span> <span class="o">=</span> <span class="n">create_time_wordcloud_plot</span><span class="p">(</span>
+            <span class="n">analyzer</span><span class="p">,</span>
+            <span class="n">comment_analyzer</span><span class="p">,</span>
+            <span class="n">engine</span>
+        <span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">pyplot</span><span class="p">(</span><span class="n">time_wordcloud_fig</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">time_efficiency_analysis</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Interaction with the reviews&quot;</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;📈 Rate Evolution and Sentiment Analysis Over Time&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rate evolution...&quot;</span><span class="p">)</span>
+        <span class="n">rate_evolution</span> <span class="o">=</span> <span class="n">create_plot_rating_evolution</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">rate_evolution</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">comment_ratings_analysis</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sentiment analysis...&quot;</span><span class="p">)</span>
+        <span class="n">sentiment_evolution</span> <span class="o">=</span> <span class="n">create_plot_sentiment_evolution</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">sentiment_evolution</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">sentiment_trend_analysis</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">word_frequency_analysis</span><span class="p">)</span>
+
+        <span class="n">words_input</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">text_input</span><span class="p">(</span>
+            <span class="s1">&#39;Enter words to search for co-occurrence, separated by commas:&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span>
+        <span class="p">)</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words_input</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="p">]</span> <span class="k">if</span> <span class="n">words_input</span> <span class="k">else</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">word_counts</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">DataAnalyzer</span>
+                <span class="o">.</span><span class="n">word_co_occurrence_over_time</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">word_counts</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+                    <span class="n">word_counts</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;year&#39;</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Co-occurrence Percentage&#39;</span><span class="p">,</span>
+                    <span class="n">title</span><span class="o">=</span><span class="p">(</span>
+                        <span class="s1">&#39;Proportion of Comments Containing the &#39;</span>
+                        <span class="s1">&#39;Specified Words Over Time&#39;</span>
+                    <span class="p">),</span>
+                    <span class="n">labels</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s1">&#39;year&#39;</span><span class="p">:</span> <span class="s1">&#39;Year&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;Co-occurrence Percentage&#39;</span><span class="p">:</span> <span class="p">(</span>
+                            <span class="s1">&#39;Percentage of Comments (%)&#39;</span>
+                        <span class="p">)</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+                    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">tickmode</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                        <span class="n">tickformat</span><span class="o">=</span><span class="s1">&#39;d&#39;</span>  <span class="c1"># Afficher les années sans virgules</span>
+                    <span class="p">),</span>
+                    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">]),</span>
+                    <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">&#39;Percentage of Comments (%)&#39;</span><span class="p">,</span>
+                    <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Year&#39;</span><span class="p">,</span>
+                    <span class="n">legend_title</span><span class="o">=</span><span class="s1">&#39;Words&#39;</span>
+                <span class="p">)</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                    <span class="s2">&quot;No co-occurrence data found for the specified words.&quot;</span>
+                <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">selected</span> <span class="o">==</span> <span class="s2">&quot;Free Visualisation&quot;</span><span class="p">:</span>
+        <span class="n">st</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;## Tags Analysis&quot;</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">render_justified_text</span><span class="p">(</span><span class="n">analysis_text</span><span class="o">.</span><span class="n">free_visualisation_text</span><span class="p">)</span>
+
+        <span class="n">st</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="s2">&quot;&lt;p style=&#39;padding-top:10px&#39;&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="n">unsafe_allow_html</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">col</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])</span>
+
+        <span class="k">with</span> <span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">set_number</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">slider</span><span class="p">(</span>
+                <span class="s2">&quot;Select set of top 10 tags (0 for 1-10, 1 for 11-20, etc.)&quot;</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">9</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">tags_chart</span> <span class="o">=</span> <span class="n">create_charts</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">set_number</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">DB_PATH</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">st</span><span class="o">.</span><span class="n">container</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                    <span class="n">cols</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">tags_chart</span><span class="p">):</span>
+                            <span class="k">with</span> <span class="n">cols</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                                <span class="n">st</span><span class="o">.</span><span class="n">plotly_chart</span><span class="p">(</span>
+                                    <span class="n">tags_chart</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">],</span> <span class="n">use_container_width</span><span class="o">=</span><span class="kc">True</span>
+                                <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

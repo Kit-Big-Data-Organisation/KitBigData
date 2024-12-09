@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>projet_kbd.comment_analyzer &mdash; Projet Kit Big Data 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Projet Kit Big Data
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.html">projet_kbd package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.comment_analyzer.html">projet_kbd.comment_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_analyzer.html">projet_kbd.data_analyzer module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_loader.html">projet_kbd.data_loader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_plotter.html">projet_kbd.data_plotter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.logger_config.html">projet_kbd.logger_config module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.main.html">projet_kbd.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.streamlit_app.html">projet_kbd.streamlit_app module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.utils.html">projet_kbd.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.analysis_text.html">projet_kbd.analysis_text module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../projet_kbd.data_downloader.html">projet_kbd.data_downloader module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Projet Kit Big Data</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">projet_kbd.comment_analyzer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for projet_kbd.comment_analyzer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Comment Analyzer Module</span>
+<span class="sd">=======================</span>
+
+<span class="sd">This module provides tools for analyzing user comments, including:</span>
+<span class="sd">- Cleaning comments.</span>
+<span class="sd">- Performing sentiment analysis.</span>
+<span class="sd">- Generating word frequencies and analyzing contextual word usage.</span>
+
+<span class="sd">Classes</span>
+<span class="sd">-------</span>
+<span class="sd">CommentAnalyzer:</span>
+<span class="sd">    Main class for processing and analyzing user comments.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">ENGLISH_STOP_WORDS</span><span class="p">,</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span> <span class="nn">textblob</span> <span class="kn">import</span> <span class="n">TextBlob</span>
+<span class="kn">from</span> <span class="nn">logger_config</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+
+<div class="viewcode-block" id="CommentAnalyzer">
+<a class="viewcode-back" href="../../projet_kbd.comment_analyzer.html#projet_kbd.comment_analyzer.CommentAnalyzer">[docs]</a>
+<span class="k">class</span> <span class="nc">CommentAnalyzer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for analyzing user comments in a DataFrame.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    comments : pd.DataFrame</span>
+<span class="sd">        A DataFrame containing user comments with a column named &#39;review&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comments_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the CommentAnalyzer with a DataFrame.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        comments_df : pd.DataFrame</span>
+<span class="sd">            A DataFrame containing user comments with a &#39;review&#39; column.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comments</span> <span class="o">=</span> <span class="n">comments_df</span>
+
+    <span class="kn">import</span> <span class="nn">re</span>  <span class="c1"># Assurez-vous d&#39;importer le module &#39;re&#39;</span>
+
+<div class="viewcode-block" id="CommentAnalyzer.clean_comments">
+<a class="viewcode-back" href="../../projet_kbd.comment_analyzer.html#projet_kbd.comment_analyzer.CommentAnalyzer.clean_comments">[docs]</a>
+    <span class="k">def</span> <span class="nf">clean_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean comments by converting to lowercase, removing punctuation,</span>
+<span class="sd">        and stripping whitespace. Ensure all entries are treated as strings.</span>
+
+<span class="sd">        The cleaned comments are stored in a new column named &#39;cleaned&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;review&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;cleaned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;review&quot;</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>  <span class="c1"># Remplace les valeurs NaN par des chaînes vides</span>
+                <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>  <span class="c1"># Toutes les entrées sont des chaînes de car.</span>
+                <span class="o">.</span><span class="n">apply</span><span class="p">(</span>  <span class="c1"># Applique une fonction à chaque élément</span>
+                    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1"># Afficher les entrées qui ne sont pas des chaînes après le</span>
+            <span class="c1"># nettoyage</span>
+            <span class="n">problematic_entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span>
+                <span class="bp">self</span>
+                <span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;cleaned&quot;</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">problematic_entries</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Problematic entries:&quot;</span><span class="p">,</span> <span class="n">problematic_entries</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No problematic entries.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Comments cleaned successfully.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Column &#39;review&#39; not found in the DataFrame.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;cleaned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CommentAnalyzer.sentiment_analysis">
+<a class="viewcode-back" href="../../projet_kbd.comment_analyzer.html#projet_kbd.comment_analyzer.CommentAnalyzer.sentiment_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">sentiment_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform sentiment analysis on the cleaned comments.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            The original DataFrame with an additional &#39;polarity&#39; column</span>
+<span class="sd">            containing sentiment polarity scores.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The `clean_comments` method should be called before this one to</span>
+<span class="sd">        ensure that comments are cleaned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;polarity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;cleaned&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">TextBlob</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">sentiment</span><span class="o">.</span><span class="n">polarity</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sentiment analysis completed.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span></div>
+
+
+<div class="viewcode-block" id="CommentAnalyzer.generate_word_frequencies">
+<a class="viewcode-back" href="../../projet_kbd.comment_analyzer.html#projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_word_frequencies</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">max_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute word frequencies from cleaned comments and save them to a</span>
+<span class="sd">        database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+<span class="sd">        max_features : int, optional</span>
+<span class="sd">            Maximum number of most frequent words to include (default is 100).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary where keys are words and values are their frequencies.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If a table named &quot;word_frequencies&quot; already exists in the database,</span>
+<span class="sd">        this method will return the existing data instead of recomputing</span>
+<span class="sd">        frequencies.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stored_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span><span class="s2">&quot;word_frequencies&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stored_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Word frequencies found in database.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">stored_data</span><span class="p">[</span><span class="s2">&quot;word&quot;</span><span class="p">],</span> <span class="n">stored_data</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">]))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Table not found or error loading data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">custom_stop_words</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;recipe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;thanks&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;make&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;just&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;really&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;didn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;great&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;good&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;added&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">all_stop_words</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ENGLISH_STOP_WORDS</span><span class="p">)</span> <span class="o">+</span> <span class="n">custom_stop_words</span>
+
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+            <span class="n">stop_words</span><span class="o">=</span><span class="n">all_stop_words</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="n">max_features</span>
+        <span class="p">)</span>
+        <span class="n">word_matrix</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;cleaned&quot;</span><span class="p">])</span>
+        <span class="n">word_frequencies</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="nb">zip</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">(),</span> <span class="n">word_matrix</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">A1</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saving word frequencies to database.&quot;</span><span class="p">)</span>
+            <span class="n">word_frequencies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">word_frequencies</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;frequency&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">word_frequencies_df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;word_frequencies&quot;</span><span class="p">,</span>
+                <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+                <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Word frequencies saved successfully.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to save word frequencies to database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">word_frequencies</span></div>
+
+
+<div class="viewcode-block" id="CommentAnalyzer.generate_word_frequencies_associated_to_time">
+<a class="viewcode-back" href="../../projet_kbd.comment_analyzer.html#projet_kbd.comment_analyzer.CommentAnalyzer.generate_word_frequencies_associated_to_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_word_frequencies_associated_to_time</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">max_features</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate word frequencies in contexts associated with the word &#39;time&#39;.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : sqlalchemy.engine.Engine</span>
+<span class="sd">            SQLAlchemy engine for database interactions.</span>
+<span class="sd">        max_features : int, optional</span>
+<span class="sd">            Maximum number of top contexts to include (default is 10).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary where keys are n-grams (phrases) and values</span>
+<span class="sd">            are their frequencies.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This method extracts contexts around the word &#39;time&#39; and computes</span>
+<span class="sd">        word frequencies based on these contexts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stored_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_table</span><span class="p">(</span>
+                <span class="s2">&quot;word_frequencies_time&quot;</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stored_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Word frequencies for &#39;time&#39; found in database.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+                    <span class="nb">zip</span><span class="p">(</span><span class="n">stored_data</span><span class="p">[</span><span class="s2">&quot;phrase&quot;</span><span class="p">],</span> <span class="n">stored_data</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">])</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Table not found or error loading data: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">exclude_phrases_with_words</span><span class="p">(</span><span class="n">contexts</span><span class="p">,</span> <span class="n">words_to_exclude</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Exclude phrases containing specific words or expressions.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            contexts : list</span>
+<span class="sd">                List of contextual phrases.</span>
+<span class="sd">            words_to_exclude : list</span>
+<span class="sd">                List of words or expressions to exclude.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            list</span>
+<span class="sd">                Filtered list of contextual phrases.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">context</span>
+                <span class="k">for</span> <span class="n">context</span> <span class="ow">in</span> <span class="n">contexts</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
+                    <span class="n">word</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words_to_exclude</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">extract_context</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">target_word</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Extract `window` words before and after the target word in a text.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            text : str</span>
+<span class="sd">                The input text.</span>
+<span class="sd">            target_word : str, optional</span>
+<span class="sd">                The target word to extract context around (default is &#39;time&#39;).</span>
+<span class="sd">            window : int, optional</span>
+<span class="sd">                The number of words to extract before and after the target word</span>
+<span class="sd">                (default is 6).</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            str</span>
+<span class="sd">                The extracted context or None if the target word is not found.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">target_word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">words</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">target_word</span><span class="p">)</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="n">window</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="n">window</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
+                <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;time_context&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;cleaned&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">extract_context</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">target_word</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">time_contexts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">comments</span><span class="p">[</span><span class="s2">&quot;time_context&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()][</span>
+            <span class="s2">&quot;time_context&quot;</span>
+        <span class="p">]</span>
+        <span class="n">words_to_exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ill&quot;</span><span class="p">,</span> <span class="s2">&quot;im going&quot;</span><span class="p">,</span> <span class="s2">&quot;think time&quot;</span><span class="p">]</span>
+        <span class="n">filtered_time_contexts</span> <span class="o">=</span> <span class="n">exclude_phrases_with_words</span><span class="p">(</span>
+            <span class="n">time_contexts</span><span class="p">,</span> <span class="n">words_to_exclude</span>
+        <span class="p">)</span>
+
+        <span class="n">custom_stop_words</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;recipe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;used&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;thanks&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;make&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;just&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;really&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;didn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bit&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;great&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;good&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;added&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">all_stop_words</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ENGLISH_STOP_WORDS</span><span class="p">)</span> <span class="o">+</span> <span class="n">custom_stop_words</span>
+
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span>
+            <span class="n">stop_words</span><span class="o">=</span><span class="n">all_stop_words</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">max_features</span><span class="o">=</span><span class="mi">10</span>
+        <span class="p">)</span>
+        <span class="n">word_matrix</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">filtered_time_contexts</span><span class="p">)</span>
+
+        <span class="n">word_frequencies</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="nb">zip</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">(),</span> <span class="n">word_matrix</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">A1</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated word frequencies: </span><span class="si">{</span><span class="n">word_frequencies</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saving word frequencies to database.&quot;</span><span class="p">)</span>
+            <span class="n">word_frequencies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">word_frequencies</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;phrase&quot;</span><span class="p">,</span> <span class="s2">&quot;frequency&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">word_frequencies_df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;word_frequencies_time&quot;</span><span class="p">,</span>
+                <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+                <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Word frequencies saved successfully.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to save word frequencies to database: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">word_frequencies</span></div>
+</div>
+
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, HARIRI Safae, NOUNAH Nour, ROQAI CHAOUI Ghalia.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
