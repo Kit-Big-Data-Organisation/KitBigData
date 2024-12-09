@@ -2,7 +2,7 @@
 This module provides various textual analyses and presentations related to cuisine data from Food.com. It includes detailed descriptions and insights into the number of recipes, interactions, cuisine distribution, evolution, nutritional values, preparation times, and ingredient usage. The analyses cover trends from 2002 to 2010, highlighting shifts in cooking patterns, user engagement, and dietary preferences.
 """
 presentation = """
-Based on the graphs above, we observe that both the number of recipes and the number of interactions peak between <strong>2002</strong> and <strong>2010</strong>.<br><br>
+Based on the graphs below, we observe that both the number of recipes and the number of interactions peak between <strong>2002</strong> and <strong>2010</strong>.<br><br>
 <ul>
     <li><strong>Before 2002</strong>: The data is sparse, with significantly fewer recipes and interactions recorded.</li>
     <li><strong>After 2010</strong>: There is a noticeable decline in both metrics. To ensure a meaningful analysis, we will focus on the period between <strong>2002</strong> and <strong>2010</strong>, where the data is most abundant and representative of user engagement.</li>
