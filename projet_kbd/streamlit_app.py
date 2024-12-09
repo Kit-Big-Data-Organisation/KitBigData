@@ -536,11 +536,11 @@ def run(path_file, recipe_file, interaction_file, engine):
         selected = option_menu(
             "Dashboard",
             [
-                "Presentation",
+                "General Analysis",
                 "Eating habits",
                 "Cuisine Analysis",
                 "Sociological Insight",
-                "Interaction with the reviews",
+                "Reviews Analysis",
                 "Free Visualisation"
             ],
             menu_icon="cast",
@@ -554,9 +554,9 @@ def run(path_file, recipe_file, interaction_file, engine):
                 }
             </style>
             """, unsafe_allow_html=True)
-    if selected == "Presentation":
+    if selected == "General Analysis":
 
-        st.write("## Presentation")
+        st.write("## 📊 General Analysis")
 
         # Texte indiquant la période d'analyse
 
@@ -597,10 +597,9 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         st.plotly_chart(user_interactions, use_container_width=True)
 
-
     elif selected == "Eating habits":
 
-        st.write("## Eating habits")
+        st.write("## 🍽️ Eating habits")
         utils.render_justified_text(analysis_text.eating_habit_presentation)
         oils_analysis = create_oils_stacked_histograms(analyzer, engine)
         st.plotly_chart(oils_analysis)
@@ -608,7 +607,7 @@ def run(path_file, recipe_file, interaction_file, engine):
 
     elif selected == "Cuisine Analysis":
 
-        st.markdown("## Cuisine Analysis")
+        st.markdown("## 🍲 Cuisine Analysis")
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 
         utils.render_justified_text(analysis_text.cuisine_presentation)
@@ -662,7 +661,7 @@ def run(path_file, recipe_file, interaction_file, engine):
 
     elif selected == "Sociological Insight":
 
-        st.write("### 🌟 Sociological Insight")
+        st.write("## 🌟 Sociological Insight")
 
         col = st.columns([0.5, 0.5])
         quick_recipe_fig = create_proportion_quick_recipe_charts(
@@ -725,8 +724,9 @@ def run(path_file, recipe_file, interaction_file, engine):
         st.pyplot(time_wordcloud_fig)
         utils.render_justified_text(analysis_text.time_efficiency_analysis)
 
-    elif selected == "Interaction with the reviews":
-        st.title('📈 Rate Evolution and Sentiment Analysis Over Time')
+    elif selected == "Reviews Analysis":
+        st.write("## 💬 Reviews Analysis")
+        st.write('### 📈 Rate Evolution and Sentiment Analysis Over Time')
 
         logger.info("Rate evolution...")
         rate_evolution = create_plot_rating_evolution(analyzer, engine)
@@ -786,7 +786,7 @@ def run(path_file, recipe_file, interaction_file, engine):
                     "No co-occurrence data found for the specified words."
                 )
     elif selected == "Free Visualisation":
-        st.write("## Tags Analysis")
+        st.write("## 🏷️ Tags Analysis")
 
         st.markdown("<p style='padding-top:10px'></p>", unsafe_allow_html=True)
 

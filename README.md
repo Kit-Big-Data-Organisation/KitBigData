@@ -10,6 +10,7 @@ KitBigData leverages extensive recipe data to deliver meaningful insights that e
 - **Eating Habits: The trends that people follow over the years 🍴.**
 - **Cuisine Analysis: Which cuisines interest people the most and the specifics of each cuisine 🥗.**
 - **Sociological Aspects: Understanding how cultural and societal trends influence cooking habits and recipe popularity 🌍.**
+- **Review Analysis: Rate Evolution and Sentiment Analysis Over Time 💬.**
 
 ## 🚀 Streamlit Application
 
