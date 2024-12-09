@@ -597,7 +597,6 @@ def run(path_file, recipe_file, interaction_file, engine):
 
         st.plotly_chart(user_interactions, use_container_width=True)
 
-
     elif selected == "Eating habits":
 
         st.write("## 🍽️ Eating habits")
